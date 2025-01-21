@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout}">
+<th:block layout:fragment="css">
+    <link th:href="@{/Main/assets/corporate/css/custom.css}" rel="stylesheet">
+    <!-- Theme styles END -->
+    <style>
+        @font-face {
+            font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+            src: url('../fonts/PRETENDARDJP-BLACK.OTF') format('opentype');
+        }
+
+        .container {
+            font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+        }
+
+        .membership-choice{
+            margin-top:-20px;
+            width: 90%;
+            height: 400px;
+            background: #fff;
+            border: 2px solid #ABAAAA;
+            border-radius: 20px !important;
+            cursor: pointer;
+            box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.2); /* 오른쪽 아래로 그림자 */
+            transition: box-shadow 0.3s ease;
+        }
+
+        .membership-choice:hover {
+            border: 2px solid #FF5733; /* 새로운 테두리 색상 (예: 주황색) */
+            box-shadow: 15px 15px 20px rgba(0, 0, 0, 0.3); /* 호버 시 더 강한 그림자 */
+        }
+
+        div.search-container {
+            padding-right: 40px;
+        }
+
+        div.footer {
+            margin-top: 45px !important;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+    <div class="main"><!--머리-본문-꼬리 중 본문-->
+        <div class="container"><!--본문의 내용을 담는 컨테이너 : 여백있는 브라우저 넓이이-->
+            <h1 style="text-align: center; font-size: 30px; margin-top: 45px; font-family: 'PRETENDARDJP-BLACK';">会員タイプ</h1><!--제목-->
+            <p style="text-align: center; margin-bottom: 60px;">商品を出品して販売したい方は販売者として登録！
+                商品を購入したい方は購入者として登録！
+                <br><!--안내-->
+                該当するタイプのボタンをクリックしてください。</p>
+
+            <div class="container" style="width: 70%"><!--구매자,판매자 박스-->
+                <div class="row"> <!--버튼을 나열할 행 : row) 수평정렬,col 사이 패딩 추가-->
+
+                    <!--판매자 버튼 박스-->
+                    <div class="col-md-6 col-sm-6 additional-shop-info" style=" text-align: center;">
+                        <button type="button" class="membership-choice" onclick="location.href='/sign/joinSeller.do'"><!--판매자 버튼-->
+                            <h1 style="font-family: 'PRETENDARDJP-BLACK'; ">販売者として登録する</h1> <!--판매자 버튼 텍스트-->
+                            <br>
+                            <p>自分の商品を登録して、ショッピングモールで<br>
+                                販売を始めましょう。</p><!--販売者ボタン説明-->
+                            <p>登録商品管理、売上レポートなど、<br>
+                                さまざまな販売ツールを提供します。</p>
+                            <p>簡単な販売者登録で、すぐにビジネスを始めましょう！</p>
+                        </button>
+                    </div>
+
+                    <!--구매자 버튼 박스-->
+                    <div class="col-md-6 col-sm-6 additional-shop-info" style=" text-align: center;">
+                        <button type="button" class="membership-choice" onclick="location.href='/sign/joinBuyer.do'">
+                            <h1 style=" font-family: 'PRETENDARDJP-BLACK'; ">購入者として登録する</h1>
+                            <br>
+                            <p>最新商品や特別割引を見逃さないでください。</p>
+                            <p>簡単で迅速な決済、安全な配送、<br>
+                                満足のいくショッピング体験をお届けします。</p>
+                            <p>会員専用特典やカスタマイズされた<br>
+                                おすすめサービスをご利用ください！</p>
+                        </button>
+                    </div>
+                </div><!--row 닫기-->
+            </div><!--container 닫기-->
+        </div><!--container 닫기-->
+    </div><!--main 닫기-->
+</div><!--content 닫기-->
+</html>

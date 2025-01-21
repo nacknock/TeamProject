@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout}">
+
+<!-- Body BEGIN -->
+<div layout:fragment="content">
+    <div class="main">
+      <div class="container">
+        <!-- BEGIN SIDEBAR & CONTENT -->
+        <div class="row margin-bottom-40">
+          <!-- BEGIN CONTENT -->
+          <div class="col-md-12 col-sm-12">
+            <h1>カート</h1>
+            <div class="goods-page">
+              <div class="goods-data clearfix">
+                <div class="table-wrapper-responsive">
+                <table summary="Shopping cart">
+                  <tr>
+                    <th class="goods-page-image" style="text-align: center;"><input type="checkbox"></th>
+                    <th class="goods-page-image" style="text-align: center;"></th>
+                    <th class="goods-page-description" style="text-align: center;">商品</th>
+                    <th class="goods-page-quantity" style="text-align: center;">数量</th>
+                    <th class="goods-page-price" style="text-align: center;">価格</th>
+                    <th class="goods-page-total" style="text-align: center;">小計</th>
+                    <th class="goods-page-image" style="text-align: center;"></th>
+                  </tr>
+                  <tr>
+                    <td class="goods-page-image" style="text-align: center; padding-right: 0; padding-top: 60px;">
+                      <input type="checkbox">
+                    </td>
+                    <td class="goods-page-image" style="padding-left: 20px;">
+                      <a href="javascript:;"><img src="../static/Main/assets/pages/img/products/model3.jpg" alt="Berry Lace Dress"></a>
+                    </td>
+                    <td class="goods-page-description" style="text-align: center;padding-left: 20px;text-align: center;padding-top: 3%;">
+                      <h3><a href="javascript:;">Cool green dress with red bell</a></h3>
+                      <p>Color: Green; Size: S</p>
+                      <em>More info is here</em>
+                    </td>
+                    <td class="goods-page-quantity" style="padding-left: 20px;text-align: center;padding-top: 5%;">
+                      <div class="product-quantity" style="width: 100%;display: flex;justify-content: center;">
+                          <input id="product-quantity" type="text" value="1" readonly class="form-control input-sm">
+                      </div>
+                    </td>
+                    <td class="goods-page-price" style="padding-left: 20px;text-align: center;padding-top: 5%;">
+                      <strong><span>$</span>47.00</strong>
+                    </td>
+                    <td class="goods-page-total" style="padding-left: 20px;text-align: center;padding-top: 5%;">
+                      <strong><span>$</span>47.00</strong>
+                    </td>
+                    <td class="del-goods-col" style="padding-top: 4%;padding-right: 0;">
+                      <a class="" href="javascript:;" style="float: left;"><i class="add-goods" style="width: 50px;height: 50px;margin: 0;"></i>&nbsp;</a>
+                      <a class="" href="javascript:;"><i class="del-goods" style="width: 50px;height: 50px;margin: 0;"></i>&nbsp;</a>
+                    </td>
+                  </tr>
+                </table>
+                </div>
+
+                <div class="shopping-total">
+                  <ul>
+                    <li>
+                      <em>小計</em>
+                      <strong class="price"><span>$</span>50.00</strong>
+                    </li>
+                    <li>
+                      <em>セール</em>
+                      <strong class="price"><span>$</span>3.00</strong>
+                    </li>
+                    <li class="shopping-total-price">
+                      <em>合計</em>
+                      <strong class="price"><span>$</span>47.00</strong>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <button class="btn btn-default" type="submit">削除 <i class="fa fa-shopping-cart"></i></button>
+              <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button>
+            </div>
+          </div>
+          <!-- END CONTENT -->
+        </div>
+        <!-- END SIDEBAR & CONTENT -->
+
+      </div>
+    </div>
+
+    <script src="../static/Main/assets/plugins/jquery.min.js" type="text/javascript"></script>
+    <script src="../static/Main/assets/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+    <script src="../static/Main/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../static/Main/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+
+    <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+    <script src="../static/Main/assets/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script><!-- pop up -->
+    <script src="../static/Main/assets/plugins/owl.carousel/owl.carousel.min.js" type="text/javascript"></script><!-- slider for products -->
+    <script src='../static/Main/assets/plugins/zoom/jquery.zoom.min.js' type="text/javascript"></script><!-- product zoom -->
+    <script src="../static/Main/assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script><!-- Quantity -->
+    <script src="../static/Main/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+    <script src="../static/Main/assets/plugins/rateit/src/jquery.rateit.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" type="text/javascript"></script><!-- for slider-range -->
+    <script src="../static/Main/assets/corporate/scripts/layout.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            Layout.init();    
+            Layout.initOWL();
+            Layout.initTwitter();
+            Layout.initImageZoom();
+            Layout.initTouchspin();
+            Layout.initUniform();
+            Layout.initSliderRange();
+        });
+    </script>
+    <!-- END PAGE LEVEL JAVASCRIPTS -->
+</div>
+<!-- END BODY -->
+</html>

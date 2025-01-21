@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout}">
+<th:block layout:fragment="css">
+  <!-- Fonts START -->
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css"> 
+  <!-- Fonts END -->
+
+  <!-- Global styles START -->          
+<link th:href="@{/Main/assets/plugins/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <!-- Global styles END --> 
+   
+  <!-- Page level plugin styles START -->
+  <link th:href="@{/Main/assets/plugins/fancybox/source/jquery.fancybox.css}" rel="stylesheet">
+  <link th:href="@{/Main/assets/plugins/uniform/css/uniform.default.css}" rel="stylesheet" type="text/css">
+  <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"><!-- for slider-range -->
+  <link th:href="@{/Main/assets/plugins/rateit/src/rateit.css}" rel="stylesheet" type="text/css">
+  <!-- Page level plugin styles END -->
+
+  <!-- Theme styles START -->
+  <link th:href="@{/Main/assets/pages/css/components.css}" rel="stylesheet">
+  <link th:href="@{/Main/assets/corporate/css/style.css}" rel="stylesheet">
+  <link th:href="@{/Main/assets/pages/css/style-shop.css}" rel="stylesheet" type="text/css">
+  <link th:href="@{/Main/assets/corporate/css/style-responsive.css}" rel="stylesheet">
+  <link th:href="@{/Main/assets/corporate/css/themes/red.css}" rel="stylesheet" id="style-color">
+  <link th:href="@{/Main/assets/corporate/css/custom.css}" rel="stylesheet">
+  <!-- Theme styles END -->
+
+    <STYLE>
+        .product-item {
+            position: relative; /* 자식 요소의 절대 위치 지정을 위한 상대 위치 설정 */
+            height: 400px; /* 상품 박스의 고정 높이 설정 */
+            overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+        }
+        .pi-img-wrapper {
+            width: 100%; /* 부모 요소에 맞게 너비 설정 */
+            height: 250px; /* 고정 높이 설정 */
+            overflow: hidden; /* 넘치는 내용 숨김 */
+        }
+
+        .pi-img-wrapper img {
+            width: 100%; /* 이미지 너비를 부모 요소에 맞추도록 설정 */
+            height: 100%; /* 이미지 높이를 부모 요소에 맞추도록 설정 */
+            object-fit: cover; /* 이미지 비율을 유지하며 잘리지 않도록 설정 */
+        }
+
+        .product-item h3 {
+            font-family: 'PRETENDARDJP-BLACK';
+            max-height: 60px; /* 상품 제목의 최대 높이를 설정 (필요에 따라 조정) */
+            overflow: hidden; /* 내용이 넘치면 숨김 처리 */
+            text-overflow: ellipsis; /* 넘치는 텍스트에 '...' 표시 */
+            white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정 */
+        }
+
+        .product-item .add2cart {
+            position: absolute; /* 절대 위치 지정 */
+            bottom: 10px; /* 하단에서 10px 위로 위치 설정 */
+            right: 10px; /* 우측에서 10px 안으로 위치 설정 */
+            color: #a8aeb3; /* 텍스트 색상 */
+            border: 1px #ededed solid; /* 경계선 설정 */
+            padding: 3px 6px; /* 내부 여백 설정 */
+        }
+
+        .product-item .pi-price {
+            font-family: inherit !important; /* font-family를 부모 요소의 값으로 설정 */
+            font-size: 15px;
+            color: red;
+            margin-top: 10px;
+            font-weight: normal !important; /* font-weight를 normal로 설정하고, !important로 우선순위를 높임 */
+        }
+
+        div.sidebar {
+            margin-top: 40px;
+        }
+
+        .breadcrumb {
+             margin-bottom: -40px;
+        }
+
+        .search-container {
+            color: black;
+        }
+
+         .search-container:hover {
+            color: gray;
+        }
+
+        .material-symbols-outlined {
+            color: black;
+        }
+
+        .material-symbols-outlined:hover {
+            color: gray;
+        }
+    </STYLE>
+</th:block>
+<div layout:fragment="content">
+    <div class="main" style="margin: 50px 0px; font-family: 'PRETENDARDJP-BLACK';">
+      <div class="container">
+        <ul class="breadcrumb">
+            <li><a th:href="@{/}"
+                   style = "font-family: 'PRETENDARDJP-BLACK';
+                   color: black;">Home</a></li>
+            <li><a th:href="@{/product/list.do}"
+                   style = "font-family: 'PRETENDARDJP-BLACK';
+                   color: black;">Store</a></li>
+            <li class="active"
+                style = "font-family: 'PRETENDARDJP-BLACK';">All</li>
+        </ul>
+      </div>
+        <div class="container">
+        <!-- BEGIN SIDEBAR & CONTENT -->
+        <div class="row margin-bottom-40">
+          <!-- BEGIN SIDEBAR -->
+          <div class="sidebar col-md-3 col-sm-5" style = "font-family: 'PRETENDARDJP-BLACK';">
+            <ul class="list-group margin-bottom-25 sidebar-menu">
+              <li th:each="cate : ${categoryList}" class="list-group-item clearfix"><a th:href="@{/product/list.do(category=${cate.id})}"><i class="fa fa-angle-right"></i> [[${cate.category_name}]]</a></li>
+            </ul>
+          </div>
+          <!-- END SIDEBAR -->
+          <!-- BEGIN CONTENT -->
+          <div class="col-md-9 col-sm-7">
+            <div class="row list-view-sorting clearfix">
+              <div class="col-md-2 col-sm-2 list-view">
+                <a href="javascript:;"><i class="fa fa-th-large"></i></a>
+                <a href="javascript:;"><i class="fa fa-th-list" style= "color:black !important;"></i></a>
+              </div>
+              <!-- <div class="col-md-10 col-sm-10">
+                <div class="pull-right" style = "font-family: 'PRETENDARDJP-BLACK';">
+                    <a value="#?sort=p.price&amp;order=ASC">低価格順</a>
+                    <a value="#?sort=p.price&amp;order=DESC">高い価格順</a>
+                    <a value="#?sort=rating&amp;order=ASC">星評価順</a>
+                    <a value="#?sort=p.model&amp;order=DESC">売上順</a>
+                    <a value="#?sort=p.model&amp;order=DESC">新着順</a>
+                </div>
+              </div> -->
+            </div>
+            <!-- BEGIN PRODUCT LIST -->
+            <div class="row product-list">
+              <!-- PRODUCT ITEM START -->
+              <div class="col-md-4 col-sm-6 col-xs-12" th:each="list : ${list}">
+                <div class="product-item">
+                  <div class="pi-img-wrapper">
+                    <img th:src="${list.thumbnail_url}" class="img-responsive" alt="Berry Lace Dress" style="width: 238.5px;height: 318px;">
+                  </div>
+                  <h3><a th:href="@{/product/detail.do(id=${list.id})}">[[${list.title}]]</a></h3>
+                  <div class="pi-price">[[${list.price}]] 円</div>
+                  <a href="javascript:void(0);" th:onclick="addWish('[[${list.id}]]')" class="btn btn-default add2cart">お気に入り</a>
+                </div>
+              </div>
+              <!-- PRODUCT ITEM END -->
+            </div>
+            <!-- END PRODUCT LIST -->
+            <!-- BEGIN PAGINATOR -->
+            <div class="row" th:if="${pageMaker.total != 0}">
+              <div class="col-md-4 col-sm-4 items-info" style = "color: black;">Items [[${pageMaker.cri.amount}]] of [[${pageMaker.total}]] total</div>
+              <div class="col-md-8 col-sm-8">
+                <ul class="pagination pull-right">
+                  <!-- 이전 페이지 -->
+                  <li th:if="${pageMaker.prev}"><a th:href="@{/product/list.do(pageNum=${pageMaker.startPage - 1}, amount=${pageMaker.cri.amount}, category=${pageMaker.cri.category}, keyword=${pageMaker.cri.keyword})}">&laquo;</a></li>
+                  <th:block th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                    <li th:if="${pageMaker.cri.pageNum != page}"><a th:href="@{/product/list.do(pageNum=${page}, amount=${pageMaker.cri.amount}, category=${pageMaker.cri.category}, keyword=${pageMaker.cri.keyword})}">[[${page}]]</a></li>
+                    <li th:if="${pageMaker.cri.pageNum == page}"><span>[[${page}]]</span></li>
+                  </th:block>
+                  <!-- 다음 페이지 -->
+                  <li th:if="${pageMaker.next}"><a th:href="@{/product/list.do(pageNum=${pageMaker.endPage + 1}, amount=${pageMaker.cri.amount}, category=${pageMaker.cri.category}, keyword=${pageMaker.cri.keyword})}">&laquo;</a></li>
+                </ul>
+              </div>
+            </div>
+            <!-- END PAGINATOR -->
+          </div>
+          <!-- END CONTENT -->
+        </div>
+        <!-- END SIDEBAR & CONTENT -->
+      </div>
+    </div>
+
+    <!-- BEGIN fast view of a product -->
+    <div id="product-pop-up" style="display: none; width: 700px;">
+            <div class="product-page product-pop-up">
+              <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-3">
+                  <div class="product-main-image">
+                    <img src="../../static/Main/assets/pages/img/products/model7.jpg" alt="Cool green dress with red bell" class="img-responsive">
+                  </div>
+                  <div class="product-other-images">
+                    <a href="javascript:;" class="active"><img alt="Berry Lace Dress" src="../../static/Main/assets/pages/img/products/model3.jpg"></a>
+                    <a href="javascript:;"><img alt="Berry Lace Dress" src="../../static/Main/assets/pages/img/products/model4.jpg"></a>
+                    <a href="javascript:;"><img alt="Berry Lace Dress" src="../../static/Main/assets/pages/img/products/model5.jpg"></a>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-9">
+                  <h1>Cool green dress with red bell</h1>
+                  <div class="price-availability-block clearfix">
+                    <div class="price">
+                      <strong><span>$</span>47.00</strong>
+                      <em>$<span>62.00</span></em>
+                    </div>
+                    <div class="availability">
+<p>재고 : <span style="color: blue; font-weight: bold;">있음</span>, <span style="color: red; font-weight: bold;">없음</span></p>
+                    </div>
+                  </div>
+                  <div class="description">
+                    <p>Lorem ipsum dolor ut sit ame dolore  adipiscing elit, sed nonumy nibh sed euismod laoreet dolore magna aliquarm erat volutpat 
+Nostrud duis molestie at dolore.</p>
+                  </div>
+                  <div class="product-page-options">
+                    <div class="pull-left">
+                      <label class="control-label">Size:</label>
+                      <select class="form-control input-sm">
+                        <option>L</option>
+                        <option>M</option>
+                        <option>XL</option>
+                      </select>
+                    </div>
+                    <div class="pull-left">
+                      <label class="control-label">Color:</label>
+                      <select class="form-control input-sm">
+                        <option>Red</option>
+                        <option>Blue</option>
+                        <option>Black</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="product-page-cart">
+                    <div class="product-quantity">
+                        <input id="product-quantity" type="text" value="1" readonly name="product-quantity" class="form-control input-sm">
+                    </div>
+                    <button class="btn btn-primary" type="submit">Add to cart</button>
+                    <a href="shop-item.html" class="btn btn-default">More details</a>
+                  </div>
+                </div>
+
+                <div class="sticker sticker-sale"></div>
+              </div>
+            </div>
+    </div>
+    <!-- END fast view of a product -->
+    <script th:src="@{/Main/assets/corporate/scripts/back-to-top.js}" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+
+    <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+    <script th:src="@{/Main/assets/plugins/uniform/jquery.uniform.min.js}" type="text/javascript"></script>
+    <script th:src="@{/Main/assets/plugins/rateit/src/jquery.rateit.js}" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" type="text/javascript"></script><!-- for slider-range -->
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            Layout.init();    
+            Layout.initOWL();
+            Layout.initTwitter();
+            Layout.initImageZoom();
+            Layout.initTouchspin();
+            Layout.initUniform();
+            Layout.initSliderRange();
+        });
+        function addWish(id) {
+
+          if(id === ""){
+            alert("問題が発生しました。");
+            return false;
+          }
+
+          $.ajax({
+              type: 'POST',
+              url: '/buyer/addWish.do',
+              data: {
+                  id: id
+              },
+              success: function(data) {
+                  if (data === "true") {
+                    alert("お気に入りに追加しました。");
+                  }else if(data === "false"){
+                    alert('問題が発生しました。');
+                    console.log('fail');
+                  }else if(data === "added"){
+                    alert('既に追加した商品です。');
+                  }else if(data === "notLogin"){
+                    location.href="/sign/login.do";
+                  }
+              },
+              error: function() {
+                  alert('エーラーが発生しました。');
+              }
+          });
+        }
+    </script>
+    <!-- END PAGE LEVEL JAVASCRIPTS -->
+</div>
+<!-- END BODY -->
+</html>

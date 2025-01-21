@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+    layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <style>
+        h2 {
+            text-align: LEFT;
+            color: #333;
+        }
+
+        .info {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .passwordDisplay{
+            display: flex;
+            /* Flexbox 사용 */
+            align-items: center;
+            /* 수직 중앙 정렬 */
+            justify-content: center;
+            /* 수평 중앙 정렬 */
+        }
+
+        /* password-box에만 적용되는 스타일 */
+        .password-box {
+            margin-left: 200px !important;
+            margin-top: 15px;
+            font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+            padding: 40px;
+            /* 내부 여백을 늘림 */
+            /*max-width: 600px;*/
+            /* 최대 너비를 600px로 설정 */
+            width: 100%;
+            /* 반응형 디자인을 위해 100% 너비 설정 */
+        }
+
+        /* 제목 스타일 */
+        .password-box h2 {
+            font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+            margin-left: 125px;
+            color: #333;
+            margin-bottom: 20px;
+            /* 제목과 정보 텍스트 간격 추가 */
+        }
+
+        /* 정보 텍스트 스타일 */
+        .password-box .info {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* 레이블 스타일 */
+        .password-box label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        /* 입력 필드 스타일 */
+        .password-box #email,
+        .password-box #email-ok,
+        .password-box #confirmPassword,
+        .password-box #password  {
+            width: 450px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+            padding: 10px;
+            height: 50px;
+        }
+
+        .password-box #email :focus,
+        .password-box #email-ok :focus,
+        .password-box #confirmPassword :focus,
+        .password-box #password :focus{
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        /* 재송신 버튼 스타일 */
+        .password-box a {
+            display: inline-block;
+            color: red;
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-bottom: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .password-box a:hover {
+            background-color: gray;
+        }
+
+        /* 제출 버튼 스타일 */
+        .password-box #btn_reemail,
+        .password-box #btn_email,
+        .password-box #btn_auth{
+            width: 100px;
+            margin-right: 10px;
+            border: none;
+            background-color: red;
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .password-box #btn_submit{
+            width: 450px;
+            padding: 10px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .password-box button:hover {
+            background-color: #218838;
+        }
+
+        .inputDisplay {
+            margin: 15px 0;
+            display: flex;
+            justify-content: start;
+        }
+
+        div.footer {
+            margin-top: -20px !important;
+        }
+
+        div.search-container {
+            padding-right: 40px;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="main">
+        <div class="container">
+            <div class="row margin-bottom-40 passwordDisplay">
+                <!-- BEGIN CONTENT -->
+                <div class="big-password-box">
+                    <div class="password-box">
+                        <h2>パスワードを再生成する</h2>
+                        <form>
+                            <label for="email">メールアドレス:</label>
+                            <div class="inputDisplay">
+                                <div class="inputBox">
+                                    <input type="text" id="email" name="email" style = "border-radius: 5px !important;">
+                                    <p class="info" id="email-help" ></p>
+                                </div>
+                                <div class="buttonBox">
+                                    <button type="button" class="btn btn-primary" id="btn_email" style = "border-radius: 5px !important;">メール認証</button>
+                                </div>
+                            </div>
+
+
+                            <label for="password">パスワード:</label>
+                            <div class="inputDisplay">
+                                <div class="inputBox">
+                                    <input type="password" id="password" name="password" style = "border-radius: 5px !important;">
+                                </div>
+                            </div>
+
+
+                            <label for="confirmPassword">パスワード再確認:</label>
+                            <div class="inputDisplay">
+                                <div class="inputBox">
+                                    <input type="password" id="confirmPassword" name="confirmPassword" style = "border-radius: 5px !important;">
+                                </div>
+                            </div>
+
+
+                            <label for="email-ok">認証番号:</label>
+                            <div class="inputDisplay">
+                                <div class="inputBox">
+                                <input type="text" id="email-ok" name="email-ok" placeholder="認証番号を入力してください" style = "border-radius: 5px !important;">
+                                <p id="auth-help"></p>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-primary" id="btn_reemail" style = "border-radius: 5px !important;">再送信</button>
+                                    <button type="button" class="btn btn-primary" id="btn_auth" style = "border-radius: 5px !important;">認証</button>
+                                </div>
+                            </div>
+                            <button type="button" id="btn_submit" style = "background-color: red; border-radius: 5px !important;" >パスワード再生成</button>
+                        </form>
+                    </div><!-- END PASSWORD BOX -->
+                </div> <!-- END CONTENT -->
+                <!-- END SIDEBAR & CONTENT -->
+            </div><!-- END ROW -->
+        </div><!-- END CONTAINER-FLUID -->
+    </div><!-- END MAIN -->
+</div><!-- END layout:content -->
+
+<th:block layout:fragment="bodyScript">
+    <script>
+        var code = "";
+        var incode = "";
+        var authCheck = false;
+        var email = "";
+        var regEmail = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-0\-]+\.[a-zA-Z0-9\-]+/;
+        let isEmailSent = false; // 플래그 변수
+
+
+        $("#btn_email").on("click", function () {
+            if (isEmailSent) {
+                alert("既に認証メールが送信されています");
+                return; // 이미 클릭된 경우 처리하지 않음
+            }
+
+            if (!regEmail.test($("#email").val())) {
+                alert("メールアドレスが無効です");
+                $("#email").focus();
+                return false;
+            }
+
+            email = $("#email").val();
+
+            // 플래그 설정
+            isEmailSent = true;
+
+            $.ajax({
+                type: 'get',
+                url: '/sign/pwFindEmail.do?email=' + email,
+                success: function (data) {
+                    if (data === "false") {
+                        alert("登録されたメールがありません");
+                        $("#email").focus();
+                        // 플래그 초기화
+                        isEmailSent = false;
+                        return false;
+                    } else {
+                        alert('送信成功');
+                        code = data;
+                    }
+
+                }
+            })
+        });
+
+        $("#btn_reemail").on("click", function () {
+            // 이메일이 유효한지 다시 확인
+            if (!regEmail.test($("#email").val())) {
+                alert("メールアドレスが無効です");
+                $("#email").focus();
+                return false;
+            }
+
+            email = $("#email").val(); // 이미 저장된 이메일 사용
+
+            // AJAX 요청을 통해 인증번호 재전송
+            $.ajax({
+                type: 'get',
+                url: '/sign/pwFindEmail.do?email=' + email,
+                success: function (data) {
+                    if (data === "false") {
+                        alert("登録されたメールがありません");
+                        $("#email").focus();
+                    } else {
+                        alert('再送信に成功しました');
+                        code = data; // 새로 받은 인증번호로 업데이트
+                    }
+                },
+                error: function () {
+                    alert("再送信中にエラーが発生しました");
+                }
+            });
+        });
+
+
+        $('#btn_auth').on("click", function () {
+            incode = $('#email-ok').val();
+            if (incode == code) {
+                $("#auth-help").html("認証番号が一致します").css('color', 'red');
+                authCheck = true;
+            } else {
+                $("#auth-help").html("認証番号が一致しません").css('color', 'red');
+                authCheck = false;
+            }
+
+        });
+
+        $("#btn_submit").on("click", function () {
+            var isValid = true;
+            if (!authCheck) {
+                alert("まずメール認証を行ってください");
+                isValid = false;
+                $('#email-ok').focus();
+            }
+
+            var password = $("#password").val();
+            var pwChk = $('#confirmPassword').val();
+            //var pwRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{9,13}$/;
+
+            //    if(!pwRegex.test(password)) {
+            //       $("#pw-help").html("<span style = 'color:#f00;'>パスワードは、英大文字、英小文字、数字、特殊文字を含む9〜13文字で設定してください</span>");
+            //       $("#password"),val("");
+            //       $("#confirmPassword").val("");
+            //       isValid=false;
+            //    }
+            //    else if(password !== pwChk) {
+            //       $("#pwChk-help").html("<span style = 'color:#f00;'>パスワードが一致しません</span>");
+            //       $("#password"),val("");
+            //       $("#confirmPassword").val("");
+            //       isValid=false;
+            //    }
+
+
+
+            if (isValid) {
+                $.ajax({
+                    type: "post",
+                    url: "/sign/pwFindAction.do",
+                    data: {
+                        email: $("#email").val(),
+                        newPw: $("#password").val()
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data == true) {
+                            alert("再生成が完了しました");
+                            location.href = "/sign/login.do";
+                        }
+                    }, error: function () {
+                        alert("通信エラー");
+                    }
+                })
+            }
+
+        });
+    </script>
+
+</th:block>
+
+</html>

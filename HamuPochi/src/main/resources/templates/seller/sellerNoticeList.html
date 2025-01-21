@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/MypageLayout}">
+
+<th:block layout:fragment="css">
+ <style>
+      .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding-top: 20px;
+}
+
+.card {
+    border: none;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1rem;
+}
+
+table {
+            width: 100%;
+            margin: 0px 15px 0px 15px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 2px;
+            text-align: center;
+        }
+		.num{
+           width:5%;
+		}
+		.title{
+			width:45%;
+		}
+		.date{
+			width:25%
+		}
+		.bt{
+			width:15%
+		}
+		.btt{
+			width:10%
+		}
+        th {
+            background-color: #f2f2f2;
+        }
+        .button {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+			border: none;
+        }
+
+		.post-insert{
+			display: flex;
+			flex-direction: row-reverse;
+		}
+
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+  <div class="main">
+    <div class="container-fluid" style="padding:0px 100px 0px 100px;">
+      <!-- BEGIN SIDEBAR & CONTENT -->
+      <div class="row" style="margin-top:40px;">
+        <!-- BEGIN SIDEBAR -->
+        <div class="col-md-2 col-lg-2 d-md-block bg-light sidebar">
+          <div th:replace="~{fragments/sellerSidebar::sidebar}"></div>
+        </div>
+        <!-- END SIDEBAR -->
+
+        <!-- BEGIN CONTENT -->
+        <div class="col-md-8 ml-sm-auto col-lg-10 px-4">
+          <div class="row" style="display: block; margin-right:80px; margin-left:20px;">
+            <!-- Header -->
+            <div class="col-md-6">
+              <ul class="breadcrumb">
+                <li><a th:href="@{/seller/main.do}"
+                style = "font-family:'PRETENDARDJP-BLACK';">マイページ</a></li>
+                <li class="active"
+                    style = "font-family:'PRETENDARDJP-BLACK';">お知らせリスト</li>
+              </ul>
+              <h1 style="margin:15px 0px 15px 0px;
+                  font-family:'PRETENDARDJP-BLACK';">お知らせリスト</h1>
+            </div>
+
+            <div class="col-md-6 justify-content-between" style="padding:0; margin-top: 18px;">
+              <div class="order-search" style="align-items: center; float:right;">
+                <button class="btn"
+                        STYLE="background:#FF5757;
+                        COLOR:#fff;
+                        margin-top: 18px;
+                        width:80px;
+                        height:30.5px;
+                        float:left;
+                        font-family:'PRETENDARDJP-BLACK';
+                        border-radius:5px !important;"
+                        th:onclick="'location.href=\'/seller/noticeRegistration.do?id=' + ${id} + '\' '">登録</button>
+              </div>
+            </div>
+
+            <!-- BEGIN PRODUCT LIST -->
+            <div class="row product-list" style="clear: both; margin-top:20px;">
+              <table>
+                <thead>
+                <tr th:if="${list.isEmpty()}" >
+                  <p style="margin-left:30px; font-size:18px;
+                            font-family:'PRETENDARDJP-BLACK';
+                            ">登録したお知らせがありません。</p>
+                <tr>
+                <tr th:if="${list != null and !list.isEmpty()}">
+                  <th>番号</th>
+                  <th>題目</th>
+                  <th>内容</th>
+                  <th>日数</th>
+                  <th>作業</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${list}">
+                  <td class="num">[[${list.id}]]</td>
+                  <td class="date">[[${list.title}]]</td>
+                  <td class="title" th:if="${#strings.length(list.content) > 30}"
+                        th:text="${list.content.substring(0, 30) + '...'}"></td>
+                  <td class="title" th:if="${#strings.length(list.content) <= 30}"
+                        th:text="${list.content}"></td>
+                  <td class="btt" th:text="${#strings.substring(list.created_at, 0, 10)}"></td>
+                  <td class="bt">
+                    <button class="button" th:onclick="'location.href=\'/seller/noticeUpdate.do?id=' + ${list.id} + '&userId=' + ${list.seller_id.id} + '\' '">修整</button>
+                    <button class="button" th:onclick="'location.href=\'/seller/noticeDelete.do?id=' + ${list.id} + '&pageId=' + ${list.seller_id.id} + '\' '">削除</button>
+                  </td>
+                </tr>
+                <!-- 추가 공지사항 항목을 여기에 삽입할 수 있습니다. -->
+                </tbody>
+              </table>
+            </div>
+            <!-- END PRODUCT LIST -->
+            <!-- BEGIN PAGINATOR -->
+            <div class="row" th:if="${pageMaker.total != 0}">
+              <div class="col-md-4 col-sm-4 items-info"></div>
+              <div class="col-md-8 col-sm-8" style="margin-top:10px;">
+                <ul class="pagination pull-right">
+                  <!-- 이전 페이지 -->
+                  <li th:if="${pageMaker.prev}"><a th:href="@{/seller/notice.do(id=${id},pageNum=${pageMaker.startPage - 1}, amount=${pageMaker.cri.amount}, type=${pageMaker.cri.type}, keyword=${pageMaker.cri.keyword})}">&laquo;</a></li>
+                  <th:block th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                    <li th:if="${pageMaker.cri.pageNum != page}"><a th:href="@{/seller/notice.do(id=${id},pageNum=${page}, amount=${pageMaker.cri.amount}, type=${pageMaker.cri.type}, keyword=${pageMaker.cri.keyword})}">[[${page}]]</a></li>
+                    <li th:if="${pageMaker.cri.pageNum == page}"><span>[[${page}]]</span></li>
+                  </th:block>
+                  <!-- 다음 페이지 -->
+                  <li th:if="${pageMaker.next}"><a th:href="@{/seller/notice.do(id=${id},pageNum=${id=${id},pageMaker.endPage + 1}, amount=${pageMaker.cri.amount}, type=${pageMaker.cri.type}, keyword=${pageMaker.cri.keyword})}">&laquo;</a></li>
+                </ul>
+              </div>
+            </div>
+            <!-- END PAGINATOR -->
+          </div>
+        </div>
+        <!-- END CONTENT -->
+      </div>
+      <!-- END SIDEBAR & CONTENT -->
+    </div>
+  </div>
+</div>
+
+  <th:block layout:fragment="bodyScript">
+  <!--없음-->
+    </th:block>
+</html>

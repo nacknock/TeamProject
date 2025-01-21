@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:fragment="sidebar">
+            <!-- 사이드바 -->
+            <nav > <!-- 적당한 너비 -->
+                <div class="sidebar-sticky" style="font-family: 'PRETENDARDJP-BLACK';">
+                    <h3 class="sidebar-heading" style="text-align:center; font-family: 'PRETENDARDJP-BLACK';">メニュー</h3>
+                    <ul class="nav flex-column" style="text-align: center;">
+                        <li class="nav-item">
+                            <a class="nav-link" style="text-align: center" th:href="@{/buyer/main.do}">購入履歴</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="text-align: center" th:href="@{/buyer/qna.do}">お問い合わせ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/buyer/wishList.do}">お気に入り</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/buyer/information.do}">会員情報管理</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+</html>

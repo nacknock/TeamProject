@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:fragment="header">
+    <div class="pre-header"
+         style="font-family:'PRETENDARDJP-BLACK'; height:110px; padding-top:5px; height: 80px !important;
+                box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05) !important;">
+        <div class="container">
+            <div class="row"
+                 style="display: flex;
+                 align-items: center;
+                 justify-content: space-between;
+                 transform: translateY(-10px);
+                 margin-top: 5px;">
+                <!-- BEGIN CATEGORY PART -->
+                <div class="category-menu"
+                     style="display: flex;
+                     align-items: center;
+                     margin-right: 10px;">
+                    <!-- 카테고리 드롭다운 -->
+                    <div class="dropdown">
+                    <span class="material-icons"
+                          style="cursor: pointer;
+                          font-size: 30px;"
+                          id="categoryIcon"
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false">
+                        menu
+                    </span>
+                        <div class="dropdown-menu" aria-labelledby="categoryIcon">
+                            <a th:each="cate : ${categoryList}" class="dropdown-item" th:href="@{/product/list.do(category=${cate.id})}">[[${cate.category_name}]]</a>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- END CATEGORY PART -->
+
+                <!-- BEGIN LOGO PART -->
+                <div class="logo-container"
+                     style="display: flex;
+                     align-items: center;">
+                    <a class="site-logo" th:href="@{/}">
+                        <img th:src="@{/Main/assets/corporate/img/logos/logo.png}"
+                             style="width: 100px;">
+                    </a>
+                </div>
+                <!-- END LOGO PART -->
+
+                <!-- SEARCH BAR AND ICON -->
+                <div class="search-container"
+                     style="display: flex;
+                     align-items: center;
+                     flex: 1;
+                     justify-content: center;
+                     gap: 10px;
+                     margin-left: -50px;">
+                    <form method="get" th:action="@{/product/list.do}"
+                          style="width: 50%;
+                          padding: 8px;">
+                        <input th:if="${cri == null}"
+                                type="text"
+                                placeholder="商品を探す" name="keyword"
+                                style="width: 80%;
+                                font-size: 16px;
+                                border: 1px solid #ccc;
+                                border-radius: 5px;">
+                        <input
+                        type="text"
+                        placeholder="商品を探す" name="keyword"
+                        style="width: 80%; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;" th:if="${cri}" th:value="${cri.keyword}">
+                        <input th:if="${cri}" type="hidden" name="category" th:value="${cri.category}">
+                        <button type="submit"
+                                style="background: none;
+                                border: none;
+                                padding: 0;
+                                margin: 0;
+                                cursor: pointer;
+                                position: relative;">
+                            <span class="material-icons"
+                                  style="cursor: pointer;
+                                  font-size: 30px;">
+                                search
+                            </span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- BEGIN TOP BAR RIGHT PART -->
+                <div class="additional-nav"
+                     style="display: flex;
+                     align-items: center;
+                     justify-content: flex-end;
+                     gap: 15px;">
+                    <a sec:authorize="hasRole('BUYER')" th:href="@{/buyer/main.do}">
+                        <span class="material-symbols-outlined"
+                              style="cursor: pointer;
+                              font-size: 30px;">person</span>
+                    </a>
+                    <a sec:authorize="hasRole('SELLER')" th:href="@{/seller/main.do}">
+                        <span class="material-symbols-outlined"
+                              style="cursor: pointer;
+                              font-size: 30px;">person</span>
+                    </a>
+                    <a sec:authorize="isAnonymous()" th:href="@{/sign/login.do}">
+                        <span class="material-symbols-outlined"
+                              style="cursor: pointer;
+                              font-size: 30px">login</span>
+                    </a>
+                    <a sec:authorize="isAuthenticated()" th:href="@{/logout.do}">
+                        <span class="material-symbols-outlined"
+                              style="cursor: pointer;
+                              font-size: 30px;
+                              color: black !important;
+
+                              ">logout</span>
+                    </a>
+                    <a sec:authorize="hasRole('BUYER')" th:href="@{/cart/list.do}">
+                        <span class="material-symbols-outlined"
+                              style="cursor: pointer;
+                              font-size: 30px;">shopping_cart</span>
+                    </a>
+                </div>
+                <!-- END TOP BAR RIGHT PART -->
+            </div>
+        </div>
+    </div>
+</div>
+</html>

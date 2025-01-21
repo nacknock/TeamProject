@@ -1,0 +1,453 @@
+<!--jQuery 중복 주석처리 : 문제시 확인 바람람-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+  layout:decorate="~{layouts/layout}">
+<th:block layout:fragment="css">
+  <!-- Fonts START -->
+  <link
+    href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all"
+    rel="stylesheet" type="text/css">
+  <!-- Fonts END -->
+
+  <!-- Page level plugin styles START -->
+  <link th:href="@{/Main/assets/plugins/uniform/css/uniform.default.css}" rel="stylesheet" type="text/css">
+  <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+  <!-- for slider-range -->
+  <link th:href="@{/Main/assets/plugins/rateit/src/rateit.css}" rel="stylesheet" type="text/css">
+  <!-- Page level plugin styles END -->
+
+  <!-- Theme styles START -->
+  <link th:href="@{/Main/assets/corporate/css/custom.css}" rel="stylesheet">
+  <!-- Theme styles END -->
+  <style>
+    /*<!--판매자를 위한 버튼-->*/
+    .buttonForSeller{
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /*<!--추천메뉴 css-->*/
+    .product-item {
+      position: relative; /* 자식 요소의 절대 위치 지정을 위한 상대 위치 설정 */
+      height: 400px; /* 상품 박스의 고정 높이 설정 */
+      overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+    }
+
+    .pi-img-wrapper {
+      width: 100%; /* 부모 요소에 맞게 너비 설정 */
+      height: 250px; /* 고정 높이 설정 */
+      overflow: hidden; /* 넘치는 내용 숨김 */
+    }
+
+    .pi-img-wrapper img {
+      width: 100%; /* 이미지 너비를 부모 요소에 맞추도록 설정 */
+      height: 100%; /* 이미지 높이를 부모 요소에 맞추도록 설정 */
+      object-fit: cover; /* 이미지 비율을 유지하며 잘리지 않도록 설정 */
+    }
+
+    .product-item h3 {
+      max-height: 60px; /* 상품 제목의 최대 높이를 설정 (필요에 따라 조정) */
+      overflow: hidden; /* 내용이 넘치면 숨김 처리 */
+      text-overflow: ellipsis; /* 넘치는 텍스트에 '...' 표시 */
+      white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정 */
+    }
+
+    .product-item .add2cart {
+      position: absolute; /* 절대 위치 지정 */
+      bottom: 10px; /* 하단에서 10px 위로 위치 설정 */
+      right: 10px; /* 우측에서 10px 안으로 위치 설정 */
+      color: #a8aeb3; /* 텍스트 색상 */
+      border: 1px #ededed solid; /* 경계선 설정 */
+      padding: 3px 6px; /* 내부 여백 설정 */
+    }
+
+    /*상품페이지 크기*/
+    .product-page {
+      font-family: 'PRETENDARDJP-BLACK';
+      max-width: 1268px;
+      width: 100%; /* 화면 크기에 따라 너비를 100%로 설정 */
+      margin: 0; /* 기본 마진 제거 */
+    }
+
+    .product-quantity {
+      font-family: 'PRETENDARDJP-BLACK';
+    }
+
+    ul#myTab.nav.nav-tabs {
+      font-family: 'PRETENDARDJP-BLACK';
+    }
+  </style>
+</th:block>
+
+<div layout:fragment="content">
+  <div class="main"><!-- 머리-본문-꼬리 중 본문 태그-->
+    <div class="container" style="padding-top: 15px;"><!--브라우저의 너비로 크기 고정 : smallNavi-->
+      <ul class="breadcrumb" style = "font-family: 'PRETENDARDJP-BLACK';"><!-- 경로 표시 : Home > Store > 가벼운 조끼-->
+        <li><a th:href="@{/}">ホーム</a></li>
+        <li><a th:href="@{/product/list.do}">商品リスト</a></li>
+        <li><a th:href="@{/product/list.do(category=${productDTO.category_id.id})}">[[${productDTO.category_id.category_name}]]</a></li>
+        <!-- <li><a th:href="">여성의류</a></li> -->
+        <li class="active">[[${productDTO.title}]]</li>
+      </ul>
+    </div><!--END container-->
+    <div class="container"><!--전체화면 너비로 크기 고정하기 -->
+      <div class="row margin-bottom-40"><!-- row : 하위 태그 수평 정렬, col태그에 자동 패딩 & 마진 아래 40px-->
+        <div class="col-md-12 col-sm-12"> <!-- 높이를 설정하여 중앙 정렬을 지원 -->
+          <div class="product-page" style="width: 100%;"><!-- 상품 상세 페이지 : 상품 이미지, 상품 기본 정보 보-->
+            <div class="row"><!-- row : 하위 태그 수평 정렬, col태그에 자동 패딩-->
+
+              <div class="col-md-6 col-sm-6"><!-- 상품 이미지 박스 : (왼쪽에) 중간 화면 기준 50%의 크기 사이즈로 고정-->
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel"><!-- 이미지 슬라이드 레이아웃 박스-->
+                  <!-- Indicators : 이미지 슬라이드 번호 표시-->
+                  <!-- Wrapper for slides : 이미지 슬라이드 내부-->
+                  <div class="carousel-inner" role="listbox"><!--carousel-inner : 슬라이드 간의 전환 효과를 관리 & listbox : 여러 항목을 나열하여 사용자가 선택할 수 있도록 하는 컴포넌트-->
+
+
+                    <!-- 첫 번째 이미지 슬라이드 활성화--><!-- thumbnail -->
+                    <div class="item active">
+                      <a th:href="${productDTO.thumbnail_url}" class="fancybox-button" rel="photos-lib"> <!-- 이미지 클릭 시 확대 & 클릭 버튼 디자인 & 사진 갤러리를 구현-->
+					      		    <img th:src="${productDTO.thumbnail_url}"> <!-- 이미지 불러오기-->
+                      </a>
+                    </div>
+
+                    <!-- 추가 이미지 슬라이드 --><!-- 추가 이미지 -->
+                    <div class="item" th:each="pictureList : ${pictureList}">
+                      <a th:href="${pictureList.product_picture_url}" class="fancybox-button" rel="photos-lib">
+					      		    <img th:src="${pictureList.product_picture_url}">
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- BEGIN 이미지 슬라이드 Controls -->
+                  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev"><!-- 이미지 슬라이드 이전 버튼-->
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><!-- 이전 버튼 아이콘-->
+                    <span class="sr-only">Previous</span><!-- 이전 버튼 텍스트-->
+                  </a>
+                  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next"><!-- 이미지 슬라이드 다음 버튼-->
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><!-- 다음 버튼 아이콘-->
+                    <span class="sr-only">Next</span><!-- 다음 버튼 텍스트-->
+                  </a>
+                  <!-- END 이미지 슬라이드 Controls -->
+
+                </div><!--END carousel-example-generic-->
+              </div><!--END col-md-6 col-sm-6 : 상품 이미지 박스-->
+
+
+              <div class="col-md-6 col-sm-6"><!-- 상품 기본 정보 박스 : (오른쪽에) 중간 화면 기준 50%의 크기 사이즈로 고정-->
+                
+                <!-- 상품 이름, 수정/삭제/문의 버튼, 판매자 이름-->
+                <h1 style ="font-family: 'PRETENDARDJP-BLACK';">
+                  [[${productDTO.title}]]
+                </h1>
+                <div class="buttonForSeller">
+                    <p style="font-size: 15px; padding-top: 10px;"> 販売者: [[${productDTO.seller_id.company_name}]] </p>
+                  <div class="SellerButton">
+                    <button class="btn btn-primary" type="button " th:if="${bool}"
+                            style="float: right; margin-left: 5px;" th:onclick="'location.href=\'/seller/productUpdate.do?id=' + ${productDTO.id} + '\' '">編集</button><!-- 판매자만 나오게 설정 -->
+                    <button class="btn btn-danger" type="button " th:if="${bool}"
+                            style="float: right; margin-left: 5px;" th:onclick="'del('+${productDTO.id}+')'">削除</button><!-- 판매자만 나오게 설정 -->
+                    <button class="btn " type="button" style="float: right;" th:onclick="'location.href=\'/question/write.do?id=' + ${productDTO.id} + '\' '">商品についてのお問い合わせ</button>
+                  </div>
+                </div>
+
+                <!-- 상품 가격-->
+                <div class="price-availability-block clearfix">
+                  <div class="price">
+                    <strong style = "font-family: 'PRETENDARDJP-BLACK';">[[${productDTO.price}]]<span>円</span></strong>
+                  </div>
+                </div>
+
+                <!-- 상품 설명-->
+                <div class="description">
+                  <p th:if="${#strings.length(productDTO.content) > 200}"
+                     th:text="${productDTO.content.substring(0, 200) + '...'}"></p>
+                  <p th:if="${#strings.length(productDTO.content) <= 200}"
+                     th:text="${productDTO.content}"></p>
+
+                </div>
+
+                <!-- 상품 옵션-->
+                <div class="product-page-options">
+                  <div class="pull-left">
+                    <label class="control-label" style = "font-family: 'PRETENDARDJP-BLACK'; margin-top: 5px;">オップション</label>
+                    <select class="form-control input-sm" id="option" style="width: 180px; border-radius: 5px !important;">
+                      <option value="0">選択</option>
+                      <option th:each="optionList : ${optionList}" th:value="${optionList.id}">[[${optionList.option_name}]]</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- 상품 수량, 구매, 장바구니, 찜하기 버튼-->
+                <div class="product-page-cart">
+                  <div class="product-quantity"> <!-- 상품 수량-->
+                    <input id="product-quantity" type="text" value="1" readonly class="form-control input-sm">
+                    <input id="product" type="hidden" th:value="${productDTO.id}">
+                  </div>
+                  <button class="btn btn-primary" id="buyBtn" type="button" onclick="goCheckout()">buy</button><!-- 구매 버튼-->
+                  <button class="btn btn-primary" id="cartBtn" type="button" onclick="addCart()" style="margin-left: 5px;">カートに追加</button><!-- 장바구니 버튼-->
+                  <button class="btn " type="button" id="wishBtn" th:onclick="addWish('[[${productDTO.id}]]')" style="margin-left: 5px;">お気に入り</button><!-- 찜하기 버튼-->
+                </div>
+
+                <!-- 상품 리뷰, 리뷰 수, 리뷰 작성 버튼-->
+                <div class="review"><!-- 별점은 rateit.js 사용 ispreset="true",readonly="true"로 사용자 수정 불가 설정// 값을 바꾸고 싶으면 backing4의 value 건드릴것 -->
+                  <input type="range" th:value="${raitAvg}" step="0.25" id="backing4">
+                  <div class="rateit" data-rateit-backingfld="#backing4"
+                    data-rateit-value="2.5" data-rateit-resetable="false"
+                    data-rateit-readonly="true"  data-rateit-ispreset="true"
+                      data-rateit-min="0" data-rateit-max="5">
+                  </div>
+                  <a href="javascript:;"style = "font-family: 'PRETENDARDJP-BLACK';">[[${reviewTotal}]] 件</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a th:href="@{/buyer/main.do}" style = "font-family: 'PRETENDARDJP-BLACK';">レビューを書く</a>
+                </div>
+              
+              </div><!--END col-md-6 col-sm-6 : 상품 기본 정보보-->
+
+              <div class="product-page-content"> <!-- 상품 상세설명 : 정보, 리뷰, 공지 사항-->
+                <ul id="myTab" class="nav nav-tabs"><!-- 탭 메뉴 제목 입력 박스스-->
+                  <li class="active"><a href="#Description" data-toggle="tab">商品詳細</a></li> <!-- 상세 내용 탭-->
+                  <li><a href="#Information" data-toggle="tab">お知らせ</a></li><!-- 공지사항 탭-->
+                  <li><a href="#Reviews" data-toggle="tab">レビュー ([[${reviewTotal}]]件)</a></li><!-- 리뷰 탭-->
+                </ul>
+
+              
+                <div id="myTabContent" class="tab-content "><!-- 탭 메뉴 내용 작성 박스-->
+                  <!-- .class 기능은 tab 내용이 보이거나 안 보이거나 & 기본은 보이게게 -->
+                  <div class="tab-pane fade in active" id="Description"> <!-- 탭1 : 상품상세정보-->
+                    <p>[[${productDTO.content}]] </p>
+                  </div>
+
+
+                  <div class="tab-pane fade" id="Information"><!-- 탭2 : 공지사항-->
+                    <table class="datasheet"><!-- 공지사항 테이블-->
+                      <tr>
+                        <th colspan="2">お知らせ</th> <!-- 공지사항 테이블 제목-->
+                      </tr>
+
+                      <!-- 공지사항 작성글1-->
+                      <tr th:each="noticeList : ${noticeList}">
+                        <td class="datasheet-features-type" style="font-size: 15px; padding: 15px">[[${noticeList.title}]] <!-- 공지사항 작성성글 제목-->
+                          <p style="font-weight: normal; font-size: 13px;">
+                            [[${noticeList.content}]] <!-- 공지사항 작성글 내용-->
+                          </p>
+                        </td>
+                        <td th:text="${#strings.substring(noticeList.created_at, 0, 10)}"></td> <!-- 공지사항 작성일-->
+                      </tr>
+
+                      <!-- 공지사항 작성글 추가 구간간-->
+                    </table>
+                  </div><!--END tab-pane fade-->
+
+                  <div class="tab-pane fade" id="Reviews"><!-- 탭3 : 리뷰-->
+                    <p th:if="${pageMaker.total == 0}">この商品のレビューはまだありません。</p> <!-- 리뷰가 없을 시 나오는 문구 -->
+                    <div th:replace="~{fragments/productDetailReview::review}">
+                    </div>
+                  </div><!--END tab-pane fade : 탭3 리뷰뷰-->
+                </div><!--END tab-content-->
+              </div><!--END product-page-content-->
+
+            </div><!--END row : 포스트 정리-->
+          </div><!--END product-page-->
+        </div><!--END col-md-9 col-sm-7-->
+      </div><!--END row-->
+      <!-- END Main CONTENT -->
+
+      <!-- BEGIN SIMILAR PRODUCTS : 추전/비슷한 상품-->
+      <div class="row margin-bottom-40" style="padding-bottom: 80px;"><!-- row : 하위 태그 수평 정렬, col태그에 자동 패딩 & 마진 아래 40px & 패딩 아래 80px-->
+        <div class="col-md-12 col-sm-12"><!-- 추천 상품 박스 : 중간 화면 기준 100%의 크기 사이즈로 고정-->
+          <h2 style = "font-family: 'PRETENDARDJP-BLACK';">この商品を見ている人はこちらもチェック</h2><!-- 추천 상품 제목-->
+          <div class="owl-carousel owl-carousel4"><!-- 추천 상품 슬라이드 박스-->
+            
+            <!-- 추천 상품1-->
+            <div th:each="recommend_list:${recommend_list}">
+              <div class="product-item"><!-- 추천 상품1 박스-->
+                <div class="pi-img-wrapper"><!-- 추천 상품1 이미지 디자인인 박스-->
+                  <img th:src="${recommend_list.thumbnail_url}" class="img-responsive" alt="Berry Lace Dress"><!-- 추천 상품1 이미지-->
+                </div>
+                <h3><a th:href="@{/product/detail.do(id = ${recommend_list.id})}" style = "font-family: 'PRETENDARDJP-BLACK';">[[${recommend_list.title}]]</a></h3> <!-- 추천 상품1 이름-->
+                <div class="pi-price">[[${recommend_list.price}]]円</div><!-- 추천 상품1 가격-->
+                <a href="javascript:void(0);" th:onclick="addWish('[[${recommend_list.id}]]')" class="btn btn-default add2cart" style = "font-family: 'PRETENDARDJP-BLACK';">お気に入り</a><!-- 추천 상품1 찜하기 버튼-->
+                <!--<div class="sticker sticker-new"></div>--><!-- 추천 상품1 새로운 상품 표시-->
+              </div>
+            </div>
+
+            <!-- 추가 추천 상품-->
+          
+          </div><!--END owl-carousel4-->
+        </div><!--END col-md-12 col-sm-12-->
+      </div><!--END row-->
+      <!-- END SIMILAR PRODUCTS -->
+    
+    </div><!--END container-fluid-->
+  </div><!--END MAIN-->
+</div><!--layout:content-->
+
+<th:block layout:fragment="bodyScript">
+
+  <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+  <script th:src="@{/Main/assets/plugins/uniform/jquery.uniform.min.js}" type="text/javascript"></script>
+  <script th:src="@{/Main/assets/plugins/rateit/src/jquery.rateit.js}" type="text/javascript"></script>
+  <script type="text/javascript">
+    jQuery(document).ready(function () {
+      //Layout.init();    
+      //Layout.initOWL();
+      //Layout.initTwitter();
+      //Layout.initImageZoom();
+      //Layout.initTouchspin();
+      Layout.initUniform();
+    });
+
+    //rateit 유저 입력값 받아오기
+    // $('.rateit').bind('rated', function(event, value) {
+    //         alert('별점이 ' + value + '로 설정되었습니다.');
+    //         // 여기서 value를 사용하여 추가적인 처리를 할 수 있습니다.
+    //     });
+
+    //review 리스트 비동기 페이징
+    function page(page, amount, id) {
+      $.ajax({
+          type: 'POST',
+          url: '/product/review_paging',
+          data: {
+              pageNum: page,
+              amount: amount,
+              id: id
+          },
+          success: function(data) {
+              if (data) {
+                  $('.reviewFragments').remove(); // 기존 리뷰 컨테이너 제거
+
+                  const newdiv = $('<div>').html(data); // 새로운 리뷰 컨테이너 생성
+
+                  let parent = $('#Reviews'); // 부모 요소 선택
+
+                  parent.append(newdiv); // 새로운 컨텐츠 추가
+
+              } else {
+                  alert('問題が発生しました。');
+                  console.log('fail');
+              }
+          },
+          error: function() {
+              alert('エラーが発生しました。');
+          }
+      });
+    }
+
+    function goCheckout() {
+      const id = $('#option').val();
+      const amount = $('#product-quantity').val();
+      const bool = false;
+
+      if(id === "0"){
+        alert("オップションを選択してください。");
+        id.focus();
+      }
+      else if(amount <= 0){
+        alert("数量を選択してください。");
+        amount.focus();
+      }
+      else{
+        location.href="/product/checkout.do?id="+id+"&amount="+amount;
+      }
+    }
+
+    function addCart() {
+      const id = $('#option').val();
+      const amount = $('#product-quantity').val();
+
+      if(id === "0"){
+        alert("オップションを選択してください。");
+        return false;
+      }
+      if(amount <= 0){
+        alert("数量を選択してください。");
+        return false;
+      }
+
+      $.ajax({
+          type: 'POST',
+          url: '/cart/add.do',
+          data: {
+              amount: amount,
+              id: id
+          },
+          success: function(data) {
+              if (data === "true") {
+                alert("カートに商品を追加しました。");
+              }else if(data === "false"){
+                alert('問題が発生しました。');
+                console.log('fail');
+              }else if(data === "added"){
+                alert('既にカートに追加した商品です。');
+              }
+          },
+          error: function() {
+              alert('エーラーが発生しました。');
+          }
+      });
+    }
+    
+    function addWish(id) {
+
+
+      if(id === ""){
+        alert("問題が発生しました。");
+        return false;
+      }
+      console.log(1231231);
+
+      $.ajax({
+          type: 'POST',
+          url: '/buyer/addWish.do',
+          data: {
+              id: id
+          },
+          success: function(data) {
+              if (data === "true") {
+                alert("お気に入りに追加しました。");
+              }else if(data === "false"){
+                alert('問題が発生しました。');
+                console.log('fail');
+              }else if(data === "added"){
+                alert('既に追加した商品です。');
+              }
+          },
+          error: function() {
+              alert('エーラーが発生しました。');
+          }
+      });
+      console.log(1231231);
+    }
+
+    function del(id) {
+
+
+      if(id === ""){
+        alert("問題が発生しました。");
+        return false;
+      }
+
+      $.ajax({
+          type: 'POST',
+          url: '/product/delete.do',
+          data: {
+              id: id
+          },
+          success: function(data) {
+              if (data === "true") {
+                alert("商品の削除に成功しました。");
+                location.href='/product/list.do';
+              }else if(data === "false"){
+                alert('問題が発生しました。');
+                console.log('fail');
+              }
+          },
+          error: function() {
+              alert('エーラーが発生しました。');
+          }
+      });
+      console.log(1231231);
+    }
+  </script>
+  <!-- END PAGE LEVEL JAVASCRIPTS -->
+</th:block>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+    layout:decorate="~{layouts/MypageLayout}">
+
+<th:block layout:fragment="css">
+    <style>
+        .container,
+        .mainFont{
+            font-family: 'PRETENDARDJP-BLACK' !important;
+        }
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding-top: 20px;
+        }
+
+        .card {
+            border: none;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .card-text {
+            font-size: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .num {
+            width: 10%;
+        }
+
+        .title {
+            width: 45%;
+        }
+
+        .date {
+            width: 25%
+        }
+
+        .bt {
+            width: 15%
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .button {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .post-insert {
+            display: flex;
+            flex-direction: row-reverse;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="main bg-light" style="height:604px;">
+        <!-- 스크립트로 기동. 보이게하는 코드: .maypage,  안보이는 코드: .password-check -->
+        <!-- 비밀번호 확인 -->
+        <div class="container password-check" style="width: 30%; margin: auto; padding-top:100px;">
+            <h1 style="text-align: center; margin: 50px 0px 0px 0px; font-size: 30px; font-weight: bold;" class="mainFont">パスワード確認</h1>
+            <p style="text-align: center; margin-bottom: 30px;" class="mainFont">❗ マイページに入るためにはパスワード認証が必要です。</p>
+            <div class="mb-3 has-error" STYLE="display: flex;  justify-content: space-between;">
+                <input type="password" class="form-control" id="password" style="width: 85%;">
+                <button type="button" class="btn btn-primary btn-auth mainFont" onclick="checkPw()" style="width: 80px; height: 30px;">確認</button>
+            </div>
+            <div class="mb-3 has-error" STYLE="display: flex;  justify-content: space-between;">
+                <div class="help-block" style="display: none;" id="warning"><p  class="mainFont">パスワードが違います。</p></div>
+            </div>
+
+        </div>
+        <!-- END SIDEBAR + POSTCONTENT -->
+    </div><!-- END MAIN -->
+</div><!-- END LAYOUT:CONTENT -->
+
+
+<th:block layout:fragment="bodyScript">
+    <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+<script th:src="@{/Main/assets/plugins/jquery.min.js}" type="text/javascript"></script>
+    <script type="text/javascript">
+        function checkPw(){
+            $.ajax({
+                type: 'POST',
+                url: '/seller/passwordCheck',
+                data: {
+                    password: $('#password').val()
+
+                },
+                success: function(data) {
+                    if(data === "true"){
+                        location.href="/seller/information.do";
+                    }else if(data === "false"){
+                        $('#warning').css("display","block");
+                    }else if(data === "error"){
+                        alert('問題が発生しました。');
+                        console.log('fail');
+                    }
+                },
+                error: function() {
+                    alert('問題が発生しました。');
+                    console.log('error');
+                    }
+            });
+
+        }
+    </script>
+    <!-- END PAGE LEVEL JAVASCRIPTS -->
+</th:block>
+
+</html>

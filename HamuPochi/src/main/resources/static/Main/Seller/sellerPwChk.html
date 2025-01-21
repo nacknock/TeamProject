@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<!--
+Template: Metronic Frontend Freebie - Responsive HTML Template Based On Twitter Bootstrap 3.3.4
+Version: 1.0.0
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase Premium Metronic Admin Theme: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<!-- Head BEGIN -->
+<head>
+  <meta charset="utf-8">
+  <title>Privacy Policy | Metronic Shop UI</title>
+
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <meta content="Metronic Shop UI description" name="description">
+  <meta content="Metronic Shop UI keywords" name="keywords">
+  <meta content="keenthemes" name="author">
+
+  <meta property="og:site_name" content="-CUSTOMER VALUE-">
+  <meta property="og:title" content="-CUSTOMER VALUE-">
+  <meta property="og:description" content="-CUSTOMER VALUE-">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="-CUSTOMER VALUE-"><!-- link to image for socio -->
+  <meta property="og:url" content="-CUSTOMER VALUE-">
+
+  <link rel="shortcut icon" href="favicon.ico">
+
+  <!-- Fonts START -->
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css"> 
+  <!-- Fonts END -->
+
+  <!-- Global styles START -->          
+  <link href="assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Global styles END --> 
+   
+  <!-- Page level plugin styles START -->
+  <link href="assets/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
+  <link href="assets/plugins/owl.carousel/assets/owl.carousel.css" rel="stylesheet">
+  <!-- Page level plugin styles END -->
+
+  <!-- Theme styles START -->
+  <link href="assets/pages/css/components.css" rel="stylesheet">
+  <link href="assets/corporate/css/style.css" rel="stylesheet">
+  <link href="assets/pages/css/style-shop.css" rel="stylesheet" type="text/css">
+  <link href="assets/corporate/css/style-responsive.css" rel="stylesheet">
+  <link href="assets/corporate/css/themes/red.css" rel="stylesheet" id="style-color">
+  <link href="assets/corporate/css/custom.css" rel="stylesheet">
+  <!-- Theme styles END -->
+  <style>
+  	 .bg-light {
+        height: 100%;
+        padding-top: 55px;
+        padding-bottom: 75px;
+    }
+
+    .form-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .bir_yy,
+    .bir_mm,
+    .bir_dd {
+        display: inline-block;
+        width: 30%;
+    }
+
+    .bir_mm+.bir_dd,
+    .bir_yy+.bir_mm {
+        margin-left: 10px;
+    }
+
+    .form-select {
+        border-color: #dbdbdb;
+        color: #777;
+        font-size: 14px;
+    }
+
+    .btn-auth {
+        width: 18%;
+        margin-left: 2%;
+    }
+    .mb-3{
+    	margin: 15px 0px;
+    }
+    .help-block{
+    	margin-left: 15px;
+    }
+    
+    
+  </style>
+</head>
+<!-- Head END -->
+
+<!-- Body BEGIN -->
+<body class="ecommerce">
+
+	<!-- BEGIN TOP BAR -->
+    <div class="pre-header">
+        <div class="container">
+            <div class="row">
+                <!-- BEGIN TOP BAR LEFT PART -->
+                <div class="col-md-6 col-sm-6 additional-shop-info">
+                <h4>HamuPochi</h4>
+                </div>
+                <!-- END TOP BAR LEFT PART -->
+                <!-- BEGIN TOP BAR MENU -->
+                <div class="col-md-6 col-sm-6 additional-nav">
+                    <ul class="list-unstyled list-inline pull-right">
+                        <li><a href="shop-account.html">Return Home</a></li>
+                        <li><a href="page-login.html">Log out</a></li>
+                    </ul>
+                </div>
+                <!-- END TOP BAR MENU -->
+            </div>
+        </div>        
+    </div>
+    <!-- END TOP BAR -->
+
+
+ <div class="main">
+     <div class="container password-check" style="width: 30%;">
+      	<h1 style="text-align: center; margin: 180px 0px 10px 0px; font-size: 30px; font-weight: bold;"> 비밀번호 확인 </h1>
+      	<p style="text-align: center; margin-bottom: 60px;">❗마이페이지를 들어가기 위해서는 비밀번호를 인증을 하셔야합니다.</p>
+      	
+         <div class="mb-3 has-error">
+             <input type="password" class="form-control" id="password" style="width: 80%; float: left;">
+             <button type="button" class="btn btn-primary btn-auth" style="width: 30;" onclick="check()">확인</button>
+             <div class="help-block">비밀번호가 일치하지 않습니다.</div>
+         </div>
+      </div>
+      <!-- 마이페이지 -->
+      <div class="container-fluid mypage" style=" margin-top: 100px; display: none; ">
+      	<h1 style="text-align: center; font-size: 30px; font-weight: bold;"> 마이페이지 </h1>
+	      	<p style="text-align: center; margin-bottom: 60px;">회원정보를 변경하거나 주문 목륵을 확인할 수 있는 페이지 입니다</p>
+      	<div class="row margin-bottom-40 ">
+          <!-- BEGIN SIDEBAR -->
+          <div class="sidebar col-md-3 col-sm-5">
+          		<div class="row">
+          			<div class="sidebar col-md-4 col-sm-5">
+          			</div>
+          			<div class="sidebar col-md-8 col-sm-5">
+	          			<ul class="list-group margin-bottom-25 sidebar-menu">
+			              <li class="list-group-item clearfix"><span style="font-weight: bold;">마이페이지 목록</span></li>
+			              <li class="list-group-item clearfix"><a href="#"><i class="fa fa-angle-right"></i>회원정보변경</a></li>
+			              <li class="list-group-item clearfix"><a href="#"><i class="fa fa-angle-right"></i>주문목록</a></li>
+			            </ul>
+			            
+			            <ul class="list-group margin-bottom-25 sidebar-menu">
+			              <li class="list-group-item clearfix"><a href="#"><i class="fa fa-angle-right"></i>내 장바구니 이동</a></li>
+			            </ul>
+          			</div>
+	            </div>
+			</div>
+          <!-- END SIDEBAR -->
+          <!-- BEGIN CONTENT -->
+          <div class="col-md-9 col-sm-7">
+	         <section>
+            <div class="form-container" style="margin: 0px 120px;>
+            	<button class="btn btn-primary btn-lg" type="button"></button>
+                <h3 class="text-center mb-4" style="margin: 30px 0px;">회원정보</h3>
+                <form>
+                	<!-- 본인 확인 이메일 -->
+                    <div class="form-group">
+	                    <div class="mb-3">
+	                        <label for="email" class="form-label">아이디</label>
+	                        <div class="d-flex">
+	                            <input type="email" class="form-control" id="email"  value="dfa@naver.com" readonly="readonly">
+	                        </div>
+	                    </div>
+                    </div>
+                
+                    <div class="mb-3 has-success">
+                        <label for="nickname" class="form-label">닉네임</label>
+                        <input type="text" class="form-control" id="nickname" value="darrk1">
+                        <div class="help-block">닉네임이 유효합니다.</div>
+                    </div>
+
+                    <!-- 비밀번호 -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">비밀번호</label>
+                        <input type="password" class="form-control is-valid" id="password">
+                        <div class="help-block"></div>
+                    </div>
+
+                    <!-- 비밀번호 재확인 -->
+                    <div class="mb-3 has-error">
+                        <label for="confirmPassword" class="form-label">비밀번호 재확인</label>
+                        <input type="password" class="form-control is-invalid" id="confirmPassword">
+                        <div class="help-block">비밀번호가 일치하지 않습니다.</div>
+                    </div>
+
+                    <!-- 이름 -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">이름</label>
+                        <input type="text" class="form-control" id="name" value="000">
+                        <div class="help-block"></div>
+                    </div>
+                    
+                    <!-- 연락처 -->
+                    <div class="mb-3">
+                        <label for="calss" class="form-label">연락처</label>
+                        <input type="text" class="form-control" id="call" placeholder="' - ' 없이 입력해주세요" value="01012341234">
+                        <div class="help-block"></div>
+                    </div>
+
+                    <!-- 생년월일 -->
+                    <div class="mb-3">
+                        <label class="form-label">생년월일</label>
+                        <div>
+                            <input type="text" class="form-control bir_yy" maxlength="4" value="2022">
+                            <select class="form-select bir_mm" style="height: 35px;">
+                                <option><span>12</span></option>
+                                <option>---------------</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                            </select>
+                            <input type="text" class="form-control bir_dd" maxlength="2" value="19">
+                        </div>
+                        <div class="help-block"></div>
+                    </div>
+
+
+                    <!-- 가입하기 버튼 -->
+                    <div class="d-grid gap-2" style="text-align: center;">
+                    <button class="btn btn-primary btn-lg" type="button" style="width: 100%; margin: 50px 0px;">수정하기</button>
+                </div>
+                </form>
+            </div>
+        </section>
+        
+        <section>
+            <div class="form-container" style="margin: 30px 115px;>
+            <button class="btn btn-primary btn-lg" type="button"></button>
+            	<h3 class="text-center mb-4" style="margin: 30px 0px;">회원탈퇴</h3>
+            	<p style="text-align: center; margin-bottom: 30px;">❗ 회원탈퇴 후에는 계정에 저장된 모든 데이터(개인 정보, 구매목록 등)가 삭제될 수 있습니다.<br>
+            	 탈퇴 후 복구가 불가능하니 주의하세요. </p>
+                <button class="btn btn-primary btn-lg" type="button" style="width: 100%; margin-bottom: 50px;" id="deleteButton">탈퇴하기</button>
+            </div>
+        </section>
+      	</div>
+      	</div>
+    	</div>
+    </div>
+</div>
+
+
+    <!-- Load javascripts at bottom, this will reduce page load time -->
+    <!-- BEGIN CORE PLUGINS(REQUIRED FOR ALL PAGES) -->
+    <!--[if lt IE 9]>
+    <script src="assets/plugins/respond.min.js"></script>  
+    <![endif]-->  
+    <script src="assets/plugins/jquery.min.js" type="text/javascript"></script>
+    <script src="assets/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>      
+    <script src="assets/corporate/scripts/back-to-top.js" type="text/javascript"></script>
+    <script src="assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+
+    <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+    <script src="assets/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script><!-- pop up -->
+    <script src="assets/plugins/owl.carousel/owl.carousel.min.js" type="text/javascript"></script><!-- slider for products -->
+
+    <script src="assets/corporate/scripts/layout.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            Layout.init();    
+            Layout.initOWL();
+            Layout.initTwitter();
+        });
+    </script>
+    <!-- 비동기식으로 비밀번호 확인하고 비밀번호가 맞을 시 화면 표시  -->
+    <script>
+    
+    function check() {
+    	
+    	//먼저 비동기식으로 검사하고 비밀번호가 맞으면 아래 기능을 실행//
+    	
+        // 버튼 요소 선택
+        const check = document.querySelector('.password-check');
+        // DIV 요소 선택
+        const myPageDiv = document.querySelector('.container-fluid.mypage');
+
+        // 버튼을 숨김 (display: none)
+        check.style.display = 'none';
+
+        // DIV 표시 (display: block)
+        myPageDiv.style.display = 'block';
+    }
+    	
+    	document.getElementById('deleteButton').addEventListener('click', function() {
+    	    const confirmDelete = confirm('정말로 탈퇴하시겠습니까?'); // 확인 알림창 표시
+    	    if (confirmDelete) {
+    	        //탈퇴 기능으로 가기 
+    	    } else {
+    	        alert('탈퇴가 취소되었습니다.');
+    	    }
+    	});
+    
+    </script>
+    <!-- END PAGE LEVEL JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

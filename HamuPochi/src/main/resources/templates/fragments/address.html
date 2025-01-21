@@ -1,0 +1,174 @@
+<div class="panel-body row" >
+     <!-- Strat not address -->
+    <div class="col-md-12 col-sm-12" th:unless="${addressaddress != null}" >
+      <h3>Your Personal Details</h3>
+      <div class="form-group">
+        <input type="hidden" value="0" id="bool">
+        <label for="name">氏名（フルネーム） <span class="require">*</span></label>
+        <input type="text" id="name" th:value="${address.buyer_id.name}" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="telephone">電話番号 <span class="require">*</span></label>
+        <input type="text" id="telephone" th:value="${address.buyer_id.phone_number}" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="post_number">郵便番号 <span class="require">*</span></label>
+        <input type="text" id="post_number" name="post_number" th:value="${address.post_number}" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="prefecture">都道府県 <span class="require">*</span></label>
+        <select id="prefecture" name="prefecture" class="form-control input-sm">
+            <option value="0">都道府県を選択する</option>
+            <option th:unless="${#strings.equals(address.prefecture, '北海道') and address.status == true}" value="北海道">北海道</option>
+            <option th:if="${#strings.equals(address.prefecture, '北海道') and address.status == false}" value="北海道" selected>北海道</option>
+            <option th:unless="${#strings.equals(address.prefecture, '青森県') and address.status == true}" value="青森県">青森県</option>
+            <option th:if="${#strings.equals(address.prefecture, '青森県') and address.status == false}" value="青森県" selected>青森県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '岩手県') and address.status == true}" value="岩手県">岩手県</option>
+            <option th:if="${#strings.equals(address.prefecture, '岩手県') and address.status == false}" value="岩手県" selected>岩手県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '宮城県') and address.status == true}" value="宮城県">宮城県</option>
+            <option th:if="${#strings.equals(address.prefecture, '宮城県') and address.status == false}" value="宮城県" selected>宮城県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '秋田県') and address.status == true}" value="秋田県">秋田県</option>
+            <option th:if="${#strings.equals(address.prefecture, '秋田県') and address.status == false}" value="秋田県" selected>秋田県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '山形県') and address.status == true}" value="山形県">山形県</option>
+            <option th:if="${#strings.equals(address.prefecture, '山形県') and address.status == false}" value="山形県" selected>山形県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '福島県') and address.status == true}" value="福島県">福島県</option>
+            <option th:if="${#strings.equals(address.prefecture, '福島県') and address.status == false}" value="福島県" selected>福島県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '茨城県') and address.status == true}" value="茨城県">茨城県</option>
+            <option th:if="${#strings.equals(address.prefecture, '茨城県') and address.status == false}" value="茨城県" selected>茨城県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '栃木県') and address.status == true}" value="栃木県">栃木県</option>
+            <option th:if="${#strings.equals(address.prefecture, '栃木県') and address.status == false}" value="栃木県" selected>栃木県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '群馬県') and address.status == true}" value="群馬県">群馬県</option>
+            <option th:if="${#strings.equals(address.prefecture, '群馬県') and address.status == false}" value="群馬県" selected>群馬県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '埼玉県') and address.status == true}" value="埼玉県">埼玉県</option>
+            <option th:if="${#strings.equals(address.prefecture, '埼玉県') and address.status == false}" value="埼玉県" selected>埼玉県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '千葉県') and address.status == true}" value="千葉県">千葉県</option>
+            <option th:if="${#strings.equals(address.prefecture, '千葉県') and address.status == false}" value="千葉県" selected>千葉県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '東京都') and address.status == true}" value="東京都">東京都</option>
+            <option th:if="${#strings.equals(address.prefecture, '東京都') and address.status == false}" value="東京都" selected>東京都</option>
+            <option th:unless="${#strings.equals(address.prefecture, '神奈川県') and address.status == true}" value="神奈川県">神奈川県</option>
+            <option th:if="${#strings.equals(address.prefecture, '神奈川県') and address.status == false}" value="神奈川県" selected>神奈川県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '新潟県') and address.status == true}" value="新潟県">新潟県</option>
+            <option th:if="${#strings.equals(address.prefecture, '新潟県') and address.status == false}" value="新潟県" selected>新潟県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '富山県') and address.status == true}" value="富山県">富山県</option>
+            <option th:if="${#strings.equals(address.prefecture, '富山県') and address.status == false}" value="富山県" selected>富山県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '石川県') and address.status == true}" value="石川県">石川県</option>
+            <option th:if="${#strings.equals(address.prefecture, '石川県') and address.status == false}" value="石川県" selected>石川県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '福井県') and address.status == true}" value="福井県">福井県</option>
+            <option th:if="${#strings.equals(address.prefecture, '福井県') and address.status == false}" value="福井県" selected>福井県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '山梨県') and address.status == true}" value="山梨県">山梨県</option>
+            <option th:if="${#strings.equals(address.prefecture, '山梨県') and address.status == false}" value="山梨県" selected>山梨県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '長野県') and address.status == true}" value="長野県">長野県</option>
+            <option th:if="${#strings.equals(address.prefecture, '長野県') and address.status == false}" value="長野県" selected>長野県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '岐阜県') and address.status == true}" value="岐阜県">岐阜県</option>
+            <option th:if="${#strings.equals(address.prefecture, '岐阜県') and address.status == false}" value="岐阜県" selected>岐阜県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '静岡県') and address.status == true}" value="静岡県">静岡県</option>
+            <option th:if="${#strings.equals(address.prefecture, '静岡県') and address.status == false}" value="静岡県" selected>静岡県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '愛知県') and address.status == true}" value="愛知県">愛知県</option>
+            <option th:if="${#strings.equals(address.prefecture, '愛知県') and address.status == false}" value="愛知県" selected>愛知県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '三重県') and address.status == true}" value="三重県">三重県</option>
+            <option th:if="${#strings.equals(address.prefecture, '三重県') and address.status == false}" value="三重県" selected>三重県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '滋賀県') and address.status == true}" value="滋賀県">滋賀県</option>
+            <option th:if="${#strings.equals(address.prefecture, '滋賀県') and address.status == false}" value="滋賀県" selected>滋賀県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '京都府') and address.status == true}" value="京都府">京都府</option>
+            <option th:if="${#strings.equals(address.prefecture, '京都府') and address.status == false}" value="京都府" selected>京都府</option>
+            <option th:unless="${#strings.equals(address.prefecture, '大阪府') and address.status == true}" value="大阪府">大阪府</option>
+            <option th:if="${#strings.equals(address.prefecture, '大阪府') and address.status == false}" value="大阪府" selected>大阪府</option>
+            <option th:unless="${#strings.equals(address.prefecture, '兵庫県') and address.status == true}" value="兵庫県">兵庫県</option>
+            <option th:if="${#strings.equals(address.prefecture, '兵庫県') and address.status == false}" value="兵庫県" selected>兵庫県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '奈良県') and address.status == true}" value="奈良県">奈良県</option>
+            <option th:if="${#strings.equals(address.prefecture, '奈良県') and address.status == false}" value="奈良県" selected>奈良県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '和歌山県') and address.status == true}" value="和歌山県">和歌山県</option>
+            <option th:if="${#strings.equals(address.prefecture, '和歌山県') and address.status == false}" value="和歌山県" selected>和歌山県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '鳥取県') and address.status == true}" value="鳥取県">鳥取県</option>
+            <option th:if="${#strings.equals(address.prefecture, '鳥取県') and address.status == false}" value="鳥取県" selected>鳥取県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '島根県') and address.status == true}" value="島根県">島根県</option>
+            <option th:if="${#strings.equals(address.prefecture, '島根県') and address.status == false}" value="島根県" selected>島根県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '岡山県') and address.status == true}" value="岡山県">岡山県</option>
+            <option th:if="${#strings.equals(address.prefecture, '岡山県') and address.status == false}" value="岡山県" selected>岡山県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '広島県') and address.status == true}" value="広島県">広島県</option>
+            <option th:if="${#strings.equals(address.prefecture, '広島県') and address.status == false}" value="広島県" selected>広島県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '山口県') and address.status == true}" value="山口県">山口県</option>
+            <option th:if="${#strings.equals(address.prefecture, '山口県') and address.status == false}" value="山口県" selected>山口県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '徳島県') and address.status == true}" value="徳島県">徳島県</option>
+            <option th:if="${#strings.equals(address.prefecture, '徳島県') and address.status == false}" value="徳島県" selected>徳島県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '香川県') and address.status == true}" value="香川県">香川県</option>
+            <option th:if="${#strings.equals(address.prefecture, '香川県') and address.status == false}" value="香川県" selected>香川県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '愛媛県') and address.status == true}" value="愛媛県">愛媛県</option>
+            <option th:if="${#strings.equals(address.prefecture, '愛媛県') and address.status == false}" value="愛媛県" selected>愛媛県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '高知県') and address.status == true}" value="高知県">高知県</option>
+            <option th:if="${#strings.equals(address.prefecture, '高知県') and address.status == false}" value="高知県" selected>高知県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '福岡県') and address.status == true}" value="福岡県">福岡県</option>
+            <option th:if="${#strings.equals(address.prefecture, '福岡県') and address.status == false}" value="福岡県" selected>福岡県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '佐賀県') and address.status == true}" value="佐賀県">佐賀県</option>
+            <option th:if="${#strings.equals(address.prefecture, '佐賀県') and address.status == false}" value="佐賀県" selected>佐賀県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '長崎県') and address.status == true}" value="長崎県">長崎県</option>
+            <option th:if="${#strings.equals(address.prefecture, '長崎県') and address.status == false}" value="長崎県" selected>長崎県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '熊本県') and address.status == true}" value="熊本県">熊本県</option>
+            <option th:if="${#strings.equals(address.prefecture, '熊本県') and address.status == false}" value="熊本県" selected>熊本県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '大分県') and address.status == true}" value="大分県">大分県</option>
+            <option th:if="${#strings.equals(address.prefecture, '大分県') and address.status == false}" value="大分県" selected>大分県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '宮崎県') and address.status == true}" value="宮崎県">宮崎県</option>
+            <option th:if="${#strings.equals(address.prefecture, '宮崎県') and address.status == false}" value="宮崎県" selected>宮崎県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '鹿児島県') and address.status == true}" value="鹿児島県">鹿児島県</option>
+            <option th:if="${#strings.equals(address.prefecture, '鹿児島県') and address.status == false}" value="鹿児島県" selected>鹿児島県</option>
+            <option th:unless="${#strings.equals(address.prefecture, '沖縄県') and address.status == true}" value="沖縄県">沖縄県</option>
+            <option th:if="${#strings.equals(address.prefecture, '沖縄県') and address.status == false}" value="沖縄県" selected>沖縄県</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="city">市区町村 <span class="require">*</span></label>
+        <input type="text" id="city" name="city" th:value="${address != null and address.status == false ? address.city : ''}" class="form-control" placeholder="例：〇〇市〇〇町">
+      </div>
+      <div class="form-group">
+        <label for="block_number">丁目・番地・号（数字は半角数字）</label>
+        <input type="text" id="block_number" name="block_number" th:value="${address.block_number != null and address.status == false ? address.block_number : ''}" class="form-control" placeholder="例：1-2-3">
+      </div>
+      <div class="form-group">
+        <label for="building_name">建物名／会社名・部屋番号</label>
+        <input type="text" id="building_name" name="building_name" th:value="${address.building_name != null and address.status == false ? address.building_name : ''}" class="form-control" placeholder="例：〇〇マンション">
+      </div>
+    </div>
+    <!-- End not address -->
+    <hr>
+    <div class="col-md-12"
+          style="display: flex; align-items: center; justify-content: flex-end; gap: 20px;">
+        <!-- 기본주소추가 버튼 -->
+        <button th:if="${address != null and !addressaddress.isEmpty()}"
+                class="btn btn-primary" type="button" id="openaddressModal" style="display: block;">
+            お届け先リスト
+        </button>
+
+        <!-- "この場所で受取" 버튼 -->
+        <button class="btn btn-primary" id="addressBtn" type="button"
+                onclick="addressSelect()">この場所で受取
+        </button>
+    </div>
+    
+    <!-- 주소 목록 모달 BEGIN -->
+    <div class="modal" id="addressaddressModal" style="position: fixed; top: 50%;
+     left: 50%; transform: translate(-50%, -50%); background: white; width: 400px;
+      height: 400px; padding: 15px; border-radius: 8px; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 8px;
+       z-index: 1000; overflow: hidden; display: none;">
+      <div class="modal-header">お届け先リスト</div>
+      <form>
+        <div style="margin-bottom: 10px;display: flex;" th:each="address : ${addressaddress}">
+          <div class="checker" id="uniform-address1">
+            <span><input type="radio" th:id="'address'+ ${address.id}" th:value="${address.id}" name="addressaddress"></span>
+          </div>
+          <label th:for="'address'+ ${address.id}" style="margin-left: 10px;">
+            <th:block th:if="${address.status == false}">[基本] </th:block>
+            〒[[${address.post_number}]] [[${address.prefecture}]][[${address.city}]][[${address.block_number}]][[${address.building_name}]]
+          </label>
+          <button class="btn btn-danger" id="delbtn">X</button>
+        </div>
+      </form>
+      <div style="text-align: right;">
+        <button class="btn btn-primary" id="saveaddressButton" type="button" onclick="addressChange()">決定</button>
+        <button class="btn btn-danger" id="canceladdressButton">キャンセル</button>
+
+      </div>
+    </div>
+    <!-- 주소 목록 모달 END -->
+
+
+  </div>

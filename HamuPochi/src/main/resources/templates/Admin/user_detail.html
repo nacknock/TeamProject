@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+  layout:decorate="~{Admin/layouts/AdminPageLayout}">
+
+<head>
+
+
+  <div layout:fragment="content">
+    <main id="main" class="main"><!-- 헤더-메인-푸터 중 메인 -->
+      <!-- ======= Breadcrumbs : 포스트 제목과 smallNavi ======= -->
+      <div class="pagetitle">
+        <h1>ユーザー詳細</h1><!-- 포스트 제목 -->
+        <nav><!-- smallNavi -->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin/}">ホーム</a></li>
+            <li class="breadcrumb-item active">ユーザー詳細</li>
+          </ol>
+        </nav><!-- End smallNavi -->
+        <!-- End smallNavi -->
+      
+      </div>
+      <!-- End Breadcrumbs -->
+
+      <section class="section profile"><!-- page 구역(area) 나누는 태그-->
+        <div class="row" style="display: flex;justify-content: center;"><!-- row : 태그 수평 정렬하고 col에 패딩 주기-->
+          <div class="col-lg-9"><!-- 유저정보 상세 박스의 큰 화면 기준 100%의 크기-->
+            <div class="card" th:if="${role=='seller'}"><!-- 판매자 정보 상세 박스 디자인 -->
+              <div class="card-body pt-3"><!-- 판매자 정보 상세 박스 내용: 제목 + 탭 바 & 여백 Padding-Top-3 주기 -->
+                
+                <!-- tab-content - 판매자 영역 -->
+                <div class="tab-content pt-2"> <!-- 탭 영역 & 위쪽 패딩 추가 -->
+                  <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                  <!-- content 구역 설정 in tab & tab 전환 에니메이션 & 탭 활성화 상태 & 판매자 상세 내용 : 제목+정보보 -->
+
+                    <div style="margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
+                      <h5 class="card-title" style="margin: 0;">販売者会員情報</h5>
+                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#disablebackdrop">
+                        Ban <!-- 판매자 밴 버튼 -->
+                      </button>
+                    </div>
+
+                    <!--유저 정보 1 : 유저 권한-->
+                    <div class="row"><!-- row : 하위 태그들 한정 수직 정렬을 수평 정렬로 바꿈 & col에 패딩 추가 -->
+                      <div class="col-lg-3 col-md-4 label">Role</div> <!-- col : 수직 정렬 &  lg : 큰 화면의 3/12 사이즈 & md: 중간 화면의 4/12 사이즈즈-->
+                      <div class="col-lg-9 col-md-8">[[${role}]]</div><!-- col : 수직 정렬 &  lg : 큰 화면의 9/12 사이즈 & md : 중간 화면의 8/12 사이즈즈-->
+                    </div>
+                    
+                    <!--유저 정보 2 : 이메일-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label ">メール</div>
+                      <div class="col-lg-9 col-md-8">[[${seller.email}]]</div>
+                    </div>
+
+                    <!--유저 정보 3 : 사업자명-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label ">事業者名</div>
+                      <div class="col-lg-9 col-md-8">[[${seller.company_name}]]</div>
+                    </div>
+
+                    <!--유저 정보 5 : 사업자등록번호or업종-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">販売業種</div>
+                      <div class="col-lg-9 col-md-8">[[${seller.category_id.category_name}]]</div>
+                    </div>
+
+                    <!--유저 정보 8 : 예금주명-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">代表者名/口座名義人</div>
+                      <div class="col-lg-9 col-md-8">[[${seller.name}]]</div>
+                    </div>
+
+                    <!--유저 정보 6 : 은행명-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">銀行名</div>
+                      <div class="col-lg-9 col-md-8">[[${seller.bank_name}]]</div>
+                    </div>
+                    
+                    <!--유저 정보 7 : 계좌-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">口座番号</div>
+                      <div class="col-lg-9 col-md-8">[[${seller.bank_account}]]</div>
+                    </div>
+                    
+                    <!--유저 정보 9 : 주소-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">事業地</div>
+                      <div class="col-lg-9 col-md-8">[[${seller.company_address}]]</div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">停止回数</div>
+                      <div class="col-lg-9 col-md-8">[[${count}]]</div>
+                    </div>
+
+                  </div><!-- End profile-overview : 판매자 정보 내용 : 제목 + 유저 정보 -->
+                </div>
+                <!-- End tab-content-판매자 -->
+                
+                <div class="card-body"><!-- 밴 버튼 &판매자 밴 상세 박스(모달) : 버튼 누르면 활성화&보임-->
+                  
+                  <!-- Disabled Backdrop Modal : 디폴트 안 보이는 모달달 -->
+                  <div class="modal fade" id="disablebackdrop" tabindex="-1" data-bs-backdrop="false"> <!-- 모달 상세 설정 태그 -->
+                    <div class="modal-dialog"> <!-- 모달 대화 상자 -->
+                      <div class="modal-content" style="height: 400px; border:1px solid #c1cada"> <!-- 모달 내용 -->
+                        <div class="modal-header"> <!-- 모달 헤더 -->
+                          <h5 class="modal-title">Ban</h5> <!-- 모달 제목 -->
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- 모달 닫기 x 표시 -->
+                        </div>
+                        <form method="post" th:action="@{/admin/user/ban.do}">
+                          <input th:if="${role == 'seller'}" type="hidden" name="seller_id" th:value="${seller.id}">
+                          <input th:if="${role == 'buyer'}" type="hidden" name="buyer_id" th:value="${buyer.id}">
+                          <div class="modal-body"> <!-- 모달 본문 -->
+                            <div>
+                              <label for="why">停止理由 :</label> <!-- 사유 입력 필드 설명 -->
+                              <textarea id="why" row="6" style="width:100%; resize:none; height:200px; border:1px solid #c1cada; padding:15px;"
+                                        placeholder="停止理由を入力してください" name="reason"></textarea> <!-- 사유 입력 필드 -->
+                            </div>
+                          </div>
+                          <div class="modal-footer"> <!-- 모달 푸터 -->
+                            <button type="submit" class="btn btn-danger">Ban</button><!-- 판매자를 밴하는 버튼 -->
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <!-- 모달 닫기 버튼 -->
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Disabled Backdrop Modal-->
+                </div><!-- End card-body : 밴 버튼 -->
+              </div><!-- End card-body : 판매자 정보 내용 -->
+            </div><!-- End card : 판매자 정보 박스 디자인 -->
+
+
+            <div class="card" th:if="${role=='buyer'}"><!-- 구매자 정보 상세 박스 디자인 -->
+              <div class="card-body pt-3"><!-- 구매자 정보 상세 박스 내용: 제목 + 탭 바 & 여백 Padding-Top-3 주기 -->
+                <!-- tab-board-구매자 -->
+                <div class="tab-content pt-2"><!-- 탭 영역 & 위쪽 패딩 2 추가 -->
+                  <div class="tab-pane fade show active profile-overview" id="profile-overview"><!-- content 구역 설정 in tab & tab 전환 에니메이션 & 탭 활성화 상태 & 사용자 정의 디자인 클래스 -->
+
+                    <div style="margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
+                      <h5 class="card-title" style="margin: 0;">購入者会員情報</h5>
+                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#disablebackdrop">
+                        Ban <!-- 판매자 밴 버튼 -->
+                      </button>
+                    </div>
+
+                    <!--유저 정보 1 : 유저 권한-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Role</div>
+                      <div class="col-lg-9 col-md-8">[[${role}]]</div>
+                    </div>
+
+                    <!--유저 정보 2 : 이메일-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label ">メール</div>
+                      <div class="col-lg-9 col-md-8">[[${buyer.email}]]</div>
+                    </div>
+
+                    <!--유저 정보 3 : 이름-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label ">名前</div>
+                      <div class="col-lg-9 col-md-8">[[${buyer.name}]]</div>
+                    </div>
+
+                    <!--유저 정보 4 : 연락처-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label ">連絡所</div>
+                      <div class="col-lg-9 col-md-8">[[${buyer.phone_number}]]</div>
+                    </div>
+
+                    <!--유저 정보 5 : 닉네임-->
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label ">ニックネーム</div>
+                      <div class="col-lg-9 col-md-8">[[${buyer.nickname}]]</div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">停止回数</div>
+                      <div class="col-lg-9 col-md-8">[[${count}]]</div>
+                    </div>
+
+                  </div><!-- End profile-overview : 구매자 정보 : 제목 + 유저정보보 -->
+                </div>
+                <!-- Disabled Backdrop Modal : 디폴트 안 보이는 모달달 -->
+                <div class="modal fade" id="disablebackdrop" tabindex="-1" data-bs-backdrop="false"> <!-- 모달 상세 설정 태그 -->
+                  <div class="modal-dialog"> <!-- 모달 대화 상자 -->
+                    <div class="modal-content" style="height: 400px; border:1px solid #c1cada"> <!-- 모달 내용 -->
+                      <div class="modal-header"> <!-- 모달 헤더 -->
+                        <h5 class="modal-title">Ban</h5> <!-- 모달 제목 -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- 모달 닫기 x 표시 -->
+                      </div>
+                      <form method="post" th:action="@{/admin/user/ban.do}">
+                        <input th:if="${role == 'seller'}" type="hidden" name="seller_id" th:value="${seller.id}">
+                        <input th:if="${role == 'buyer'}" type="hidden" name="buyer_id" th:value="${buyer.id}">
+                        <div class="modal-body"> <!-- 모달 본문 -->
+                          <div>
+                            <label for="why">停止理由 :</label> <!-- 사유 입력 필드 설명 -->
+                            <textarea id="why" row="6" style="width:100%; resize:none; height:200px; border:1px solid #c1cada; padding:15px;"
+                                      placeholder="停止理由を入力してください" name="reason"></textarea> <!-- 사유 입력 필드 -->
+                          </div>
+                        </div>
+                        <div class="modal-footer"> <!-- 모달 푸터 -->
+                          <button type="submit" class="btn btn-danger">Ban</button><!-- 판매자를 밴하는 버튼 -->
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <!-- 모달 닫기 버튼 -->
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- End tab-content-구매자 -->
+              </div><!-- End card-body : 구매자 정보 내용 -->
+            </div><!-- End card : 구매자 정보 박스 디자인 -->
+
+
+          </div><!-- End col-xl-12 : 유저정보 상세 박스의 큰 화면 기준 100%의 크기-->
+        </div><!-- End row : 유저정보 상세 박스의 수평 정렬-->
+      </section><!-- End section : 유저정보 상세 박스-->
+    </main><!-- End #main -->
+  </div><!-- End layout:fragment="content"-->
+</html>

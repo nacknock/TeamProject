@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+    layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <!-- Fonts START -->
+    <link
+        href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all"
+        rel="stylesheet" type="text/css">
+    <!-- Fonts END -->
+
+    <!-- Theme styles START -->
+    <link href="assets/corporate/css/custom.css" rel="stylesheet">
+    <!-- Theme styles END -->
+    <style>
+        .bg-light {
+            height: 100%;
+            padding-top: 55px;
+            padding-bottom: 75px;
+        }
+
+        .form-container {
+            border-radius: 5px !important;
+            height: 1000px !important;
+            font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .bir_yy,
+        .bir_mm,
+        .bir_dd {
+            display: inline-block;
+            width: 30%;
+        }
+
+        .bir_mm+.bir_dd,
+        .bir_yy+.bir_mm {
+            margin-left: 10px;
+        }
+
+        .form-select {
+            border-color: #dbdbdb;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .btn-auth {
+            width: 18%;
+            margin-left: 2%;
+        }
+
+        .mb-3 {
+            margin: 15px 0px;
+        }
+
+        .help-block {
+            margin-left: 15px;
+        }
+
+        .calculate {
+            margin-bottom: 10px;
+        }
+
+        div.footer {
+            margin-top: -5px !important;
+        }
+
+        div.search-container {
+            padding-right: 40px;
+        }
+
+         /* placeholder 스타일 변경 */
+        input::placeholder {
+        font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+        }
+
+        select::placeholder {
+        font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+        }
+    </style>
+</th:block>
+
+
+<div layout:fragment="content">
+    <div class="main">
+        <div class="container">
+            <section class="bg-light">
+                <div class="form-container" style="height: auto !important;">
+                    <h3 class="text-center mb-4" style="margin: 30px 0px; font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */">販売者会員登録</h3>
+                    <form>
+
+                        <!-- 본인 확인 이메일 -->
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="emailIn" class="form-label">本人確認メール</label>
+                                <div class="d-flex"> <!--d-flex: flex 속성을 사용하기 위한 클래스-->
+
+                                    <input type="email" class="form-control" id="emailIn" name="emailIn"
+                                        placeholder="メールアドレス入力" style="width: 78%; float: left; border-radius: 5px !important;">  <!--이메일 입력 칸-->
+                                    <button type="button" class="btn btn-primary btn-auth" id="btn_mail"
+                                        style="width: 120px; height:35px; border-radius: 5px !important;">認証</button><!--인증번호 전송 버튼-->
+                                    <input type="text" class="form-control" id="email-ok" placeholder="認証番号入力"
+                                        style="width: 78%; float: left; margin-top: 10px; border-radius: 5px !important;"><!--인증번호 입력 칸-->
+                                    <button type="button" class="btn btn-primary btn-auth" id="auth-btn"
+                                        style="width: 120px; margin-top: 10px; height:35px; background:#e94d1c !important; border-radius: 5px !important;" disabled>認証確認</button><!--인증번호 확인 버튼-->
+                                </div>
+                                <div id="email-help" class="help-block" style="color:#f00;"></div><!--인증번호 확인 결과-->
+                            </div>
+                        </div>
+
+                        <!-- 아이디 -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">ユーザーID</label>
+                            <input type="text" class="form-control" id="email" name="email" value=""
+                                placeholder="ユーザーIDが自動入力されます" readonly="readonly" style = "border-radius: 5px !important;">
+                                <div class="help-block" id="email-help"></div><!--비밀번호 유효성 검사 결과-->
+                        </div>
+
+                        <!-- 비밀번호 -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">パスワード</label>
+                            <input type="password" name="password" class="form-control is-valid" id="password" style = "border-radius: 5px !important;">
+                            <div class="help-block" id="pw-help"></div><!--비밀번호 유효성 검사 결과-->
+                        </div>
+
+                        <!-- 비밀번호 재확인 -->
+                        <div class="mb-3 has-error">
+                            <label for="confirmPassword" class="form-label">パスワード再確認</label>
+                            <input type="password" class="form-control is-invalid" id="confirmPassword" style = "border-radius: 5px !important;">
+                            <div class="help-block" id="pwChk-help"></div><!--비밀번호 재확인 결과-->
+                        </div>
+
+                        <!--회사 이름 -->
+                        <div class="mb-3">
+                            <label for="company_name" class="form-label">事業者名（または販売者名)</label>
+                            <input type="text" class="form-control" id="company_name" name="company_name"
+                                placeholder="個人販売者または事業者名" style = "border-radius: 5px !important;">
+                            <div class="help-block" id="company_name-help"></div><!--사업자명 유효성 검사 결과-->
+                        </div>
+
+                        <!-- 사람 이름 -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">代表者名</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="名前を入力してください" style = "border-radius: 5px !important;">
+                            <div class="help-block" id="name-help"></div><!--이름 유효성 검사 결과-->
+                        </div>
+
+                        <!-- 업종(카테고리로 분류될 사항) -->
+                        <div class="mb-3">
+                            <label class="form-label">業種（カテゴリで分類される項目）</label>
+                            <div>
+                                <select class="form-control" name="category_id" id="category_id"
+                                        style = "border-radius: 5px !important;">
+                                    <option value="">選択</option>
+                                    <option th:each="cate : ${categoryList}" th:value="${cate.id}">
+                                        [[${cate.category_name}]]</option>
+                                </select>
+                            </div>
+                            <div class="help-block" id="category_id-help"></div><!--업종 유효성 검사 결과-->
+                        </div>
+
+                        <!-- 정산받을 은행 계좌 정보 -->
+                        <div class="mb-3">
+                            <label for="bank_name" class="form-label">精算情報</label>
+                            <input type="text" class="form-control calculate" id="bank_name" name="bank_name"
+                                placeholder="銀行名" style = "border-radius: 5px !important;">
+                            <input type="text" class="form-control calculate" id="bank_account" name="bank_account"
+                                placeholder="口座" style = "border-radius: 5px !important;">
+                            <input type="text" class="form-control" id="depositor" placeholder="口座名義人名（自動入力）"
+                                   style = "border-radius: 5px !important;">
+                            <div class="help-block" id="bank-help"></div><!--정산 정보 유효성 검사 결과-->
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="company_address" class="form-label">住所</label>
+                            <input type="text" class="form-control" id="company_address" name="company_address"
+                                placeholder="住所入力" style = "border-radius: 5px !important;">
+                            <div class="help-block" id="company_address-help"></div><!--주소 유효성 검사 결과-->
+                        </div>
+
+
+                        <!-- 가입하기 버튼 -->
+                        <div class="d-grid gap-2" style="text-align: center;"><!--버튼을 가운데 정렬하기 위한 클래스-->
+                            <button class="btn btn-primary btn-lg" id="btn_submit" type="button"
+                                style="width: 100%; margin: 50px 0px; margin-top: 20px !important; border-radius: 5px !important;">登録する</button>
+                        </div>
+                    </form><!--회원가입 양식 닫기-->
+                </div><!--form-container 닫기-->
+            </section><!--회원가입 섹션 닫기-->
+        </div><!--container 닫기-->
+    </div><!--main 닫기-->
+</div><!--content 닫기-->
+
+
+<th:block layout:fragment="bodyScript">
+    <script>
+        var code = "";
+        var incode = "";
+        var authCheck = false;
+        var email = "";
+
+        var fields = [
+            { id: '#name', helpId: '#name-help', message: '代表者名を入力してください' },
+            { id: '#company_name', helpId: '#company_name-help', message: '事業者名を入力してください' },
+            { id: '#category_id', helpId: '#category_id-help', message: '業種を入力してください' },
+            { id: '#password', helpId: '#password-help', message: 'パスワードを入力してください' },
+            { id: '#confirmPassword', helpId: '#confirmPassword-help', message: 'パスワードを再入力してください' },
+            { id: '#bank_name', helpId: '#bank-help', message: '銀行の情報を入力してください' },
+            { id: '#bank_account', helpId: '#bank-help', message: '銀行の情報を入力してください' },
+            { id: '#depositor', helpId: '#bank-help', message: '銀行の情報を入力してください' },
+            { id: '#company_address', helpId: '#company_address-help', message: '住所を入力してください' },
+            { id: '#email-ok', helpId: '#email-help', message: 'メール認証を完了してください' }
+        ];
+
+
+        // 유효성 검사 함수
+        function validateField(field) {
+            var inputValue = $(field.id).val().trim(); // 입력 값 가져오기
+
+            // 입력 값이 비어 있는 경우
+            if (inputValue === "") {
+                $(field.helpId).html(field.message).css('color', 'red'); // 도움말 블록에 메시지 출력
+                return false; // 유효성 검사 실패
+            } else {
+                $(field.helpId).html(""); // 유효성 검사 통과 시 도움말 메시지 초기화
+                return true; // 유효성 검사 성공
+            }
+        }
+
+        $("#btn_mail").on("click", function () {
+            var regEmail = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-0\-]+\.[a-zA-Z0-9\-]+/;
+
+
+            if (!regEmail.test($("#emailIn").val())) {
+                alert("メールアドレスが無効です");
+                $("#emailIn").focus();
+                return false;
+            }
+
+            email = $("#emailIn").val();
+
+            $.ajax({
+                type: 'get',
+                url: '/sign/mail.do?email=' + email,
+                success: function (data) {
+                    if (data === "false") {
+                        alert("すでに登録されたメールアドレスです。");
+                        $("#emailIn").focus();
+                        return false;
+                    } else {
+                        alert('送信成功しました。メールアドレスをご確認ください。');
+                        code = data;
+                        $('#auth-btn').attr("disabled", false);
+                    }
+
+                }
+            })
+        });
+
+
+
+        $('#auth-btn').on("click", function () {
+            incode = $('#email-ok').val();
+            if (incode == code) {
+                $("#email-help").html("認証番号が一致します");
+                authCheck = true;
+                $('#email').val(email);
+            } else {
+                $("#email-help").html("認証番号が一致しません")
+                authCheck = false;
+            }
+
+        });
+
+        // blur할때 각 필드에 유효성 검사
+        fields.forEach(function(field) {
+            $(field.id).on('blur', function() {
+                validateField(field); // blur 시 유효성 검사 수행
+            });
+        });
+
+        $("#btn_submit").on("click", function () {
+            var isValid = true;
+
+            // 모든 필드 유효성 검사
+            fields.forEach(function(field) {
+                if (!validateField(field)) {
+                    isValid = false; // 유효성 검사 실패
+                }
+            });
+
+            if (!authCheck) {
+                alert("まずメール認証を行ってください。");
+                isValid = false;
+                $('#email-ok').focus();
+            }
+            if ($("#emailIn").val() === "") {
+                isValid = false;
+            }
+            var password = $("#password").val();
+            var pwChk = $('#confirmPassword').val();
+            var pwRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{9,13}$/;
+
+               if(!pwRegex.test(password)) {
+                  $("#pw-help").html("<span style = 'color:#f00;'>パスワードは、英大文字、英小文字、数字、特殊文字を含む9〜13文字で設定してください</span>");
+                  $("#password").val("");
+                  $("#confirmPassword").val("");
+                  isValid=false;
+               }
+               else if(password !== pwChk) {
+                  $("#pwChk-help").html("<span style = 'color:#f00;'>パスワードが一致しません</span>");
+                  $("#password").val("");
+                  $("#confirmPassword").val("");
+                  isValid=false;
+               } else {
+                $("#pw-help").html(""); // 유효성 검사 통과 시 도움말 메시지 초기화
+                $("#pwChk-help").html(""); // 유효성 검사 통과 시 도움말 메시지 초기화
+                }
+
+
+
+            if (isValid) {
+                $.ajax({
+                    type: "post",
+                    url: "/sign/sellerJoinAction.do",
+                    data: {
+                        email: $("#email").val(),
+                        password: $("#password").val(),
+                        company_name: $('#company_name').val(),
+                        name: $('#name').val(),
+                        category_id: $('#category_id').val(),
+                        bank_name: $('#bank_name').val(),
+                        bank_account: $('#bank_account').val(),
+                        company_address: $('#company_address').val(),
+
+                    },
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (data.result == "ok") {
+                            alert("会員登録が完了しました");
+                            location.href = "/";
+                        }
+                    }, error: function () {
+                        alert("問題が発生しました。");
+                    }
+                })
+            }
+
+        });
+    </script>
+</th:block>
+
+</html>

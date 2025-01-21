@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+  layout:decorate="~{layouts/BuyerMainPageLayout}">
+
+
+<th:block layout:fragment="css">
+  <link th:href="@{/Main/assets/plugins/rateit/src/rateit.css}" rel="stylesheet" type="text/css">
+  <style>
+    /*사이드바*/
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding-top: 20px;
+    }
+
+    /* 상단 검색 및 필터 */
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      border-radius: 5px !important;
+      width: 300px;
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+    }
+
+    .search-box button {
+      border-radius: 5px !important;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 10px;
+    }
+
+    .date-filter button {
+      margin-right: 5px;
+      border: none;
+      background-color: #f8f9fa;
+      color: #0d6efd;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .date-filter button:hover {
+      background-color: #e9ecef;
+    }
+
+    /* 주문 목록 스타일 */
+    .order-list {
+      margin-top: 20px;
+    }
+
+    .order-item {
+      border: 1px solid #e9ecef;
+      border-radius: 10px !important;
+      margin-bottom: 20px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-details {
+      display: flex;
+      align-items: center;
+    }
+
+    .order-details img {
+      width: 80px;
+      height: 80px;
+      margin-right: 15px;
+    }
+
+    .order-title {
+      color: #198754;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .order-title2 {
+      color: #e6400c;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .order-desc {
+      margin: 5px 0;
+      color: #333;
+    }
+
+    .order-price {
+      font-weight: bold;
+      color: #6c757d;
+    }
+
+    .order-actions {
+      border-radius: 5px !important;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 14px;
+      border-radius: 5px;
+    }
+
+    /*페이징 버튼*/
+    .pagination {
+      display: flex;
+      justify-content: center;
+      /* 가운데 정렬 */
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+
+    .pagination li {
+      margin: 0 5px;
+    }
+
+    .pagination a {
+      display: inline-block;
+      text-align: center;
+      width: 30px;
+      /* 너비 설정 */
+      height: 30px;
+      /* 높이 설정 */
+      line-height: 30px;
+      /* 텍스트 수직 정렬 */
+      border: 2px solid #007BFF;
+      /* 진한 경계선 */
+      color: #007BFF;
+      border-radius: 50%;
+      /* 동그라미 모양 */
+      font-weight: bold;
+      /* 진하게 */
+      transition: background-color 0.3s;
+    }
+
+    .pagination a:hover {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    .breadcrumb,
+    .container-fluid,
+    .goods-page-description h2{
+      font-family: 'PRETENDARDJP-BLACK' !important;
+    }
+
+    button.btn.btn-outline-secondary.btn-sm {
+      border-radius: 5px !important;
+    }
+  </style>
+</th:block>
+
+<div layout:fragment="content">
+  <div class="main">
+    <!-- BEGIN NAV -->
+    <div class="container">
+      <ul class="breadcrumb" style = "margin-top: 20px;">
+        <li><a th:href="@{/}">ホーム</a></li>
+        <li class="active">マイページ</li>
+      </ul>
+    </div> <!-- END NAV -->
+
+    <!-- BEGIN SIDEBAR & CONTENT -->
+    <div class="container-fluid">
+      <div class="row">
+        <!-- BEGIN SIDEBAR -->
+        <div class="col-md-2 col-lg-2 d-md-block bg-light sidebar" id="sidebarParents">
+          <div th:replace="~{fragments/buyerSidebar::sidebar}"></div>
+        </div>
+        <!-- END SIDEBAR -->
+
+        <!-- BEGIN CONTENT -->
+        <div class="col-md-10 col-lg-10 d-md-block bg-light" id="orderParents">
+        <div th:replace="~{fragments/buyerOrderList::list}"></div>
+        </div>
+        <!-- END CONTENT -->
+      </div><!-- END ROW -->
+    </div><!-- END CONTENT-FUILD -->
+    <!-- END SIDEBAR & CONTENT -->
+  </div> <!-- END MAIN -->
+</div><!-- END LAYOUT:CONTENT -->
+
+<th:block layout:fragment="bodyScript">
+  <script th:src="@{/Main/assets/plugins/rateit/src/jquery.rateit.js}" type="text/javascript"></script>
+  <script>
+    var reviewContent = '';
+
+    $(document).ready(function() {
+        // textarea의 입력값을 실시간으로 변수에 저장
+        $('#reviewContent').on('input', function() {
+            reviewContent = $(this).val();
+        });
+    });
+
+    let rate = 0;
+    //rateit 유저 입력값 받아오기
+    $('.rateit').bind('rated', function(event, value) {
+      rate = value;
+    });
+
+    //주문 리스트 비동기 페이징
+    function page(page, amount,startDate,endDate,keyword,id) {
+      console.log(page);
+      $.ajax({
+          type: 'POST',
+          url: '/buyer/list_paging',
+          data: {
+              pageNum: page,
+              amount: amount,
+              startDate: startDate,
+              endDate: endDate,
+              keyword: keyword,
+              id: id
+
+          },
+          success: function(data) {
+              if (data) {
+                  $('.buyerOrderFragments').remove(); // 기존 리뷰 컨테이너 제거
+
+                  const newdiv = $('<div>').html(data); // 새로운 리뷰 컨테이너 생성
+
+                  let parent = $('#orderParents'); // 부모 요소 선택
+
+                  parent.append(newdiv); // 새로운 컨텐츠 추가
+
+              } else {
+                  alert('問題が発生しました。');
+                  console.log('fail');
+              }
+          },
+          error: function() {
+              alert('실패2!');
+          }
+      });
+    }
+
+    function addReview(product_id){
+        if(rate < 0){
+
+          alert("問題が発生しました。");
+
+        }else{
+
+          $.ajax({
+          type: 'POST',
+          url: '/buyer/review.do',
+          data: {
+              content: reviewContent,
+              buyer_id: $('#id').val(),
+              product_id: product_id,
+              rating: rate
+
+          },
+          success: function(data) {
+              if (data === "notBuy") {
+                  alert("レビューの作成は商品を購入してから可能になります。");
+              } else {
+                  if(data === "true"){
+                    alert("レビューを登録しました。");
+                    window.location.reload();
+                  }else{
+                    alert('問題が発生しました。');
+                    console.log('fail');
+                  }
+              }
+          },
+          error: function() {
+              alert('실패2!');
+              }
+          });
+
+        }
+    }
+
+    function delReview(review_id){
+
+          $.ajax({
+          type: 'POST',
+          url: '/buyer/reviewDel.do',
+          data: {
+              review_id: review_id
+
+          },
+          success: function(data) {
+              if (data === "true") {
+                  alert("レビューが削除されました。");
+                  window.location.reload();
+              } else {
+                  alert('問題が発生しました。');
+                  console.log('fail');
+                  $.fancybox.close();
+              }
+          },
+          error: function() {
+              alert('실패2!');
+              }
+          });
+    }
+
+    function updateStatus(status,id){
+      console.log(status+"//"+id);
+      if(status || id < 1){
+
+      }else{
+        $.ajax({
+          type: 'POST',
+          url: '/buyer/statusUpdate.do',
+          data: {
+              status: status,
+              id: id
+
+          },
+          success: function(data) {
+              if (data === "true") {
+                  window.location.reload();
+              } else {
+                  alert('問題が発生しました。');
+                  console.log('fail');
+              }
+          },
+          error: function() {
+              alert('エラーが発生しました!');
+              }
+        });
+      }
+      
+    }
+  </script>
+  <!-- END PAGE LEVEL JAVASCRIPTS -->
+</th:block>
+
+</html>

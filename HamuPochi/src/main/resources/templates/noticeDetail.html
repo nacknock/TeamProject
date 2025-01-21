@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout}">
+
+<div layout:fragment="content">
+    <div class="main">
+      <div class="container">
+        <ul class="breadcrumb"
+            style = "margin-top: 25px;
+            font-family:'PRETENDARDJP-BLACK';
+            color: black;">
+            <li><a th:href="@{/}"
+            style = "color: black;">ホーム</a></li>
+            <li>お知らせ</li>
+            <li class="active">[[${dto.title}]]</li>
+        </ul>
+        <!-- BEGIN SIDEBAR & CONTENT -->
+        <div class="row margin-bottom-40" style="display: flex;justify-content: center;">
+
+          <!-- BEGIN CONTENT -->
+          <div class="col-md-9 col-sm-7">
+            <img th:each="img : ${ntcpicture}" th:src="${img.notice_picture_url}" alt="Berry Lace Dress" style="width: 100%;">
+            <div style="margin: 5%;
+                 font-family:'PRETENDARDJP-BLACK';
+                 color: black;">
+              <p>
+              [[${dto.content}]]  
+              </p>
+            </div>
+            <div style="text-align: center;
+                 font-family:'PRETENDARDJP-BLACK';">
+              <a class="btn btn-primary" style="padding-top: 15px;
+                                         border-radius:5px !important;" th:href="@{/}">ホームへ</a>
+            </div>
+          </div>
+          <!-- END CONTENT -->
+        </div>
+        <!-- END SIDEBAR & CONTENT -->
+      </div>
+    </div>
+</div>
+<!-- END BODY -->
+</html>

@@ -1,0 +1,53 @@
+<html>
+<div class="row" id="sellerOrderList" th:fragment="list">
+    <div class="col">
+            <table class="table text-center table-striped table-hover" style="border-bottom:1px solid #ccc;">
+                <thead class="table-head">
+                <tr>
+                    <td>NO</td>
+                    <td>商品名</td>
+                    <td>購入コード</td>
+                    <td>購入者ID</td>
+                    <td>購買者</td>
+                    <td>連絡所</td>
+                    <td>住所</td>
+                    <td>決済金額</td>
+                    <td>注文状態</td>
+                    <td>日数</td>
+                    <td>注文キャンセル</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${list}">
+                    <td>[[${list.id}]]</td>
+                    <td th:if="${#strings.length(list.option_id.product_id.title) > 4}"
+                          th:text="${list.option_id.product_id.title.substring(0, 4) + '...'}"></td>
+                    <td th:if="${#strings.length(list.option_id.product_id.title) <= 4}"
+                          th:text="${list.option_id.product_id.title}"></td>
+                    <td>[[${list.payment_id.payment_number}]]</td>
+                    <td>[[${list.buyer_id.email}]]</td>
+                    <td>[[${list.receiver}]]</td>
+                    <td>[[${list.phone_number}]]</td>
+                    <td>[[${list.address}]]</td>
+                    <td>[[${list.option_id.product_id.price * list.amount}]]</td>
+                    <td th:if="${list.status}">注文キャンセル</td>
+                    <td th:if="${!list.status}">注文完了</td>
+                    <td class="date" th:text="${#strings.substring(list.created_at, 0, 10)}"></td>
+                    <td><button type="button" class="btn btn-danger" th:if="${!list.status}"
+                                th:onclick="'location.href=\'/seller/orderCancellation.do?id=' + ${list.id} +'\' '" style="height:30px;">注文キャンセル</button></td>
+                </tr>
+                </tbody>
+            </table>
+        <div class="pagination-box">
+            <ul class="pagination pull-right">
+                <li th:if="${pageMaker.prev}"><a href="javascript:void(0);" th:onclick="page([[${pageMaker.startPage - 1}]],[[${pageMaker.cri.amount}]],[[${pageMaker.cri.status}]],[[${pageMaker.cri.keyword}]],[[${id}]])">«</a></li>
+                <th:block th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                    <li th:if="${pageMaker.cri.pageNum != page}"><a href="javascript:void(0);" th:onclick="page([[${page}]],[[${pageMaker.cri.amount}]],[[${pageMaker.cri.status}]],[[${pageMaker.cri.keyword}]],[[${id}]])">[[${page}]]</a></li>
+                    <li th:if="${pageMaker.cri.pageNum == page}"><span>[[${page}]]</span></li>
+                </th:block>
+                <li th:if="${pageMaker.prev}"><a href="javascript:void(0);" th:onclick="page([[${pageMaker.endPage + 1}]],[[${pageMaker.cri.amount}]],[[${pageMaker.cri.status}]],[[${pageMaker.cri.keyword}]],[[${id}]])">»</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</html>

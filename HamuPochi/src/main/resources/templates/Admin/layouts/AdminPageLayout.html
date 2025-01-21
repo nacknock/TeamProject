@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard - NiceAdmin Bootstrap Template</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons START -->
+  <link th:href="@{/Admin/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/Admin/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+  <!-- Favicons END -->
+
+<!-- Google Fonts START-->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+<!-- Google Fonts END -->
+
+  <!-- Vendor CSS Files START-->
+  <link th:href="@{/Admin/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/Admin/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/Admin/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/Admin/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/Admin/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/Admin/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/Admin/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+<!-- Vendor CSS Files END -->
+
+  <!-- Template Main CSS File START -->
+  <link th:href="@{/Admin/assets/css/style.css}" rel="stylesheet">
+  <!-- Template Main CSS File END -->
+
+  <th:block layout:fragment="script"></th:block>
+  <th:block layout:fragment="css"></th:block>
+</head>
+<!-- Head END -->
+
+<!-- Body BEGIN -->
+<body class="ecommerce">
+
+<!-- BEGIN HEADER -->
+<div th:replace="~{Admin/fragments/header::header}"></div>
+<!-- HEADER END -->
+ <!-- BEGIN SIDEBAR -->
+<div th:replace="~{Admin/fragments/adminSidebar::sidebar}"></div>
+<!-- SIDEBAR END -->
+
+<!-- BEGIN CONTENT -->
+<div layout:fragment="content" class="content"></div>
+<!-- CONTENT END -->
+
+<!-- BEGIN FOOTER -->
+<div th:replace="~{Admin/fragments/footer::footer}"></div>
+<!-- FOOTER END -->
+</body>
+
+<!--스크롤 내리면 나타남
+누르면 자동으로 상단으로 올라가는 버튼: 
+페이지 왼쪽 하단 보라색 화살표표-->
+<!--그냥 FOOTER 아래 스크립트 태그 위에 위치 시키면 됨됨-->
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  
+<!-- Vendor JS Files START -->
+  <script th:src="@{/Admin/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+  <script th:src="@{/Admin/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/Admin/assets/vendor/chart.js/chart.umd.js}"></script>
+  <script th:src="@{/Admin/assets/vendor/echarts/echarts.min.js}"></script>
+  <script th:src="@{/Admin/assets/vendor/quill/quill.js}"></script>
+  <script th:src="@{/Admin/assets/vendor/tinymce/tinymce.min.js}"></script>
+  <script th:src="@{/Admin/assets/vendor/php-email-form/validate.js}"></script>
+<!-- Vendor JS Files END -->
+
+  <!-- Template Main JS File START -->
+  <script th:src="@{/Admin/assets/js/main.js}"></script>
+  <!-- Template Main JS File END -->
+<th:block layout:fragment="bodyScript"></th:block>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!--jQuery 중복 주석처리 : 문제시 확인 바람-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+  layout:decorate="~{layouts/layout}">
+
+
+<th:block layout:fragment="css">
+  <!-- Fonts START -->
+  <style>
+  div.content-form-page {
+    width: 800px;
+  }
+
+  .container-fluid {
+    margin-top: 20px;
+    display: grid;
+    place-items: center; /* 수평 및 수직 중앙 정렬 */
+  }
+
+  div.search-container {
+    padding-left: 30px;
+    padding-right: 95px !important;
+  }
+
+  .form-horizontal form-without-legend {
+    width: 1200px;
+  }
+  div.footer {
+    margin-top: 80px !important;
+  }
+    btn.btn-primary {
+      border-radius: 5px;
+    }
+  </style>
+  <link
+    href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all"
+    rel="stylesheet" type="text/css">
+  <!-- Fonts END -->
+
+  <!-- Page level plugin styles START -->
+  <link href="assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+  <!-- Page level plugin styles END -->
+
+  <!-- Theme styles START -->
+  <link href="assets/corporate/css/custom.css" rel="stylesheet">
+  <!-- Theme styles END -->
+</th:block>
+
+<div layout:fragment="content">
+  <div class="main" style="margin: 80px 0px;"><!-- 머리-본문-꼬리 중 본문 태그-->
+    
+    <div class="container-fluid"><!--전체화면 너비로 크기 고정하기 -->
+      <div class="row margin-bottom-40"><!-- row : 수평 정렬, col태그에 자동 패딩 & 마진 아래 40px-->
+        <!-- BEGIN CONTENT : QNA 전체 박스스 --> 
+        <div class="col-md-12 col-sm-12"><!--qna 박스 : 중간 화면 기준 75%의 크기 사이즈-->
+          <h1 style = "font-family: 'PRETENDARDJP-BLACK';
+          margin-left: 13px;
+          margin-top: 10px;
+          color: black;">お問い合わせ</h1> <!-- 제목 : 판매자이냐, 관리자이냐 조건을 걸어 출력 다르게 하기기 -->
+          
+          <!-- BEGIN CHECKOUT PAGE : QNA 작성하기 -->
+          <div class="container-fluid bg-bookImg my-2 py-2"><!--전체화면 너비로 크기 고정하기 &  특정 배경 이미지를 설정 & my-마진상하2 & py-패딩 상하2 -->
+
+              <div class="contentes-botom"><!--내용 박스-->
+                
+                <div class="content-form-page"
+                     style = "border-radius:5px !important;
+                     color: black;"><!--내용 폼 페이지-->
+                  <form method="post" th:action="@{/question/save.do}" class="form-horizontal form-without-legend"><!--수평 폼 & 범례 없음 설정-->
+                    <input type="hidden" th:value="${role}" name="role" style = "border-radius:5px !important;">
+                    <input type="hidden" style = "border-radius:5px !important;" th:if="${role == 2}" name="seller_id" th:value="${product.seller_id.id}">
+                    <input type="hidden" style = "border-radius:5px !important;" th:if="${role != 1}" name="buyer_id" th:value="${id}">
+                    <input type="hidden" style = "border-radius:5px !important;" th:if="${role == 1}" name="seller_id" th:value=${id}>
+                    <input type="hidden" style = "border-radius:5px !important;" th:if="${role != 2}" name="admin_id" value=1>
+                    <!-- 제목 기입 박스 -->
+                    <div class="form-group">
+                      <label class="col-lg-2 control-label" for="fax"
+                             style = "font-family: 'PRETENDARDJP-BLACK';
+                             margin-left: 10px;
+                             color: black;">題目</label> <!-- 제목 -->
+                      <div class="col-lg-8">
+                        <input th:if="${role == 2}" type="text" class="form-control" name="title" th:value="${product.title}" readonly="readonly"
+                               style = "border-radius: 5px !important;"/> <!-- 입력창 -->
+                        <input th:if="${role != 2}" type="text" class="form-control" name="title"
+                               style = "border-radius: 5px !important;"/> <!-- 입력창 -->
+                      </div>
+                    </div>
+
+                    <!-- 카테고리 선택 박스 (판매자용) -->
+                    <div class="form-group" th:if="${role == 2}">
+                      <label class="col-md-2 control-label"
+                             style = "font-family: 'PRETENDARDJP-BLACK';
+                             margin-left: 10px;">カテゴリ</label> <!-- 카테고리 -->
+                      <div class="col-md-8" style = "color: black;">
+                        <select class="form-control" name="category"> <!-- 선택창 -->
+                          <option value="商品購入関連" style = "font-family: 'PRETENDARDJP-BLACK'; color: black;">商品購入関連</option>
+                          <option value="商品詳細関連" style = "font-family: 'PRETENDARDJP-BLACK'; color: black;">商品詳細関連</option>
+                          <option value="返品/払い戻し関連" style = "font-family: 'PRETENDARDJP-BLACK'; color: black;">返品/払い戻し関連</option>
+                          <option value="その外" style = "font-family: 'PRETENDARDJP-BLACK'; color: black;">その外</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <!-- 카테고리 선택 박스 (관리자용) -->
+                    <div class="form-group" th:if="${role != 2}">
+                      <label class="col-md-2 control-label" style = "font-family: 'PRETENDARDJP-BLACK'; margin-left: 10px;">カテゴリ</label> <!-- 카테고리 -->
+                      <div class="col-md-8">
+                        <select class="form-control" name="category"
+                                style = "font-family: 'PRETENDARDJP-BLACK';
+                                border-radius: 5px !important;
+                                color: black;"> <!-- 선택창 -->
+                          <option value="サイト運営関連" >サイト運営関連</option>
+                          <option value="注文及び決済管理関連" >注文及び決済管理関連</option>
+                          <option value="商品管理関連" >商品管理関連</option>
+                          <option value="その外" >その外</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <!--내용 기입 박스-->
+                    <div class="form-group">
+                      <label class="col-lg-2 control-label" for="message"
+                             style = "font-family: 'PRETENDARDJP-BLACK';
+                             margin-left: 10px;
+                             border-radius: 5px !important;">Message</label>
+                      <div class="col-lg-8">
+                        <textarea class="form-control" rows="6" name="content"
+                        style = "border-radius: 5px !important;"></textarea>
+                      </div>
+                    </div>
+
+                    <!--문의 등록/취소 버튼 박스-->
+                    <div class="row" style = "margin-left: 10px;">
+                      <div class="col-lg-8 col-md-offset-2 padding-left-0 padding-top-20" style="text-align: center;"><!--왼쪽 여백 0 & 위쪽 여백 20 & 버튼 중앙 정렬-->
+                        <button class="btn btn-primary" type="submit"
+                                style = "font-family: 'PRETENDARDJP-BLACK';
+                                border-radius: 5px !important;">送信する</button>
+                        <button class="btn btn-primary" type="button" onclick="history.back();"
+                                style="font-family: 'PRETENDARDJP-BLACK';
+                                border-radius: 5px !important;">キャンセル</button>
+                      </div>
+                    </div>
+                  
+                  </form><!--END form-->
+                </div><!--END content-form-page-->
+              </div><!--END contentes-botom-->
+
+          </div><!--END container-fluid-->
+          <!-- END CHECKOUT PAGE : QNA 작성하기 -->
+        
+        </div><!--END col-md-12 col-sm-12-->
+        <!-- END CONTENT : QNA 전체 박스 -->
+      
+      </div><!--END row-->
+    </div><!--END container-fluid-->
+  </div><!--END MAIN-->
+</div><!--END LAYOUT:CONTENT-->
+
+<th:block layout:fragment="bodyScript">
+  <script src="assets/corporate/scripts/back-to-top.js" type="text/javascript"></script>
+  <!-- END CORE PLUGINS -->
+
+  <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+  <script src="assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+
+  <script src="assets/pages/scripts/checkout.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    jQuery(document).ready(function () {
+      //Layout.init();    
+      //Layout.initOWL();
+      //Layout.initTwitter();
+      //Layout.initImageZoom();
+      //Layout.initTouchspin();
+      Layout.initUniform();
+      Checkout.init();
+    });
+  </script>
+</th:block>
+
+</html>

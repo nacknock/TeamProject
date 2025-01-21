@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:fragment="review" class="reviewFragments">
+    <!-- 리뷰 작성1 박스-->
+    <div class="review-item clearfix" th:unless="${pageMaker.total == 0}" th:each="reviewList : ${reviewList}"> <!-- 전체 리뷰 작성 박스 : 작성자, 작성일, 별점, 내용-->
+        <div class="review-item-submitted"><!-- 리뷰 정보 박수 :  작성자, 작성일, 별점-->
+        <strong>[[${reviewList.buyer_id.nickname}]]</strong><!-- 작성자-->
+        <em>[[${#strings.substring(reviewList.created_at, 0, 10)}]]</em><!-- 작성일-->
+        <!-- 별점 BEGIN -->
+        <input type="range" th:value="${reviewList.rating}" step="0.25" th:id="'backing-' + ${reviewList.id}">
+        <div class="rateit" th:data-rateit-backingfld="'#backing-' + ${reviewList.id}"
+            data-rateit-value="2.5" data-rateit-resetable="false"
+            data-rateit-readonly="true"  data-rateit-ispreset="true"
+            data-rateit-min="0" data-rateit-max="5">
+        </div>
+        <!-- 별점 END -->
+        </div><!--END review-item-submitted-->
+
+        <div class="review-item-content"><!-- 리뷰 내용 박스 : 리뷰 내용-->
+        <p>[[${reviewList.content}]]</p>
+        </div><!--END review-item-content-->
+    
+    </div><!--END review-item clearfix-->
+
+    <!-- 리뷰 작성 추가 구간-->
+
+    <!-- 리뷰 페이지네이션 : 페이지네이션 위치-->
+    <ul class="pagination pull-right" th:unless="${#lists.size(reviewList) > pageMaker.cri.amount}"> 
+    <li th:if="${pageMaker.prev}"><a href="javascript:void(0);" th:onclick="page([[${pageMaker.startPage - 1}]],[[${pageMaker.cri.amount}]],[[${productDTO.id}]])">«</a></li> 
+    <th:block th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+        <li th:if="${pageMaker.cri.pageNum != page}"><a href="javascript:void(0);" th:onclick="page([[${page}]],[[${pageMaker.cri.amount}]],[[${productDTO.id}]])" th:if="${page != 0}">[[${page}]]</a></li>
+        <li th:if="${pageMaker.cri.pageNum == page}"><span>[[${page}]]</span></li>
+    </th:block>
+    <li th:if="${pageMaker.prev}"><a href="javascript:void(0);" th:onclick="page([[${pageMaker.endPage + 1}]],[[${pageMaker.cri.amount}]],[[${productDTO.id}]])">»</a></li>
+    </ul>
+    <script th:src="@{/Main/assets/plugins/rateit/src/jquery.rateit.js}" type="text/javascript"></script>
+</div>
+</html>

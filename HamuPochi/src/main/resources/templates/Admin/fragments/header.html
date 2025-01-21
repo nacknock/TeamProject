@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:fragment="header">
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+    <a class="site-logo" th:href="@{/}">
+      <img th:src="@{/Main/assets/corporate/img/logos/logo.png}"
+           style="width: 100px; margin-left:20px;">
+    </a>
+  </header><!-- End Header -->
+</div>
+</html>

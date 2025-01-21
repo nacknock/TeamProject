@@ -1,0 +1,258 @@
+<!--jQuery 중복 세출 주석처리 : 문제시 확인 바람람-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+  layout:decorate="~{layouts/MypageLayout}">
+
+<th:block layout:fragment="css">
+  <!-- Page level plugin styles START -->
+  <link href="assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+  <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+  <!-- for slider-range -->
+  <link href="assets/plugins/rateit/src/rateit.css" rel="stylesheet" type="text/css">
+  <!-- Page level plugin styles END -->
+  <style>
+    /*사이드바*/
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding-top: 20px;
+    }
+    .breadcrumb,
+    .mainFont h1,h3{
+      font-family: 'PRETENDARDJP-BLACK' !important;
+    }
+  </style>
+
+</th:block>
+<div layout:fragment="content">
+  <div class="main">
+    <!-- BEGIN NAV -->
+    <div class="container">
+      <ul class="breadcrumb" style = "border-radius: 5px;
+                             font-family: 'PRETENDARDJP-BLACK';
+                             margin-top: 20px;">
+        <li><a th:href="@{/}">ホーム</a></li>
+        <li><a th:href="@{/buyer/main.do}">マイページ</a></li>
+        <li class="active">お気に入り</li>
+      </ul>
+    </div>
+    <!-- END NAV -->
+
+    <!-- BEGIN SIDEBAR & CONTENT -->
+    <div CLASS="container-fluid">
+      <div class="row">
+        <!-- BEGIN SIDEBAR -->
+        <div class="col-md-2 col-lg-2 d-md-block bg-light sidebar">
+          <div th:replace="~{fragments/buyerSidebar::sidebar}"></div>
+        </div>
+
+        <!-- END SIDEBAR -->
+
+        <!-- BEGIN CONTENT -->
+        <div class="col-md-9 col-sm-7">
+          <h1 style = "font-family: 'PRETENDARDJP-BLACK';">お気に入りブックマーク</h1>
+
+          
+          <!-- BEGIN WISHLIST-BOX -->
+          <div class="goods-page">
+
+            <div th:if="${#lists.isEmpty(list)}" class="clearfix mainFont" style="text-align: center; margin-top: 100px;">
+              <h1>まだお気に入りに商品が入っていません。</h1>
+            </div>
+            
+            <!-- BEGIN WISHILIST + PAGING-BUTTON -->
+            <div th:if="${!#lists.isEmpty(list)}" class="goods-data clearfix">
+
+              <!-- BEGIN WISHLIST -->
+              <div class="table-wrapper-responsive"  >
+                <table summary="Shopping cart" >
+                  <!-- WISHLIST 표 HEADER :(칸별로) 체크박스/ 이미지/ 상품/ 가격/ 장바구니로가기 버튼, 삭제버튼 -->
+                  <tr >
+                    <th class="goods-page-price" style="padding-left: 35px;"><input type="checkbox" id="select-all"  onclick="toggleSelectAll(this)"></th>
+                    <th class="goods-page-image"></th>
+                    <th class="goods-page-description" style="text-align: center; font-family: 'PRETENDARDJP-BLACK' !important;'">商品</th>
+                    <th class="goods-page-stock" style="text-align: center; font-family: 'PRETENDARDJP-BLACK' !important;">価格</th>
+                    <th class="goods-page-price"></th>
+                  </tr>
+                  <!-- WISHLIST 1행 : (칸별로)  체크박스/ 이미지/ 상품/ 가격/ 장바구니로가기 버튼, 삭제버튼-->
+                  <tr th:each="lists : ${list}" th:data-id="${lists.id}" class="wish-item">
+                    <td class="goods-page-image" style="padding-top: 60px;padding-left: 35px;">
+                      <input type="checkbox" onclick="updateSelectAll()">
+                    </td>
+                    <td class="goods-page-image">
+                      <div style="width:85px; height:90px; padding:20px 20px 20px 0px; box-sizing: border-box; overflow: hidden;">
+                        <img th:src="${lists.product_id.thumbnail_url}" alt=""
+                             style="width: calc(100% + 20px); height: calc(100% + 40px); object-fit: cover; margin: -20px -20px -20px 0px;">
+                      </div>
+                    </td>
+                    <td class="goods-page-description" style="padding-top: 4.5%; text-align: center; font-family: 'PRETENDARDJP-BLACK' !important;">
+                      <h2 style="clear: both; cursor: pointer;"
+                          th:if="${#strings.length(lists.product_id.title) > 25}"
+                          th:onclick="'location.href=\'/product/detail.do?id=' + ${lists.product_id.id} + '\''"
+                          th:text="${lists.product_id.title.substring(0, 25) + '...'}"></h2>
+                      <h2 style="clear: both; cursor: pointer;"
+                          th:if="${#strings.length(lists.product_id.title) <= 25}"
+                          th:onclick="'location.href=\'/product/detail.do?id=' + ${lists.product_id.id} + '\''"
+                          th:text="${lists.product_id.title}"></h2>
+                    </td>
+                    <td class="goods-page-price" style="text-align: center;padding-right: 0;padding-top: 4.5%; font-family: 'PRETENDARDJP-BLACK';">
+                      <strong>[[${lists.product_id.price}]]<span>円</span></strong>
+                    </td>
+                    <td class="del-goods-col" style="padding-top: 2.9%;">
+                      <a class=""  th:onclick="'handleDelete(['+${lists.id}+'])'">
+                        <i class="del-goods" style="width: 50px;height: 50px;"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <!-- END WISHLIST -->
+
+              <!-- BEGIN PAGING-BUTTON 
+               + ALL TO CART BUTTOON 
+               + ALL PRODUCT DELETE BUTTON 
+               + PRODUCT TOTAL COUNT IN WISHLIST  -->
+               <div class="row" style="margin-top: 25px;">
+                
+                <!-- BEGIN PRODUCT-INFO-BUTTON -->
+                <div class="col-md-4 col-sm-4 items-info">
+                  <div style="float: left; width:50px;">
+                    <button class="btn btn-danger" id="delete-bulk"
+                            style="width:50px;
+                            border-radius: 5px !important;">削除</button><!-- 찜목록에서 삭제 -->
+                  </div>
+                </div>
+                <!-- END PRODUCT-INFO-BUTTON-->
+
+                <!-- BEGIN PAGING-BUTTON -->
+                <div class="col-md-8 col-sm-8">
+                  <ul class="pagination pull-right">
+                    <!-- 이전 페이지 -->
+                    <li th:if="${pageMaker.prev}"><a th:href="@{/buyer/wishList.do(pageNum=${pageMaker.startPage - 1}, amount=${pageMaker.cri.amount}, type=${pageMaker.cri.type}, keyword=${pageMaker.cri.keyword})}">&laquo;</a></li>
+                    <th:block th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                      <li th:if="${pageMaker.cri.pageNum != page}"><a th:href="@{/buyer/wishList.do(pageNum=${page}, amount=${pageMaker.cri.amount}, type=${pageMaker.cri.type}, keyword=${pageMaker.cri.keyword})}">[[${page}]]</a></li>
+                      <li th:if="${pageMaker.cri.pageNum == page}"><span>[[${page}]]</span></li>
+                    </th:block>
+                    <!-- 다음 페이지 -->
+                    <li th:if="${pageMaker.next}"><a th:href="@{/buyer/wishList.do(pageNum=${pageMaker.endPage + 1}, amount=${pageMaker.cri.amount}, type=${pageMaker.cri.type}, keyword=${pageMaker.cri.keyword})}">&laquo;</a></li>
+                  </ul>
+                </div>
+                <!-- END PAGING-BUTTON -->
+
+              </div>
+               <!-- END PAGING-BUTTON 
+               + ALL TO CART BUTTOON 
+               + ALL PRODUCT DELETE BUTTON 
+               + PRODUCT TOTAL COUNT IN WISHLIST  -->
+
+            </div>
+            <!-- END WISHILIST + PAGING-BUTTON -->
+
+          </div>
+          <!-- END WISHLIST-BOX -->
+
+        </div>
+        <!-- END CONTENT -->
+      </div><!--ROW END-->
+    </div> <!--CONTAINER-FLUIL-->
+    <!-- END SIDEBAR & CONTENT -->
+  </div><!--MAIN END-->
+</div><!--LAYOUT:CONTENT END-->
+
+<th:block layout:fragment="bodyScript">
+
+
+  <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+
+  <script th:src="@{/Main/assets/plugins/jquery.min.js}" type="text/javascript"></script>
+  <script th:src='@{/Main/assets/plugins/zoom/jquery.zoom.min.js}' type="text/javascript"></script><!-- product zoom -->
+  <script th:src="@{/Main/assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js}" type="text/javascript"></script>
+  <!-- Quantity -->
+  <script th:src="@{/Main/assets/plugins/uniform/jquery.uniform.min.js}" type="text/javascript"></script>
+  <script th:src="@{/Main/assets/plugins/rateit/src/jquery.rateit.js}" type="text/javascript"></script>
+
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" type="text/javascript"></script><!-- for slider-range -->
+
+  <script type="text/javascript">
+    jQuery(document).ready(function () {
+      //Layout.init();    
+      //Layout.initOWL();
+      //Layout.initTwitter();
+      Layout.initImageZoom();
+      Layout.initTouchspin();
+      Layout.initUniform();
+      Layout.initSliderRange();
+    });
+
+    // 전체 선택 체크박스 상태 토글
+    function toggleSelectAll(selectAllCheckbox) {
+      const checkboxes = document.querySelectorAll('.wish-item input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked; // 전체 선택 체크박스 상태에 따라 개별 체크박스 상태 설정
+      });
+    }
+
+    // 개별 체크박스 클릭 시 전체 선택 체크박스 상태 업데이트
+    function updateSelectAll() {
+      const itemCheckboxes = document.querySelectorAll('.wish-item input[type="checkbox"]');
+      const selectAllCheckbox = document.getElementById('select-all');
+      const allChecked = Array.from(itemCheckboxes).every(checkbox => checkbox.checked);
+      selectAllCheckbox.checked = allChecked; // 모든 개별 체크박스가 체크되면 전체 선택 체크박스도 체크
+    }
+
+    //삭제 기능
+    // 1) 통합된 삭제 함수
+    function handleDelete(itemIds) {
+      // itemIds가 배열이 아닌 경우 단일 ID 배열로 변환
+      if (!Array.isArray(itemIds)) {
+        itemIds = [itemIds]; // 배열로 변환
+      }
+
+      // 삭제할 항목이 없으면 경고
+      if (itemIds.length === 0) {
+        alert("삭제할 상품이 없습니다.");
+        return;
+      }
+
+      console.log("삭제 요청 ID:", itemIds); // 추가된 로그
+
+      // AJAX 요청으로 삭 제
+      $.ajax({
+        type: 'POST',
+        url: '/buyer/wishDelete.do', // 삭제 요청을 보낼 URL
+        data: { 'ids[]': itemIds }, // 삭제할 ID 배열
+        success: function(response) {
+          // 성공적으로 삭제된 후 UI 업데이트
+          if (response === "true") {
+            // 페이지 새로고침
+            location.reload();
+
+          } else {
+            alert('삭제 실패했습니다.');
+          }
+        },
+        error: function() {
+          alert('삭제 중 오류가 발생했습니다.');
+        }
+      });
+    }
+
+    // 2) 전체 삭제 버튼 클릭 시
+    document.getElementById('delete-bulk').addEventListener('click', function() {
+      const selectedIds = [];
+      // 체크된 항목의 ID 수집
+      $('.wish-item input[type="checkbox"]:checked').each(function() {
+        const cartItemId = $(this).closest('.wish-item').data('id');
+        selectedIds.push(cartItemId);
+      });
+
+      // 전체 삭제 함수 호출
+      handleDelete(selectedIds);
+    });
+    
+  </script>
+  <!-- END PAGE LEVEL JAVASCRIPTS -->
+</th:block>
+
+</html>

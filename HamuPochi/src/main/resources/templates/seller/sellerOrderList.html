@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/MypageLayout}">
+
+<!-- CSS Section -->
+<th:block layout:fragment="css">
+  <link th:href="@{/Main/assets/plugins/uniform/css/uniform.default.css}" rel="stylesheet" type="text/css">
+  <style>
+    .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding-top: 20px;
+    }
+  </style>
+</th:block>
+
+<!-- Content Section -->
+<div layout:fragment="content">
+  <div class="main">
+    <div class="container-fluid" style="padding:0px 100px 0px 100px;">
+      <div class="row"  style="margin-top:40px;">
+        <!-- Sidebar -->
+        <div class="col-md-2 col-lg-2 bg-light sidebar">
+          <div th:replace="~{fragments/sellerSidebar::sidebar}"></div>
+        </div>
+        <!-- Main Content -->
+        <div class="col-md-8 ml-sm-auto col-lg-10 px-4"
+             style = "font-family:'PRETENDARDJP-BLACK';">
+          <div class="row"
+               style="display: block;
+               margin-right:80px;
+               margin-left:20px;">
+            <!-- Header -->
+            <div class="col-md-6">
+              <ul class="breadcrumb">
+                <li><a th:href="@{/seller/main.do}"
+                style = "font-family:'PRETENDARDJP-BLACK';">マイページ</a></li>
+                <li class="active"
+                style = "font-family:'PRETENDARDJP-BLACK';">販売内訳</li>
+              </ul>
+              <h1 style="margin:15px 0px 15px 0px;
+                  font-family:'PRETENDARDJP-BLACK';">販売内訳</h1>
+            </div>
+
+            <form method="get" th:action="@{/seller/order.do}">
+              <div class="col-md-6 justify-content-between"
+                   style="padding:0;
+                   margin-top: 18px;
+                   font-family:'PRETENDARDJP-BLACK';">
+                <!-- Search Bar -->
+                <div class="order-search"
+                     style="align-items: center;
+                     float:right;">
+                  <input type="hidden" name="id" value="3"
+                         style = "font-family:'PRETENDARDJP-BLACK';">
+                  <input type="text" placeholder="商品検索" class="form-control"
+                         style="margin: 15px 0px 15px 0px;
+                         width:300px;
+                         float:left;
+                         font-family:'PRETENDARDJP-BLACK';"
+                         th:value="${pageMaker.cri.keyword}" name="keyword">
+                  <button class="btn btn-primary" type="submit"
+                          style="margin: 15px 0px 15px 0px;
+                          width:80px;
+                          height:30.5px;
+                          float:left;
+                          font-family:'PRETENDARDJP-BLACK';">検索</button>
+                </div>
+                <div style="float:right;">
+                  <!-- Order Status Options -->
+                  <select class="form-control"
+                          style="margin: 18px 5px 15px 0px;
+                          width: 100px;
+                          float:left;
+                          border-radius:5px;
+                          height: 30px;
+                          margin-bottom:-25px !important;"
+                          name="status" >
+                    <option value="0"
+                            style = "font-family:'PRETENDARDJP-BLACK';
+                            ">選択</option>
+                    <option value="2" style = "font-family:'PRETENDARDJP-BLACK';">注文完了</option>
+                    <option value="1" style = "font-family:'PRETENDARDJP-BLACK';">注文キャンセル</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+
+            <!-- Order List -->
+            <div id="parent" style="clear: both; margin-top:20px;">
+              <div th:replace="~{fragments/sellerOrderList::list}"></div>
+            </div>
+          </div>
+
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS Section -->
+<th:block layout:fragment="bodyScript">
+  <script th:src="@{/Main/assets/plugins/jquery.min.js}" type="text/javascript"></script>
+  <script th:src="@{/Main/assets/plugins/zoom/jquery.zoom.min.js}"></script>
+  <script th:src="@{/Main/assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js}"></script>
+  <script th:src="@{/Main/assets/plugins/uniform/jquery.uniform.min.js}"></script>
+  <script th:src="@{/Main/assets/pages/scripts/checkout.js}"></script>
+  <script>
+    jQuery(document).ready(function() {
+        Layout.initImageZoom();
+        Layout.initTouchspin();
+        Layout.initUniform();
+        Checkout.init();
+    });
+
+    //주문 리스트 비동기 페이징
+    function page(page, amount,status,keyword,id) {
+      $.ajax({
+          type: 'POST',
+          url: '/seller/list_paging',
+          data: {
+              pageNum: page,
+              amount: amount,
+              status: status,
+              keyword: keyword,
+              id: id
+
+          },
+          success: function(data) {
+              if (data) {
+                  $('#sellerOrderList').remove(); // 기존 리뷰 컨테이너 제거
+
+                  const newdiv = $('<div>').html(data); // 새로운 리뷰 컨테이너 생성
+                  console.log(3);
+                  let parent = $('#parent'); // 부모 요소 선택
+
+                  parent.append(newdiv); // 새로운 컨텐츠 추가
+
+              } else {
+                  alert('실패하였습니다! 관리자에게 문의해주세요.');
+                  console.log('fail');
+              }
+          },
+          error: function() {
+              alert('실패2!');
+          }
+      });
+    }
+  </script>
+</th:block>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <style>
+        ul.breadcrumb {
+            font-family: 'PRETENDARDJP-BLACK';
+        }
+
+        #delbtn:focus,#delbtn:active {
+            outline: none; /* 포커스 시 테두리 제거 */
+            background: transparent; /* 배경색 제거 */
+            color: inherit; /* 텍스트 색상 상속 */
+        }
+    </style>
+</th:block>
+<!-- Body BEGIN -->
+<div layout:fragment="content">
+
+    <div class="main">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a th:href="@{/}">ホーム</a></li>
+                <li><a th:href="@{/product/list.do}">商品リスト</a></li>
+                <li>チェックアウト</li>
+            </ul>
+            <!-- BEGIN SIDEBAR & CONTENT -->
+            <div class="row margin-bottom-40" style="display: flex;justify-content: center;">
+                <!-- BEGIN CONTENT -->
+                <div class="col-md-6 col-sm-6">
+                    <h1>チェックアウト</h1>
+                    <!-- BEGIN CHECKOUT PAGE -->
+                    <div class="panel-group checkout-page accordion scrollable" id="checkout-page">
+
+                        <!-- BEGIN PAYMENT ADDRESS -->
+                        <div id="payment-address" class="panel panel-default">
+                          <div class="panel-heading">
+                            <h2 class="panel-title">
+                              <a data-toggle="collapse" data-parent="#checkout-page" href="#payment-address-content" class="accordion-toggle">
+                                受取場所を選択
+                              </a>
+                            </h2>
+                          </div>
+                          <div id="payment-address-content" class="panel-collapse collapse">
+                                <div class="panel-body row" id="address">
+                                  <!-- Strat address -->
+                                  <div class="col-md-12 col-sm-12" th:each="list,iterStat : ${addressList}"  th:if="${addressList.size() > 0 and !list.status}">
+                                    <h3>Your Personal Details</h3>
+                                    <div class="form-group">
+                                      <input type="hidden" th:value="${list.id}" id="address_id">
+                                      <label for="name">氏名（フルネーム） <span class="require">*</span></label>
+                                      <input type="text" id="name" th:value="${list.buyer_id.name}" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="telephone">電話番号 <span class="require">*</span></label>
+                                      <input type="text" id="telephone" th:value="${list.buyer_id.phone_number}" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="post_number">郵便番号 <span class="require">*</span></label>
+                                      <input type="text" id="post_number" th:value="${list.post_number}" name="post_number" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="prefecture">都道府県 <span class="require">*</span></label>
+                                      <select id="prefecture" name="prefecture" class="form-control input-sm">
+                                        <option value="0">都道府県を選択する</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '北海道') and list.status == true}" value="北海道">北海道</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '北海道') and list.status == false}" value="北海道" selected>北海道</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '青森県') and list.status == true}" value="青森県">青森県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '青森県') and list.status == false}" value="青森県" selected>青森県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '岩手県') and list.status == true}" value="岩手県">岩手県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '岩手県') and list.status == false}" value="岩手県" selected>岩手県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '宮城県') and list.status == true}" value="宮城県">宮城県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '宮城県') and list.status == false}" value="宮城県" selected>宮城県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '秋田県') and list.status == true}" value="秋田県">秋田県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '秋田県') and list.status == false}" value="秋田県" selected>秋田県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '山形県') and list.status == true}" value="山形県">山形県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '山形県') and list.status == false}" value="山形県" selected>山形県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '福島県') and list.status == true}" value="福島県">福島県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '福島県') and list.status == false}" value="福島県" selected>福島県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '茨城県') and list.status == true}" value="茨城県">茨城県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '茨城県') and list.status == false}" value="茨城県" selected>茨城県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '栃木県') and list.status == true}" value="栃木県">栃木県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '栃木県') and list.status == false}" value="栃木県" selected>栃木県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '群馬県') and list.status == true}" value="群馬県">群馬県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '群馬県') and list.status == false}" value="群馬県" selected>群馬県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '埼玉県') and list.status == true}" value="埼玉県">埼玉県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '埼玉県') and list.status == false}" value="埼玉県" selected>埼玉県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '千葉県') and list.status == true}" value="千葉県">千葉県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '千葉県') and list.status == false}" value="千葉県" selected>千葉県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '東京都') and list.status == true}" value="東京都">東京都</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '東京都') and list.status == false}" value="東京都" selected>東京都</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '神奈川県') and list.status == true}" value="神奈川県">神奈川県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '神奈川県') and list.status == false}" value="神奈川県" selected>神奈川県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '新潟県') and list.status == true}" value="新潟県">新潟県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '新潟県') and list.status == false}" value="新潟県" selected>新潟県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '富山県') and list.status == true}" value="富山県">富山県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '富山県') and list.status == false}" value="富山県" selected>富山県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '石川県') and list.status == true}" value="石川県">石川県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '石川県') and list.status == false}" value="石川県" selected>石川県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '福井県') and list.status == true}" value="福井県">福井県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '福井県') and list.status == false}" value="福井県" selected>福井県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '山梨県') and list.status == true}" value="山梨県">山梨県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '山梨県') and list.status == false}" value="山梨県" selected>山梨県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '長野県') and list.status == true}" value="長野県">長野県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '長野県') and list.status == false}" value="長野県" selected>長野県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '岐阜県') and list.status == true}" value="岐阜県">岐阜県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '岐阜県') and list.status == false}" value="岐阜県" selected>岐阜県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '静岡県') and list.status == true}" value="静岡県">静岡県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '静岡県') and list.status == false}" value="静岡県" selected>静岡県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '愛知県') and list.status == true}" value="愛知県">愛知県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '愛知県') and list.status == false}" value="愛知県" selected>愛知県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '三重県') and list.status == true}" value="三重県">三重県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '三重県') and list.status == false}" value="三重県" selected>三重県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '滋賀県') and list.status == true}" value="滋賀県">滋賀県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '滋賀県') and list.status == false}" value="滋賀県" selected>滋賀県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '京都府') and list.status == true}" value="京都府">京都府</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '京都府') and list.status == false}" value="京都府" selected>京都府</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '大阪府') and list.status == true}" value="大阪府">大阪府</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '大阪府') and list.status == false}" value="大阪府" selected>大阪府</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '兵庫県') and list.status == true}" value="兵庫県">兵庫県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '兵庫県') and list.status == false}" value="兵庫県" selected>兵庫県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '奈良県') and list.status == true}" value="奈良県">奈良県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '奈良県') and list.status == false}" value="奈良県" selected>奈良県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '和歌山県') and list.status == true}" value="和歌山県">和歌山県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '和歌山県') and list.status == false}" value="和歌山県" selected>和歌山県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '鳥取県') and list.status == true}" value="鳥取県">鳥取県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '鳥取県') and list.status == false}" value="鳥取県" selected>鳥取県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '島根県') and list.status == true}" value="島根県">島根県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '島根県') and list.status == false}" value="島根県" selected>島根県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '岡山県') and list.status == true}" value="岡山県">岡山県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '岡山県') and list.status == false}" value="岡山県" selected>岡山県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '広島県') and list.status == true}" value="広島県">広島県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '広島県') and list.status == false}" value="広島県" selected>広島県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '山口県') and list.status == true}" value="山口県">山口県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '山口県') and list.status == false}" value="山口県" selected>山口県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '徳島県') and list.status == true}" value="徳島県">徳島県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '徳島県') and list.status == false}" value="徳島県" selected>徳島県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '香川県') and list.status == true}" value="香川県">香川県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '香川県') and list.status == false}" value="香川県" selected>香川県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '愛媛県') and list.status == true}" value="愛媛県">愛媛県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '愛媛県') and list.status == false}" value="愛媛県" selected>愛媛県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '高知県') and list.status == true}" value="高知県">高知県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '高知県') and list.status == false}" value="高知県" selected>高知県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '福岡県') and list.status == true}" value="福岡県">福岡県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '福岡県') and list.status == false}" value="福岡県" selected>福岡県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '佐賀県') and list.status == true}" value="佐賀県">佐賀県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '佐賀県') and list.status == false}" value="佐賀県" selected>佐賀県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '長崎県') and list.status == true}" value="長崎県">長崎県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '長崎県') and list.status == false}" value="長崎県" selected>長崎県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '熊本県') and list.status == true}" value="熊本県">熊本県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '熊本県') and list.status == false}" value="熊本県" selected>熊本県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '大分県') and list.status == true}" value="大分県">大分県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '大分県') and list.status == false}" value="大分県" selected>大分県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '宮崎県') and list.status == true}" value="宮崎県">宮崎県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '宮崎県') and list.status == false}" value="宮崎県" selected>宮崎県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '鹿児島県') and list.status == true}" value="鹿児島県">鹿児島県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '鹿児島県') and list.status == false}" value="鹿児島県" selected>鹿児島県</option>
+                                        <option th:unless="${#strings.equals(list.prefecture, '沖縄県') and list.status == true}" value="沖縄県">沖縄県</option>
+                                        <option th:if="${#strings.equals(list.prefecture, '沖縄県') and list.status == false}" value="沖縄県" selected>沖縄県</option>
+                                      </select>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="city">市区町村 <span class="require">*</span></label>
+                                      <input type="text" id="city" name="city" th:value="${addressList != null and list.status == false ? list.city : ''}" class="form-control" placeholder="例：〇〇市〇〇町">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="block_number">丁目・番地・号（数字は半角数字）</label>
+                                      <input type="text" id="block_number" name="block_number" th:value="${addressList != null and list.status == false ? list.block_number : ''}" class="form-control" placeholder="例：1-2-3">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="building_name">建物名／会社名・部屋番号</label>
+                                      <input type="text" id="building_name" name="building_name" th:value="${addressList != null and list.status == false ? list.building_name : ''}" class="form-control" placeholder="例：〇〇マンション">
+                                    </div>
+                                  </div>
+                                  <!-- End address -->
+                                   <!-- Strat not address -->
+                                  <div class="col-md-12 col-sm-12" id="address" th:if="${addressList.size() == 0}" >
+                                    <h3>Your Personal Details</h3>
+                                    <div class="form-group">
+                                      <input type="hidden" value="0" id="address_id">
+                                      <label for="name">氏名（フルネーム） <span class="require">*</span></label>
+                                      <input type="text" id="name" th:value="${buyer.name}" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="telephone">電話番号 <span class="require">*</span></label>
+                                      <input type="text" id="telephone" th:value="${buyer.phone_number}" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="post_number">郵便番号 <span class="require">*</span></label>
+                                      <input type="text" id="post_number" name="post_number" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="prefecture">都道府県 <span class="require">*</span></label>
+                                      <select id="prefecture" name="prefecture" class="form-control input-sm">
+                                        <option value="0">都道府県を選択する</option>
+                                        <option value="北海道">北海道</option>
+                                        <option value="青森県">青森県</option>
+                                        <option value="岩手県">岩手県</option>
+                                        <option value="宮城県">宮城県</option>
+                                        <option value="秋田県">秋田県</option>
+                                        <option value="山形県">山形県</option>
+                                        <option value="福島県">福島県</option>
+                                        <option value="茨城県">茨城県</option>
+                                        <option value="栃木県">栃木県</option>
+                                        <option value="群馬県">群馬県</option>
+                                        <option value="埼玉県">埼玉県</option>
+                                        <option value="千葉県">千葉県</option>
+                                        <option value="東京都">東京都</option>
+                                        <option value="神奈川県">神奈川県</option>
+                                        <option value="新潟県">新潟県</option>
+                                        <option value="富山県">富山県</option>
+                                        <option value="石川県">石川県</option>
+                                        <option value="福井県">福井県</option>
+                                        <option value="山梨県">山梨県</option>
+                                        <option value="長野県">長野県</option>
+                                        <option value="岐阜県">岐阜県</option>
+                                        <option value="静岡県">静岡県</option>
+                                        <option value="愛知県">愛知県</option>
+                                        <option value="三重県">三重県</option>
+                                        <option value="滋賀県">滋賀県</option>
+                                        <option value="京都府">京都府</option>
+                                        <option value="大阪府">大阪府</option>
+                                        <option value="兵庫県">兵庫県</option>
+                                        <option value="奈良県">奈良県</option>
+                                        <option value="和歌山県">和歌山県</option>
+                                        <option value="鳥取県">鳥取県</option>
+                                        <option value="島根県">島根県</option>
+                                        <option value="岡山県">岡山県</option>
+                                        <option value="広島県">広島県</option>
+                                        <option value="山口県">山口県</option>
+                                        <option value="徳島県">徳島県</option>
+                                        <option value="香川県">香川県</option>
+                                        <option value="愛媛県">愛媛県</option>
+                                        <option value="高知県">高知県</option>
+                                        <option value="福岡県">福岡県</option>
+                                        <option value="佐賀県">佐賀県</option>
+                                        <option value="長崎県">長崎県</option>
+                                        <option value="熊本県">熊本県</option>
+                                        <option value="大分県">大分県</option>
+                                        <option value="宮崎県">宮崎県</option>
+                                        <option value="鹿児島県">鹿児島県</option>
+                                        <option value="沖縄県">沖縄県</option>
+                                      </select>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="city">市区町村 <span class="require">*</span></label>
+                                      <input type="text" id="city" name="city" class="form-control" placeholder="例：〇〇市〇〇町">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="block_number">丁目・番地・号（数字は半角数字）</label>
+                                      <input type="text" id="block_number" name="block_number" class="form-control" placeholder="例：1-2-3">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="building_name">建物名／会社名・部屋番号</label>
+                                      <input type="text" id="building_name" name="building_name" class="form-control" placeholder="例：〇〇マンション">
+                                    </div>
+                                  </div>
+                                  <!-- End not address -->
+                                  <hr>
+                                  <div class="col-md-12"
+                                        style="display: flex; align-items: center; justify-content: flex-end; gap: 20px;">
+                                      <!-- 기본주소추가 버튼 -->
+                                      <button th:if="${addressList != null and !addressList.isEmpty()}"
+                                              class="btn btn-primary" type="button" id="openListModal" style="display: block;">
+                                          お届け先リスト
+                                      </button>
+
+                                      <!-- "この場所で受取" 버튼 -->
+                                      <button class="btn btn-primary" id="addressBtn" type="button"
+                                              onclick="addressSelect()">この場所で受取
+                                      </button>
+                                  </div>
+                                  
+                                  <!-- 주소 목록 모달 BEGIN -->
+                                  <div class="modal" id="addressListModal" style="position: fixed; top: 50%;
+                                   left: 50%; transform: translate(-50%, -50%); background: white; width: 400px;
+                                    height: 400px; padding: 15px; border-radius: 8px; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 8px;
+                                     z-index: 1000; overflow: hidden; display: none;">
+                                    <div class="modal-header">お届け先リスト</div>
+                                    
+                                      <div style="margin-bottom: 10px;display: flex;" th:each="list : ${addressList}" th:id="'listDiv-'+${list.id}">
+                                        <div class="checker" id="uniform-address1">
+                                          <span><input type="radio" th:id="'address'+ ${list.id}" th:value="${list.id}" name="addressList"></span>
+                                        </div>
+                                        <label th:for="'address'+ ${list.id}" style="margin-left: 10px;">
+                                          <th:block th:if="${list.status == false}">[基本] </th:block>
+                                          〒[[${list.post_number}]] [[${list.prefecture}]][[${list.city}]][[${list.block_number}]][[${list.building_name}]]
+                                        </label>
+                                        <button class="btn btn-danger" id="delbtn" style="background: none; display: flex;
+                                        border: none;padding: 0;margin: 0;cursor: pointer;position: relative;outline: none;"
+                                         th:onclick="delAddress([[${list.id}]])">
+                                         <span class="material-icons" style="cursor: pointer; color: red;">
+                                          Close
+                                          </span>
+                                        </button>
+                                      </div>
+                                    
+                                    <div style="text-align: right;">
+                                      <button class="btn btn-primary" id="saveListButton" type="button" onclick="addressChange()">決定</button>
+                                      <button class="btn btn-danger" id="cancelListButton">キャンセル</button>
+                  
+                                    </div>
+                                  </div>
+                                  <!-- 주소 목록 모달 END -->
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- BEGIN CONFIRM -->
+                        <div id="confirm" class="panel panel-default">
+                          <div class="panel-heading">
+                            <h2 class="panel-title">
+                              <a data-toggle="collapse" data-parent="#checkout-page" href="#confirm-content" class="accordion-toggle">
+                                商品を確認
+                              </a>
+                            </h2>
+                          </div>
+                          <div id="confirm-content" class="panel-collapse collapse">
+                              <div class="panel-body row">
+                                  <div class="col-md-12 clearfix">
+                                      <div class="table-wrapper-responsive">
+                                          <table>
+                                              <tr>
+                                                  <th class="checkout-image"></th>
+                                                  <th class="checkout-description">商品</th>
+                                                  <th class="checkout-quantity">数量</th>
+                                                  <th class="checkout-price">価格</th>
+                                                  <th class="checkout-total">小計</th>
+                                              </tr>
+                                              <tr th:each="cartDTOList,iterStat : ${cartDTOList}">
+                                                  <input type="hidden" th:if="${iterStat.index == 0}" th:value="${cartDTOList.buyer_id.name}" id="buyerName">
+                                                  <input type="hidden" th:if="${iterStat.index == 0}" th:value="${cartDTOList.buyer_id.email}" id="email">
+                                                  <td class="checkout-image">
+                                                      <a href="javascript:;">
+                                                          <img th:src="${cartDTOList.option_id.product_id.thumbnail_url}"></a>
+                                                  </td>
+                                                  <td class="checkout-description">
+                                                      <h3><a th:href="@{/product/detail.do(id=${cartDTOList.option_id.product_id.id})}" th:attr="data-option-id=${cartDTOList.option_id.id}">
+                                                          [[${cartDTOList.option_id.product_id.title}]]
+                                                      </a>
+                                                      </h3>
+                                                      <p>[[${cartDTOList.option_id.option_name}]]</p>
+                                                  </td>
+                                                  <td class="checkout-quantity">[[${cartDTOList.amount}]]</td>
+                                                  <td class="checkout-price"><strong>[[${cartDTOList.option_id.product_id.price}]]<span>円</span></strong>
+                                                  </td>
+                                                  <td class="checkout-total"><strong>[[${cartDTOList.option_id.product_id.price*cartDTOList.amount}]]<span>円</span></strong>
+                                                  </td>
+                                              </tr>
+                                          </table>
+                                      </div>
+                                      <div class="checkout-total-block">
+                                          <ul>
+                                              <li class="checkout-total-price">
+                                                  <em>合計</em>
+                                                  <strong class="price">[[${total}]]<span>円</span></strong>
+                                              </li>
+                                          </ul>
+                                      </div>
+                                      <div class="clearfix"></div>
+                                      <input type="hidden" th:value="${id}" id="buyer">
+                                      <button class="btn btn-primary pull-right" type="button" id="button-confirm"
+                                              onclick="checkout()">注文を確定する
+                                      </button>
+                                      <button type="button" id="checkoutCancel" onclick="history.back();"
+                                              class="btn btn-default pull-right margin-right-20">キャンセル
+                                      </button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- END CONFIRM -->
+                    </div>
+                </div>
+                <!-- END CHECKOUT PAGE -->
+            </div>
+            <!-- END CONTENT -->
+        </div>
+        <!-- END SIDEBAR & CONTENT -->
+    </div>
+
+
+    <!-- Load javascripts at bottom, this will reduce page load time -->
+    <!-- BEGIN CORE PLUGINS(REQUIRED FOR ALL PAGES) -->
+    <!--[if lt IE 9]>
+    <script src="../../static/Main/assets/plugins/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            Layout.init();    
+            Layout.initOWL();
+            Layout.initTwitter();
+            Layout.initImageZoom();
+            Layout.initTouchspin();
+            Layout.initUniform();
+            Checkout.init();
+        });
+    </script>
+    
+</div>
+<!-- END BODY -->
+<th:block layout:fragment="bodyScript">
+  <script th:src="@{/Main/assets/plugins/jquery.min.js}" type="text/javascript"></script>
+<script th:inline="javascript">
+  let sessionId = 0;
+  let boolean = false;
+  //결제 버튼 클릭시 사용할 전역 변수
+  const name = $('#email').val();
+  const optionIds = Array.from(document.querySelectorAll('.checkout-description h3 a')).map((element) => element.getAttribute('data-option-id'));
+
+  console.log('Option IDs:'+ optionIds);
+  document.addEventListener('DOMContentLoaded', () => {
+    // const openAddressModalButton = document.getElementById('openAddressModal');
+    // const cancelAddressButton = document.getElementById('cancelAddressButton');
+    // const addressAddModal = document.getElementById('addressAddModal');
+
+    const openListModalButton = document.getElementById('openListModal');
+    const cancelListButton = document.getElementById('cancelListButton');
+    const addressListModal = document.getElementById('addressListModal');
+
+    // // 기본 주소 추가 모달 열기
+    // openAddressModalButton.addEventListener('click', function () {
+    //   addressAddModal.style.display = 'block';
+    // });
+
+    // // 기본 주소 추가 모달 닫기
+    // function closeAddressModal() {
+    //   addressAddModal.style.display = 'none';
+    // }
+    // cancelAddressButton.addEventListener('click', closeAddressModal);
+
+    // 주소 목록 모달 열기
+    openListModalButton.addEventListener('click', function () {
+      addressListModal.style.display = 'block';
+    });
+
+    // 주소 목록 모달 닫기
+    function closeListModal() {
+      addressListModal.style.display = 'none';
+    }
+    cancelListButton.addEventListener('click', closeListModal);
+  });
+
+  //주소 추가 모달 이벤트
+  function addressAdd(booln){
+    const post_number = $('#post_number').val();//우편번호
+    const prefecture = $('#prefecture').val();//都道府県
+    const city = $('#city').val();//市区町村
+    const block_number = $('#block_number').val();//丁目・番地・号
+    const building_name = $('#building_name').val();//建物名／会社名・部屋番号
+    const buyer = $('#buyer').val();//buyerId
+
+    
+    if(booln){
+      $.ajax({
+        type: 'POST',
+        url: '/buyer/addAddress.do',
+        data: {
+            post_number: post_number,
+            prefecture: prefecture,
+            city: city,
+            block_number: block_number,
+            building_name: building_name,
+            buyer_id: buyer
+        },
+        success: function(data) {
+            if(data === "false"){
+              alert('問題が発生しました。');
+              console.log('fail');
+              return 0;
+            }else{
+              alert("お届け先の登録に成功しました。");
+              return data;
+            }
+        },
+        error: function() {
+            alert('エーラーが発生しました。');
+            return 0;
+        }
+    });
+    }
+    
+  }
+  //주소 삭제 모달 이벤트
+  function delAddress(delId){
+
+    if(delId > 0){
+      $.ajax({
+        type: 'POST',
+        url: '/buyer/addressDelete.do',
+        data: {
+            id: delId
+        },
+        success: function(data) {
+            if(data === "false"){
+              alert('問題が発生しました。');
+              console.log('fail');
+              return false;
+            }else if(data === "cannot"){
+              alert('基本住所は削除できません。');
+              return false;
+            }else{
+              $('#listDiv-'+delId).remove();
+              return true;
+            }
+        },
+        error: function() {
+            alert('エーラーが発生しました。');
+            return false;
+        }
+    });
+
+    }else{
+      alert('エーラーが発生しました。');
+    }
+      
+  }
+  //주소 업데이트 이벤트
+  function addressUpdate(updateId){
+    const post_number = $('#post_number').val();//우편번호
+    const prefecture = $('#prefecture').val();//都道府県
+    const city = $('#city').val();//市区町村
+    const block_number = $('#block_number').val();//丁目・番地・号
+    const building_name = $('#building_name').val();//建物名／会社名・部屋番号
+    const buyer = $('#buyer').val();//buyerId
+
+    
+      $.ajax({
+        type: 'POST',
+        url: '/buyer/updateAddress.do',
+        data: {
+            id: updateId,
+            post_number: post_number,
+            prefecture: prefecture,
+            city: city,
+            block_number: block_number,
+            building_name: building_name,
+            buyer_id: buyer
+        },
+        success: function(data) {
+            if(data === "false"){
+              alert('問題が発生しました。');
+              console.log('fail');
+              return 0;
+            }else{
+              alert("お届け先の編集に成功しました。");
+              return buyer;
+            }
+        },
+        error: function() {
+            alert('エーラーが発生しました。');
+            return 0;
+        }
+    });
+    
+  }
+  //주소 리스트 선택 이벤트
+  function addressChange(){
+    const addressIdModal = $('input[name="addressList"]:checked').val();
+
+    if(addressIdModal == null || addressIdModal < 1){
+      alert('お届け先を選んでください。');
+    }else{
+      $.ajax({
+        type: 'POST',
+        url: '/buyer/addressChange.do',
+        data: {
+            id: addressIdModal
+        },
+        success: function(data) {
+            if(data){
+              $('#address').remove(); // 기존 리뷰 컨테이너 제거
+
+              const newdiv = $('<div>').html(data); // 새로운 리뷰 컨테이너 생성
+
+              let parent = $('#payment-address-content'); // 부모 요소 선택
+
+              parent.append(newdiv); // 새로운 컨텐츠 추가
+
+              closeListModal(); // 모달 닫기
+            }else{
+              alert("お届け先の登録に失敗しました。");
+              return false;
+            }
+        },
+        error: function() {
+            alert('エーラーが発生しました。');
+            return false;
+        }
+      });
+    }
+  }
+
+  function addressSelect(){ //주소 확정 버튼 이벤트
+    let booln = true;
+    
+    if($('#name').val() === ''){
+      alert("氏名を入力してください。");
+      
+      booln = false;
+
+      $('#name').focus();
+    }
+    
+    else if($('#telephone').val() === ''){
+      alert("電話番号を入力してください。");
+      booln = false;
+      $('#telephone').focus();
+    }
+
+    else if($('#post_number').val() === ''){
+      alert("郵便番号を入力してください。");
+      booln = false;
+      $('#post_number').focus();
+    }
+
+    else if($('#prefecture').val() === '0'){
+      alert("都道府県を選択してください。");
+      booln = false;
+      $('#prefecture').focus();
+    }
+
+    else if($('#city').val() === ''){
+      alert("市区町村を入力してください。");
+      booln = false;
+      $('#city').focus();
+    }
+    else if(booln){
+      if($('#address_id').val() == 0){
+      if(confirm('この住所を保存しますか？')){
+        sessionId = addressAdd(booln);
+      }
+      booln = true;
+      }else{
+        if(confirm('既存の住所を編集しますか？')){
+          sessionId = addressUpdate($('#address_id').val());
+        }else{
+          if(confirm('新しい住所で保存しますか？')){
+            sessionId = addressAdd(booln);
+          }else{
+            booln = true;
+          }
+        }
+      }
+    }else{
+      alert("問題が発生しました。");
+    }
+    
+    if(booln){
+      $('#address').prop('disabled',true); //select disabled
+      $('#addressBtn').prop('disabled',true);//button disabled
+      boolean = true;
+    }
+  }
+
+  function generateOrderId() {
+      const now = new Date();
+
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+
+      const random = Math.floor(Math.random() * 90000) + 10000;
+
+      return `${month}${day}${minutes}${seconds}${random}`;
+  }
+
+  //결제 이벤트
+  function checkoutAction(){
+    const orderId = generateOrderId();
+    const amountElement = document.querySelector('.price');
+    const titleElement = document.querySelector('.checkout-description h3 a');
+
+
+
+    const amountText = amountElement.textContent;
+    const cleanedText = amountText.replace('円', '').trim();
+    const amount = parseInt(cleanedText, 10);
+
+    itemName = titleElement.textContent.trim();
+
+    fetch('/kakao/pay/ready', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            orderId: orderId,
+            userId: name,
+            itemName: itemName,
+            amount: amount,
+            optionIds: optionIds
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.next_redirect_pc_url) {
+            window.location.href = data.next_redirect_pc_url;
+        } else {
+            alert('결제 준비 중 오류가 발생했습니다.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+  }
+
+  
+  function checkout(){
+    if(boolean){
+
+      let option_id = [];
+      let amount = [];
+      [# th:each="list : ${cartDTOList}"]
+          option_id.push(JSON.parse([[${list.option_id.id}]])); 
+          amount.push([[${list.amount}]]);
+      [/]
+      const post_number = $('#post_number').val();//우편번호
+      const prefecture = $('#prefecture').val();//都道府県
+      const city = $('#city').val();//市区町村
+      const block_number = $('#block_number').val();//丁目・番地・号
+      const building_name = $('#building_name').val();//建物名／会社名・部屋番号
+
+      $.ajax({
+          type: 'POST',
+          url: '/product/tempSaveOrder',
+          data: {
+              id: sessionId,
+              receiver: $('#name').val(),
+              tel : $('#telephone').val(),
+              option_id : option_id,
+              amount : amount,
+              buyer_id : $('#buyer').val(),
+              post_number : post_number,
+              prefecture : prefecture,
+              city : city,
+              block_number : block_number,
+              building_name : building_name
+          },
+          success: function(data) {
+              if(data === "false"){
+                alert('問題が発生しました。');
+                console.log('fail');
+              }else{
+                checkoutAction();
+              }
+          },
+          error: function() {
+              alert('エーラーが発生しました。');
+          }
+      });
+
+    }else{
+      alert("お届け先を確定してください。");
+      $('#addressBtn').focus();
+    }
+  }
+
+</script>
+</th:block>
+<!-- END PAGE LEVEL JAVASCRIPTS -->
+</html>

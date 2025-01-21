@@ -1,0 +1,42 @@
+@font-face {
+	font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+	src: url('../fonts/PRETENDARDJP-BLACK.OTF') format('opentype');
+}
+
+@font-face {
+	font-family: 'PRETENDARDJP-BOLD';
+	src: url('../fonts/PRETENDARDJP-BOLD.OTF') format('opentype');
+}
+
+.footer {
+    margin-top:130px;
+    font-family: 'PRETENDARDJP-BLACK', sans-serif !important;
+	height:40px;
+	box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05) !important; /* 미묘한 그림자 효과 */
+    background-color: white !important; /* 배경색 */
+    color: #616b76; /* 텍스트 색상 */
+    display: flex; /* Flexbox 활성화 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    column-gap: 50px; /* 열 간격 추가 */
+	white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+    overflow: hidden; /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* 숨겨진 부분에 "..." 표시 */
+}
+
+.footer-item {
+	color: #616b76; /* 텍스트 색상 */
+    font-size: 15px; /* 폰트 크기 */
+    text-align: center;
+    padding: 0 390px; /* 항목 안쪽 공백 */
+	text-align: left; /* 텍스트 정렬 */
+}
+
+.footer-item a {
+    color: #616b76; /* 링크 색상 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+.footer-item a:hover {
+    color: #616b76; /* 링크 색상 변경 */
+}
+

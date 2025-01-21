@@ -1,0 +1,155 @@
+<html>
+<div th:fragment="list" class="buyerOrderFragments">
+    <div class="col-md-9 col-sm-7">
+        <!-- BEGIN 검색 바 -->
+        <form method="get" th:action="@{/buyer/main.do}">
+            <div class="list-header">
+                <h1 class="fw-bold" style="font-family: 'PRETENDARDJP-BLACK' !important;">購入履歴</h1>
+                <div class="search-box" style="display: flex;">
+                    <input type="hidden" name="id" th:value="${id}">
+                    <input type="text" name="keyword" placeholder="検索" th:value="${pageMaker.cri.keyword}" style="margin-right: 10px;">
+                    <button type="submit" class="btn" id="searchBtn" style="font-family: 'PRETENDARDJP-BLACK' !important;">検索</button>
+                </div>
+            </div>
+            <!-- 날짜 필터 -->
+            <div class="date-filter mb-3">
+                <label for="start-date">開始日:</label>
+                <input type="date" id="start-date" name="startDate" min="2021-01-01" max="2025-12-31">
+                ~
+                <label for="end-date">終了日:</label>
+                <input type="date" id="end-date" name="endDate" min="2021-01-01" max="2025-12-31">
+            </div>
+        </form>
+        <!-- 주문 전체 내역역 -->
+            
+        <div class="order-list" th:if="${#lists.size(list) == 0}" style="margin-top:100px;text-align: center;">
+            <h1 style="font-family: 'PRETENDARDJP-BLACK' !important;">表示する注文がありません。</h1> <!-- 리뷰가 없을 시 나오는 문구 -->
+        </div>
+        <div class="order-list" th:if="${#lists.size(list) != 0}">
+        <!-- 첫 번째 주문 -->
+            <div class="order-item" th:each="list : ${list}"><!-- 주문 내용 + 반품 등 버튼 포함함-->
+                <div class="order-details"> <!-- 주문 내용 중앙에 위치 시키기 위한 DIV : ORDER-DETAIL 때문에 만든 DIV -->
+
+                    <div class="order-item-text"><!-- 주문내역 text-->
+
+                        <div>
+                        <h1 style="font-family: 'PRETENDARDJP-BLACK' !important;">[[${#strings.substring(list.created_at, 0, 10)}]] 注文</h1>
+                        </div><!--주문 날짜 BEGIN/END-->
+
+                        <div STYLE="display:flex; justify-content: space-between;"><!--이미지 + 주문 text 왼/오 정렬를 위한 div-->
+
+                            <img th:src="${list.option_id.product_id.thumbnail_url}" alt="상품 이미지"><!--이미지 왼쪽 정렬-->
+
+                            <div> <!--text 오른쪽 정렬-->
+                                <div th:if="${list.status == false}" class="order-title2">注文完了</div>
+                                <div th:if="${list.status == true}" class="order-title2">注文キャンセル</div>
+                                <div class="order-desc">[[${list.option_id.product_id.title}]], [[${list.option_id.option_name}]]</div>
+                                <div class="order-price">[[${list.amount*list.option_id.product_id.price}]] 円 · [[${list.amount}]]個</div>
+                                <div class="order-price">注文コード : [[${list.payment_id.payment_number}]]</div>
+                            </div>
+                        </div><!--이미지 + 주문 text 왼/오 정렬를 위한 div 종료-->
+
+                    </div><!--주문내역 text 종료-->
+
+                </div><!--주문 내용 중앙에 위치 시키기 위한 DIV : ORDER-DETAIL 종료-->
+
+                <div class="order-actions" th:if="${list.status == false}"><!--반품, 리뷰 버튼-->
+                    <button th:if="${list.status == false}" class="btn btn-outline-secondary btn-sm" th:onclick="updateStatus([[${list.status}]],[[${list.id}]])">注文をキャンセル</button>
+                    <button th:if="${list.review == null}" class="btn btn-outline-secondary btn-sm fancybox-fast-view" href="#product-pop-up">レビューを書く</button>
+                    <button th:if="${list.review != null}" class="btn btn-outline-secondary btn-sm fancybox-fast-view" href="#product-pop-up">レビュー確認</button>
+                </div><!--반품, 리뷰 버튼 종료-->
+                <div class="order-actions" th:if="${list.status == true}" style="justify-content: center;"><!--반품, 리뷰 버튼-->
+                    <button th:if="${list.review != null}" style="padding-left: 24px;padding-right: 24px;" class="btn btn-outline-secondary btn-sm fancybox-fast-view" href="#product-pop-up">レビュー確認</button>
+                </div><!--반품, 리뷰 버튼 종료-->
+                <!-- BEGIN Review pop-up -->
+                <div th:if="${list.review == null}" id="product-pop-up" style="display: none; width: 750px;">
+                    <div class="product-page product-pop-up">
+                        <div class="row" style="display: flex;flex-direction: column;">
+                            <h1 style="margin-left: 5%;">レビューを書く</h1>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="product-main-image col-md-3">
+                                    <img th:src="${list.option_id.product_id.thumbnail_url}" alt="Cool green dress with red bell" class="img-responsive">
+                                </div>
+                                <div class="col-md-9">
+                                    <h1>[[${list.option_id.product_id.title}]]</h1>
+                                    <div class="review">
+                                        <p>数量 : [[${list.amount}]]</p>
+                                        <p>オップション : [[${list.option_id.option_name}]]</p>
+                                    </div>
+                                    <div class="review">
+                                        <input type="range" value="0" step="0.25" id="backing4">
+                                        <div class="rateit" data-rateit-backingfld="#backing4"
+                                        data-rateit-value="2.5" data-rateit-resetable="false"
+                                        data-rateit-readonly="false"  data-rateit-ispreset="false"
+                                            data-rateit-min="0" data-rateit-max="5">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12" style="display: flex;justify-content: center;">
+                                <textarea role="6" style="width: 80%;height: 200px;" id="reviewContent" name="content"></textarea>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12" style="display: flex;justify-content: center;">
+                                <div class="product-page-cart">
+                                    <button class="btn btn-primary" type="button" id="reviewBtn" th:onclick="addReview([[${list.option_id.product_id.id}]])">投稿する</button>
+                                    <button class="btn btn-danger" onclick="$.fancybox.close();">キャンセル</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${list.review != null}" id="product-pop-up" style="display: none; width: 750px;">
+                    <div class="product-page product-pop-up">
+                        <div class="row" style="display: flex;flex-direction: column;">
+                            <h1 style="margin-left: 5%;">レビュー確認</h1>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="product-main-image col-md-3">
+                                    <img th:src="${list.option_id.product_id.thumbnail_url}" alt="Cool green dress with red bell" class="img-responsive">
+                                </div>
+                                <div class="col-md-9">
+                                    <h1>[[${list.option_id.product_id.title}]]</h1>
+                                    <div class="review">
+                                        <p>数量 : [[${list.amount}]]</p>
+                                        <p>オップション : [[${list.option_id.option_name}]]</p>
+                                    </div>
+                                    <div class="review">
+                                        <input type="range" th:value="${list.review.rating}" step="0.25" id="backing4">
+                                        <div class="rateit" data-rateit-backingfld="#backing4"
+                                        data-rateit-value="2.5" data-rateit-resetable="false"
+                                        data-rateit-readonly="true"  data-rateit-ispreset="true"
+                                            data-rateit-min="0" data-rateit-max="5">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12" style="display: flex;justify-content: center;">
+                                <textarea role="6" style="width: 80%;height: 200px;" id="content" name="content">[[${list.review.content}]]</textarea>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12" style="display: flex;justify-content: center;">
+                                <div class="product-page-cart">
+                                    <button class="btn btn-primary" type="button" id="reviewBtn" th:onclick="delReview([[${list.review.id}]])">削除する</button>
+                                    <button class="btn btn-danger" onclick="$.fancybox.close();">キャンセル</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Review pop-up -->
+            </div><!-- 첫 번째 주문 종료 -->
+        </div><!-- 주문 전체 내역 종료 -->
+
+        <!--페이징 BEGIN-->
+        <div class="pagination-box" th:if="${#lists.size(list) > pageMaker.cri.amount}">
+            <ul class="pagination pull-right"> 
+                <li th:if="${pageMaker.prev}"><a href="javascript:void(0);" th:onclick="page([[${pageMaker.startPage - 1}]],[[${pageMaker.cri.amount}]],[[${pageMaker.cri.startDate}]],[[${pageMaker.cri.endDate}]],[[${pageMaker.cri.keyword}]],[[${id}]])">«</a></li> 
+                <th:block th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                    <li th:if="${pageMaker.cri.pageNum != page}"><a href="javascript:void(0);" th:onclick="page([[${page}]],[[${pageMaker.cri.amount}]],[[${pageMaker.cri.startDate}]],[[${pageMaker.cri.endDate}]],[[${pageMaker.cri.keyword}]],[[${id}]])">[[${page}]]</a></li>
+                    <li th:if="${pageMaker.cri.pageNum == page}"><span>[[${page}]]</span></li>
+                </th:block>
+                <li th:if="${pageMaker.prev}"><a href="javascript:void(0);" th:onclick="page([[${pageMaker.endPage + 1}]],[[${pageMaker.cri.amount}]],[[${pageMaker.cri.startDate}]],[[${pageMaker.cri.endDate}]],[[${pageMaker.cri.keyword}]],[[${id}]])">»</a></li>
+            </ul>
+        </div>
+        <!--페이징 END-->
+    </div>
+</div>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout}">
+
+<div layout:fragment="content">
+
+    <div class="main">
+      <div class="container">
+        <ul class="breadcrumb">
+            <li><a th:href="@{/}">ホーム</a></li>
+            <li><a th:href="@{/cart/list.do}">カート</a></li>
+            <li class="active">購入完了</li>
+        </ul>
+        <!-- BEGIN SIDEBAR & CONTENT -->
+        <div class="row margin-bottom-40">
+          <!-- BEGIN CONTENT -->
+          <div class="col-md-12 col-sm-12" style="display: flex;align-items: center;flex-direction: column;">
+            <h1>購入完了</h1>
+            <!-- BEGIN CHECKOUT PAGE -->
+            <div class="col-md-6 col-sm-6">
+              <div class="jumbotron" style="display: flex;flex-direction: column;">
+                <div class="container" style="display: flex;flex-direction: column;align-items: center;">		
+                    <div class="col-md-6 alert alert-danger" style="display: flex;flex-direction: column;align-items: center;">
+                      <th:block th:each="list,iterStat : ${orderList}">
+                      <div>
+                        <h2 class="alert" th:if="${iterStat.index == 0}">[[${list.payment_id.payment_number}]]</h2>
+                      </div>
+                      <div style="margin-bottom: 10px;">[[${list.option_id.product_id.title}]] [[${list.option_id.option_name}]] x [[${list.amount}]]</div>
+                      </th:block>
+                    </div>
+                    <div class="col-md-6 text-center" th:each="list,iterStat : ${orderList}">
+                        <h5 class="mt-3" th:if="${iterStat.index == 0}">お支払い合計 : [[${list.payment_id.total_payment}]]円</h5>
+                    </div>
+                    <div class="row" style="width:100%; display: flex;justify-content: space-between;">
+                        <button class="btn btn-primary" th:onclick="location.href='/'">ホームへ</button>
+                        <button class="btn btn-primary" th:onclick="location.href='/buyer/main.do'">マイページへ</button>
+                    </div>
+                </div>
+              </div>
+            </div>      
+            <!-- END CHECKOUT PAGE -->
+          </div>
+          <!-- END CONTENT -->
+        </div>
+        <!-- END SIDEBAR & CONTENT -->
+      </div>
+    </div>
+
+    <!-- Load javascripts at bottom, this will reduce page load time -->
+    <!-- BEGIN CORE PLUGINS(REQUIRED FOR ALL PAGES) -->
+    <!-- END PAGE LEVEL JAVASCRIPTS -->
+</div>
+<!-- END BODY -->
+</html>

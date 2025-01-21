@@ -1,0 +1,133 @@
+<!--jQuery 중복 세출 주석처리 : 문제시 확인 바람람-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/MypageLayout}">
+<th:block layout:fragment="css">
+
+  <!--Page level plugin styles START -->
+  <link href="assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+  <!-- Page level plugin styles END -->
+
+  <STYLE>
+  .date-filter input {
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            background-color: #f8f9fa;
+            color: #0d6efd;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #fff;
+            border-radius: 5px !important;
+        }
+        .date-filter input:hover {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+		
+		      .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding-top: 20px;
+}
+    input#fax.form-control {
+      margin-left: 148px;
+    }
+  </STYLE>
+</th:block>
+
+<div layout:fragment="content">
+  <div class="main">
+    <div class="container-fluid" style="padding:0px 100px 0px 100px;">
+      <div class="row"  style="margin-top:40px;">
+        <!-- Sidebar -->
+        <div class="col-md-2 col-lg-2 bg-light sidebar">
+          <div th:replace="~{fragments/sellerSidebar::sidebar}"></div>
+        </div>
+        <!-- Main Content -->
+        <div class="col-md-8 ml-sm-auto col-lg-10 px-4">
+          <div class="row" style="display: block; margin-right:80px; margin-left:20px;">
+            <!-- Header -->
+            <div class="col-md-6">
+              <ul class="breadcrumb">
+                <li><a th:href="@{/seller/main.do}" style = "">マイページ</a></li>
+                <li><a th:href="@{/seller/notice.do}">お知らせリスト</a></li>
+                <li class="active">お知らせ登録</li>
+              </ul>
+              <h1 style="margin:15px 0px 15px 0px;
+                  font-family:'PRETENDARDJP-BLACK';
+                  padding-bottom: 20px;">お知らせ登録</h1>
+            </div>
+
+            <!-- Order List -->
+            <div style="margin-top:20px;">
+                <div class="contentes-botom">
+                  <div class="content-form-page">
+                    <form class="form-horizontal form-without-legend" method="post" th:action="@{/seller/noticeSave.do}" >
+                      <input type="hidden" name="seller_id" th:value="${id}">
+                      <div class="form-group">
+                        <label class="col-lg-2 control-label" for="fax"
+                               style = "font-family:'PRETENDARDJP-BLACK';
+                               margin-top: 50px;
+                               margin-left: -510px;">題目</label>
+                        <div class="col-lg-8">
+                          <input type="text" id="fax" name="title" class="form-control">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-2 control-label" style = "font-family:'PRETENDARDJP-BLACK';">対象商品</label>
+                        <div class="col-md-8">
+                          <select class="form-control" name="product_id">
+                            <option th:each="products : ${products}" th:value="${products.id}">[[${products.title}]]</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-lg-2 control-label" for="content" style = "font-family:'PRETENDARDJP-BLACK';">内容</label>
+                        <div class="col-lg-8">
+                          <textarea class="form-control" rows="6" name="content"></textarea>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-8 col-md-offset-2 padding-left-0 padding-top-20;" style="text-align:center;">
+                          <button class="btn btn-primary" type="submit"
+                                  style="width:100px;
+                                  font-family:'PRETENDARDJP-BLACK';">登録</button>
+                          <button class="btn btn-primary" type="reset"
+                                  style="width:100px;
+                                  font-family:'PRETENDARDJP-BLACK';">書き直し</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+            </div> <!-- post-content end -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <th:block layout:fragment="bodyScript">
+    <script src='assets/plugins/zoom/jquery.zoom.min.js' type="text/javascript"></script><!-- product zoom -->
+    <script src="assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script><!-- Quantity -->
+    <script src="assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+
+    <script src="assets/pages/scripts/checkout.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            //Layout.init();    
+            //Layout.initOWL();
+            //Layout.initTwitter();
+            Layout.initImageZoom();
+            Layout.initTouchspin();
+            Layout.initUniform();
+            Checkout.init();
+        });
+    </script>
+  </th:block>
+</html>

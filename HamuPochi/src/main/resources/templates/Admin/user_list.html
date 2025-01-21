@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+  layout:decorate="~{Admin/layouts/AdminPageLayout}">
+
+<div layout:fragment="content">
+  <main id="main" class="main"><!-- 헤더-메인-푸터 중 메인 -->
+    <div class="pagetitle"><!-- Breadcrumbs -->
+      <h1>ユーザーリスト</h1><!-- 포스트 제목 -->
+      <nav><!-- smallNavi -->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/admin/}">ホーム</a></li>
+          <li class="breadcrumb-item active">ユーザーリスト</li>
+        </ol>
+      </nav><!-- End smallNavi -->
+    </div><!-- End Breadcrumbs -->
+
+    <section class="section"><!-- 페이지 구역을 나누는 태그-->
+      <div class="row"><!-- row : 태그 수평 정렬하고 col에 패딩 주기-->
+        <div class="col-lg-12"><!-- 유저 리스트 박스 : 큰 화면 기준 100%의 크기-->
+          <div class="card"><!-- 유저 리스트 박스 디자인 -->
+            <div class="card-body"><!-- 유저 리스트 박스 내용 : 제목 + 테이블 -->
+              <div class="search-bar header" style="box-shadow: none; margin-top:20px;">
+                <form class="search-form d-flex align-items-center" method="GET" th:action="@{/admin/user/list.do}" style="margin-left: 70%;width: 30%;">
+                  <input type="text" name="keyword" placeholder="検索" title="Enter search keyword" th:value="${cri.keyword}">
+                  <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                </form>
+              </div><!-- 공지사항 리스트 박스 제목 -->
+              <!-- 유저 리스트 테이블-->
+              <table class="table datatable">
+                <thead>
+                  <tr>
+                    <th>
+                      <b>userid </b> <!-- 유저 아이디 -->
+                    </th>
+                    <th>氏名</th> <!-- 유저 이름 -->
+                    <th>Role</th><!-- 구매자 or 판매자 -->
+                    <th data-type="date" data-format="YYYY/DD/MM">登録日</th><!-- 가입 날짜 -->
+                  </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list, status:${userList}">
+                  <td><a class="text-primary fw-bold" th:href="@{/admin/user/detail.do(id=${list[4]},role=${list[2]})}" th:text="${list[0]}"></a></td>
+                  <td th:text="${list[1]}"></td> <!-- 이름 -->
+                  <td th:text="${list[2]}"></td> <!-- seller? buyer? -->
+                  <td th:text="${#dates.format(list[3], 'yyyy-MM-dd')}"></td>
+                </tr>
+                </tbody>
+              </table>
+
+              <div class="datatable-bottom">
+                <nav class="datatable-pagination">
+                  <ul class="datatable-pagination-list">
+                    <li th:if="${pageMaker.prev}" class="datatable-pagination-list-item">
+                      <a class="datatable-pagination-list-item-link" th:href="@{/admin/user/list.do(pageNum=${pageMaker.startPage - 1}, amount=${pageMaker.cri.amount}, keyword=${pageMaker.cri.keyword})}">‹</a></li>
+                    <th:block th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                      <li th:if="${pageMaker.cri.pageNum != page}" class="datatable-pagination-list-item">
+                        <a class="datatable-pagination-list-item-link" th:href="@{/admin/user/list.do(pageNum=${page}, amount=${pageMaker.cri.amount}, keyword=${pageMaker.cri.keyword})}">[[${page}]]</a>
+                      </li>
+                      <li th:if="${pageMaker.cri.pageNum == page}" class="datatable-pagination-list-item datatable-active">
+                        <a href='#' class="datatable-pagination-list-item-link">[[${page}]]</a>
+                      </li>
+                    </th:block>
+                    <li th:if="${pageMaker.next}" class="datatable-pagination-list-item">
+                      <a class="datatable-pagination-list-item-link" th:href="@{/admin/user/list.do(pageNum=${pageMaker.endPage + 1}, amount=${pageMaker.cri.amount}, keyword=${pageMaker.cri.keyword})}">›</a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+
+
+
+
+              <!-- End 유저 리스트 테이블 -->
+            </div><!-- END card-body -->
+          </div><!-- END card -->
+        </div><!-- END col-lg-12 -->
+      </div><!-- END row -->
+    </section><!-- END section -->
+  </main><!-- End #main -->
+</div><!-- End layout:content -->
+</html>

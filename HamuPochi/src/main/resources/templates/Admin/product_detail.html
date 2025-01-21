@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+  layout:decorate="~{Admin/layouts/AdminPageLayout}">
+  <div layout:fragment="content">
+    <main id="main" class="main"> <!-- 머리 - 본문 - 꼬리 中 본문문-->
+      <!-- ======= Breadcrumbs ======= -->
+      <div class="pagetitle">
+        <h1>商品名</h1>
+        <!-- smallNavi -->
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item">Tables</li>
+            <li class="breadcrumb-item active">Data</li>
+          </ol>
+        </nav>
+        <!-- END smallNavi -->
+      </div>
+      <!-- End Breadcrumbs -->
+      
+      <section class="section"> <!-- page 구역(area) 나누는 태그-->
+        <div class="row" style="display: flex;justify-content: center;"> <!-- row : 태그 수평 정렬하고 col에 패딩 주기 &  flex : 가운데 정렬-->
+          <div class="col-lg-6"> <!-- 상품 상세 박스의 큰 화면 기준 50%의 크기-->
+            <div class="card"> <!-- 상품 상세 박스 디자인 -->
+              <div class="card-body"> <!-- 상품 상세 박스 내용 : 제목 + 폼-->
+                <h5 class="card-title">商品の詳細情報</h5>
+
+                 <!-- BEGIN 상품 상세세 폼 -->
+                <form>
+                  <!-- 상품 기입 칸 1 : 상품명 -->
+                  <div class="row mb-3"><!-- row : 수평 정렬 col에 패딩 추가 & mb-3 : 마진 아래쪽으로 3-->
+                    <label for="inputText" class="col-sm-2 col-form-label">商品名</label><!-- 상품명 -->
+                    <div class="col-sm-10"><!-- 작은 화면 사이즈의 input길이 & 상품명과 떨어지게 패딩 추가가 -->
+                      <input type="text" class="form-control" th:value="${prodto.title}" readonly><!-- 상품명 입력란 -->
+                    </div>
+                  </div>
+                  
+                  <!-- 상품 기입 칸 2 : 등록일-->
+                  <div class="row mb-3">
+                    <label for="inputEmail" class="col-sm-2 col-form-label">登録日</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" th:value="${#strings.substring(prodto.created_at, 0, 10)}" readonly>
+                    </div>
+                  </div>
+
+                  <!-- 상품 기입 칸 3 : 가격 -->
+                  <div class="row mb-3">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">価格</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" th:value="${prodto.price}" readonly>
+                    </div>
+                  </div>
+
+                  <!-- 상품 기입 칸 4 : 재고 -->
+                  <div class="row mb-3">
+                    <label for="inputNumber" class="col-sm-2 col-form-label">在庫</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" th:value="${prodto.amount}" readonly>
+                    </div>
+                  </div>
+
+                  <!-- 상품 기입 칸 5 : 상품설명 -->
+                  <div class="row mb-3">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">商品説明</label>
+                    <div class="col-sm-10">
+                      <textarea class="form-control" style="height: 100px; resize:none;" readonly>[[${prodto.content}]]</textarea>
+                    </div>
+                  </div>
+
+                  <!-- 상품 기입 칸 6 : 썸네일 -->
+                  <div class="row mb-3">
+                    <label for="inputNumber" class="col-sm-2 col-form-label" style="letter-spacing: -3px;">サムネイル</label>
+                    <div class="col-sm-10">
+                      <img th:src="${prodto.thumbnail_url}" style="width:140px;
+                                                                   height:170px;">
+                    </div>
+                  </div>
+
+                  <!-- 상품 기입 칸 7 : 이미지 -->
+                  <div class="row mb-3">
+                    <label for="inputNumber" class="col-sm-2 col-form-label">イメージ</label>
+                    <div class="col-sm-10">
+                      <img th:each="pic : ${pictures}" th:src="${pic.product_picture_url}" style="width:100px;
+                                                                                                  height:130px;
+                                                                                                  margin-right:15px;">
+                    </div>
+                  </div>
+
+                  <!-- 상품 기입 칸 8 : 옵션 -->
+                  <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" style="letter-spacing: -3px;">オプション</label>
+                    <div class="col-sm-10">
+                      <select class="form-select" aria-label="Default select example">
+                        <option  th:each="option : ${option}">[[${option.option_name}]]</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- 상품 기입 칸 9 : 상품 등록 버튼 -->
+                  <div class="row mb-3" style="display: flex;justify-content: center;"> <!-- row : 수평 정렬 col에 패딩 추가 &  flex : 가운데 정렬-->
+                    <div class="col-sm-10" style="display: flex;justify-content: center;"><!-- 작은 화면 사이즈의 input길이 & 가운데 정렬-->
+                      <button type="button" class="btn btn-danger"
+                              th:onclick="'if(confirm(\'本当に進行しますか?\')) { location.href=\'/admin/product/delete.do?id=' + ${prodto.id} + '\' }'">
+                        商品削除
+                      </button>
+                    </div>
+                  </div>
+                
+                </form>
+                <!-- END 상품 상세 폼 -->
+              </div><!-- End card-body -->
+            </div><!-- End card -->
+          </div><!-- End col-lg-6 -->
+        </div><!-- End row -->
+      </section><!-- End section -->
+    </main><!-- End #main -->
+  </div><!-- End layout:fragment="content"-->
+</html>

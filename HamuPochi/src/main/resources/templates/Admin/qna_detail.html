@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+  layout:decorate="~{Admin/layouts/AdminPageLayout}">
+
+<div layout:fragment="content">
+  <main id="main" class="main"> <!-- 머리 - 본문 - 꼬리 中 본문-->
+    <!-- ======= Breadcrumbs : 포스트 제목과 smallNavi ======= -->
+    <div class="pagetitle">
+      <h1>お問い合わせ</h1><!-- 포스트 제목 -->
+      <!-- smallNavi -->
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Forms</li>
+          <li class="breadcrumb-item active">Layouts</li>
+        </ol>
+      </nav>
+      <!-- End smallNavi -->
+    </div>
+    <!-- End Breadcrumbs -->
+
+    <section class="section"><!-- page 구역(area) 나누는 태그-->
+      <div class="row" style="display: flex;justify-content: center;"><!-- row : 태그 수평 정렬하고 col에 패딩 추가 & flex : 가운데 정렬렬-->
+        <div class="col-lg-6"><!-- 문의/답변 상세 박스 사이즈는 큰 화면 기준 50% 크기-->
+          <div class="card"><!-- 문의 상세 박스 디자인 -->
+            <div class="card-body"><!-- 문의 상세 박스 내용 : 제목 + 테이블-->
+              <h5 class="card-title">質問</h5><!-- 문의 상세 박스 제목 -->
+
+              <!-- 문의 상세 폼 -->
+              <form>
+                <!-- 문의 기입 칸 1 : 이메일 -->
+                <div class="row mb-3"> <!-- row : 수평 정렬 col에 패딩 추가 & 마진 아래쪽으로 3-->
+                  <label for="buyer_email" class="col-sm-2 col-form-label">Email</label><!-- 작은 화면 2 사이즈의 공간 & label를 폼에 적절히 배치 -->
+                  <div class="col-sm-10" th:if="${question.buyer_id != null}"><!-- 작은 화면 사이즈의 input & 제목과 떨어지게 패딩 추가 -->
+                    <input type="text" class="form-control" id="buyer_email" th:value="${question.buyer_id.email}"><!-- 이메일 입력란 -->
+                  </div>
+                  <div class="col-sm-10" th:if="${question.seller_id != null}"><!-- 작은 화면 사이즈의 input & 제목과 떨어지게 패딩 추가 -->
+                    <input type="text" class="form-control" id="seller_email" th:value="${question.seller_id.email}"><!-- 이메일 입력란 -->
+                  </div>
+                </div>
+                
+                <!-- 문의 기입 칸 2 : 카테고리 -->
+                <div class="row mb-3">
+                  <label for="category" class="col-sm-2 col-form-label">カテ<br>ゴリ</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="category" th:value="${question.category}">
+                  </div>
+                </div>
+
+                <!-- 문의 기입 칸 3 : 내용용 -->
+                <div class="row mb-3">
+                  <label for="contentQ" class="col-sm-2 col-form-label">内容</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" id="contentQ" style="height: 100px" >[[${question.content}]]</textarea>
+                  </div>
+                </div>
+              </form>
+              <!-- End 문의 상세 폼 -->
+
+            </div><!-- End 문의 card-body -->
+          </div><!-- End 문의 card -->
+
+          <!-- 답변 상세 박스 -->
+          <div class="card"><!-- 답변 상세 박스 디자인 -->
+            <div class="card-body"><!-- 답변 상세 박스 내용 : 제목 + 테이블-->
+              <h5 class="card-title">返答</h5><!-- 답변 상세 박스 제목 -->
+
+              <!-- 답변 상세 폼 -->
+              <form action="/admin/qna/save.do" method="post">
+                <input type="hidden" name="question_id" th:value="${question.id}" />
+                <input type="hidden"  name="admin_id" th:value="${id}">
+                <input type="hidden"  name="seller_id" th:if="${question.seller_id != null}" th:value="${question.seller_id.id}">
+                <div class="row mb-3">
+                  <label for="contentA" class="col-sm-2 col-form-label">内容</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" id="contentA" name="content" style="height: 100px; text-align: left;">[[${answer != null ? answer.content : ''}]]</textarea>
+                  </div>
+                </div>
+                <div class="submit_right" style="display: flex; justify-content: end">
+                  <button class="btn btn-primary" id="btn_submit" type="submit" th:if="${!question.status}">返答する</button>
+                </div>
+              </form>
+
+
+
+
+
+
+            </div><!-- End 답변 card-body -->
+          </div><!-- End 답변 card -->
+        </div><!-- End col-lg-6 -->
+      </div><!-- End row -->
+    </section><!-- End section -->
+  </main><!-- End #main -->
+</div><!-- End layout:content -->
+<th:block layout:fragment="bodyScript">
+</th:block>
+
+</html>

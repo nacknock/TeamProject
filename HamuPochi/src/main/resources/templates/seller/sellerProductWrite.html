@@ -1,0 +1,255 @@
+<!--jQuery 중복 세출 주석처리 : 문제시 확인 바람람-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/MypageLayout}">
+  
+<th:block layout:fragment="css">
+  <!-- Page level plugin styles START -->
+  <link href="assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+  <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"><!-- for slider-range -->
+  <link href="assets/plugins/rateit/src/rateit.css" rel="stylesheet" type="text/css">
+  <!-- Page level plugin styles END -->
+  <!-- select박스 직접입력 추가용 selectize -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/selectize/dist/css/selectize.default.css">
+
+  <style>
+    .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding-top: 20px;
+	  }
+  	 .bg-light {
+        height: 100%;
+        padding-top: 55px;
+        padding-bottom: 75px;
+    }
+
+    .form-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .bir_yy,
+    .bir_mm,
+    .bir_dd {
+        display: inline-block;
+        width: 30%;
+    }
+
+    .bir_mm+.bir_dd,
+    .bir_yy+.bir_mm {
+        margin-left: 10px;
+    }
+
+    .form-select {
+        border-color: #dbdbdb;
+        color: #777;
+        font-size: 14px;
+    }
+
+    .btn-auth {
+        width: 18%;
+        margin-left: 2%;
+    }
+    .mb-3{
+    	margin: 15px 0px;
+    }
+    .help-block{
+    	margin-left: 15px;
+    }
+    .item{
+        background: #f03d06 !important;
+    }
+
+    .selectize-input {
+        border-radius: 5px !important;
+    }
+
+  </style>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="main">
+        <div class="container-fluid"
+             style="padding:0px 100px 0px 100px;
+             border-radius: 5px !important;">
+            <div class="row"  style="margin-top:40px;">
+                <!-- Sidebar -->
+                <div class="col-md-2 col-lg-2 bg-light sidebar">
+                    <div th:replace="~{fragments/sellerSidebar::sidebar}"></div>
+                </div>
+                <!-- Main Content -->
+                <div class="col-md-8 ml-sm-auto col-lg-10 px-4">
+                    <div class="row" style="display: block; margin-right:80px; margin-left:20px;">
+                        <!-- Header -->
+                        <div class="col-md-6">
+                            <ul class="breadcrumb">
+                                <li><a th:href="@{/seller/main.do}" style = "font-family:'PRETENDARDJP-BLACK';">マイページ</a></li>
+                                <li class="active" style = "font-family:'PRETENDARDJP-BLACK';">商品登録</li>
+                            </ul>
+                        </div>
+
+                        <div class="row product-page"
+                             style="margin: 50px 15px 150px 0px;
+                             display:block;
+                             border-radius: 5px !important;">
+                            <h1 style="text-align: center; margin: 10px 0px; font-size: 30px; font-weight: bold;"> 商品登録 </h1>
+                            <form th:action="@{/seller/productSave.do}" method="post" enctype="multipart/form-data">
+                                <div class="mb-3 ">
+                                    <label for="product-name" class="form-label" style = "font-family:'PRETENDARDJP-BLACK';">商品名</label>
+                                    <input type="text" class="form-control" id="product-name" name="title" placeholder="商品名を入力してください"
+                                           style = "border-radius:5px !important;
+                                           font-family:'PRETENDARDJP-BLACK';">
+                                    <input type="hidden" class="form-control" id="seller_id" name="seller_id" th:value="${id}">
+                                    <div class="help-block"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="price" class="form-label" style="margin: 0;">価格</label>
+                                    <div style="height: 34px">
+                                        <input type="text" class="form-control" name="price" id="price" placeholder="商品価格を入力してください (例)123456"
+                                               style = "border-radius:5px !important;
+                                               font-family:'PRETENDARDJP-BLACK';">
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 ">
+                                    <label for="inventory" class="form-label" style = "font-family:'PRETENDARDJP-BLACK';">在庫数</label>
+                                    <input type="text" class="form-control" name="amount" id="inventory" placeholder="在庫数を入力してください"
+                                           style = "border-radius:5px !important;
+                                           font-family:'PRETENDARDJP-BLACK';">
+                                    <div class="help-block"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="details" class="form-label" style = "font-family:'PRETENDARDJP-BLACK';">商品詳細説明</label>
+                                    <textarea type="text" class="form-control" name="content" id="details" placeholder="詳細説明を入力してください"
+                                              style="height: 120px;
+                                              resize: none;
+                                              border-radius:5px !important;
+                                              font-family:'PRETENDARDJP-BLACK';"></textarea>
+                                    <div class="help-block"></div>
+                                </div>
+
+                                <div class="mb-3">
+									<label for="options"
+                                           style = "font-family:'PRETENDARDJP-BLACK';">オプション</label>
+									<div id="options" style ="border-radius: 5px !important;">
+										<select class="js-example-basic-multiple" multiple="multiple" name="option_name" id="option_name"><!-- sendto배열로 db에 넘긴 후 바꿈-->
+										</select>
+									</div>
+								</div>
+
+                                <div class="mb-3">
+                                    <label for="imageInput" class="form-label"
+                                           style = "font-family:'PRETENDARDJP-BLACK';">代表写真</label>
+                                    <input type="file" id="imageInput" name="thumbnail" accept="image/*" onchange="validateFile()"
+                                           style="margin-bottom: 20px;
+                                           border-radius:5px !important;">
+                                    <div id="error-message" style="color: red; font-size: 14px;"></div>
+                                    <div class="help-block"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="picture" class="form-label" style = "font-family:'PRETENDARDJP-BLACK';">追加製品写真</label>
+                                    <input type="file" id="picture" name="files"
+                                           style="margin-bottom: 20px;
+                                           border-radius:5px !important;" multiple="multiple">
+                                    <div class="help-block"></div>
+                                </div>
+
+                                <div class="d-grid gap-2" style="text-align: center;">
+                                    <button class="btn btn-primary btn-lg" type="submit"
+                                            style="width: 100%;
+                                            margin: 50px 0px;
+                                            font-family:'PRETENDARDJP-BLACK';
+                                            border-radius: 5px !important;">商品登録</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="bodyScript">  
+    <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- select박스 직접입력 추가용 selectize || 항상 jquery보다 뒤에 위치해야함 -->
+    <script src="https://cdn.jsdelivr.net/npm/selectize/dist/js/standalone/selectize.min.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            //Layout.init();    
+            //Layout.initOWL();
+            //Layout.initTwitter();
+            Layout.initImageZoom();
+            Layout.initTouchspin();
+            Layout.initUniform();
+        });
+        $(document).ready(function() {
+            $('#option_name').selectize({
+                create:true
+            });
+        });
+
+    </script>
+    
+    <script>
+    let optionCount = 1; // 초기 옵션 번호
+
+    function plusOption() {
+      optionCount++; // 옵션 번호 증가
+
+      // 새로운 input 요소 생성
+      const newInput = document.createElement('input');
+      newInput.type = 'text';
+      newInput.className = 'form-control';
+      newInput.id = `option${optionCount}`; // id 설정
+      newInput.placeholder = 'オプションを入力してください';
+      newInput.name = 'option_name[]';
+      newInput.style.marginTop = '10px'; // 약간의 여백 추가
+
+      // 새로운 input 요소를 options div에 추가
+      document.getElementById('options').appendChild(newInput);
+    }
+    
+    
+    function validateFile() {
+        const fileInput = document.getElementById('imageInput');
+        const errorMessage = document.getElementById('error-message');
+
+        // 파일이 선택되었는지 확인
+        if (fileInput.files.length > 1) {
+          errorMessage.textContent = '한 번에 하나의 이미지 파일만 업로드할 수 있습니다.';
+          fileInput.value = ''; // 입력 초기화
+          return;
+        }
+
+        // 파일 타입 확인
+        const file = fileInput.files[0];
+        if (file && !file.type.startsWith('image/')) {
+          errorMessage.textContent = '이미지 파일만 업로드할 수 있습니다.';
+          fileInput.value = ''; // 입력 초기화
+          return;
+        }
+
+        // 오류 메시지 초기화
+        errorMessage.textContent = '';
+      }
+
+    
+    </script>
+    <!-- END PAGE LEVEL JAVASCRIPTS -->
+</th:block>
+</html>

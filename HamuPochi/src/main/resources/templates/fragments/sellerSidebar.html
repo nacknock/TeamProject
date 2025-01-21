@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="sidebar">
+            <!-- 사이드바 -->
+            <nav > <!-- 적당한 너비 -->
+                <div class="sidebar-sticky">
+                    <h3 class="sidebar-heading" style="text-align:center;  font-family: 'PRETENDARDJP-BLACK' !important;" >メニュー</h3>
+                    <ul class="nav flex-column" style="text-align: center;">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/seller/product.do}" style=" font-family: 'PRETENDARDJP-BLACK' !important;">商品リスト</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/seller/order.do}" style=" font-family: 'PRETENDARDJP-BLACK' !important;">注文管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/seller/buyerQna.do}" style=" font-family: 'PRETENDARDJP-BLACK' !important;">お問い合わせ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/seller/notice.do}" style=" font-family: 'PRETENDARDJP-BLACK' !important;">お知らせ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/seller/myQna.do}" style=" font-family: 'PRETENDARDJP-BLACK' !important;">サイトお問い合わせ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/seller/password.do}" style=" font-family: 'PRETENDARDJP-BLACK' !important;">会員情報管理</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+</html>

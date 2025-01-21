@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<!-- 사이드바에 있는 아이콘 사용 안 한 것 목록-->
+<!--<i class="bi bi-journal-text"></i>  ▤ 스프링 줄 노트 아이콘 -->
+<!-- <i class="bi bi-question-circle"></i> 물음표 아이콘 -->
+<!-- <i class="bi bi-file-earmark-text"></i> 파일 아이콘 -->
+<!--<i class="bi bi-envelope"></i> 편지 아이콘 -->
+<!-- <i class="bi bi-card-list"></i> 카드 리스트 아이콘-->
+<!-- <i class="bi bi-box-arrow-in-right"></i> 로그인 아이콘-->
+<!-- <i class="bi bi-gem"></i> 보석(다이아몬드) 아이콘-->
+<!-- <i class="bi bi-dash-circle"></i>  - IN 동그라미 아이콘-->
+
+<div th:fragment="sidebar">
+  
+ <aside id="sidebar" class="sidebar"> <!--SIDEBAR AREA : 페이지 상 사이드바 영역-->
+    <ul class="sidebar-nav" id="sidebar-nav"><!--SIDEBAR NAV-BOX : 이 안에 리스트 항목이 되어 있음-->
+
+      <!--BEGIN NAV-CONTENT 1 : TO MAIN-->
+      <li class="nav-item">
+        <a class="nav-link " th:href="@{/admin/}">
+          <i class="bi bi-grid"></i> <!--ㅁㅁ아이콘 -->
+                                     <!--ㅁㅁ       -->
+          <span>メインページへ</span>
+        </a>
+      </li>
+
+      <!--BEGIN NAV-CONTENT 2 : USER LIST-->
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/admin/user/list.do}">
+           <i class="bi bi-person"></i> <!-- 사람 아이콘 -->
+          <span>ユーザー</span>                  
+          <!-- <i class="bi bi-chevron-down ms-auto"></i> ▼ 아이콘 -->
+        </a>
+
+         <!-- 위 태그의 data-bs-target="#components-nav" 와 아래 태그의 id="components-nav" 가 일치하고 -->
+        <!-- 위 태그의 data-bs-toggle="collapse" 와 아래 태그의 class="nav-content collapse" 가 일치해야 DROP-MENU 작동 -->
+        <!-- data-bs-target : 어떤 대상(요소)을 정해서 -->
+        <!-- data-bs-toggle : 어떤 행동을 할지 정함, collapse는 보이기/ 숨기기 기능능 -->
+      <!-- BEGIN NAV-CONTENT 2 : DROP-DOWN-MENU -->
+        <!-- <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav"> -->
+          
+          <!--BEGIN NAV-DROP-MENU 1 -->
+          <!-- <li>
+            <a href="components-alerts.html">
+              <i class="bi bi-circle"></i><span>Alerts</span>
+            </a>
+          </li> -->
+          <!--END NAV-DROP-MENU 1 -->
+          
+          <!--BEGIN NAV-DROP-MENU 2 -->
+          <!-- <li>
+            <a href="components-accordion.html">
+              <i class="bi bi-circle"></i><span>Accordion</span>
+            </a>
+          </li> -->
+          <!--END NAV-DROP-MENU 2 -->
+        
+        <!-- </ul> -->
+        <!-- END NAV-CONTENT 2 : DROP-DOWN-MENU -->
+      </li>
+
+      <!-- <li class="nav-heading">유저 정보</li> 페이지 항목 묶는 타이틀(큰 타이틀/ 유저/ 상품 등등등) 
+            항목이 너무 많아 항목 별로 분류할 때 쓰는 큰 타이틀 : 쿠팡에 있길래 남겨둠.
+            항목 사이 사이에 넣으면 됨-->
+
+      <!--BEGIN NAV-CONTENT 3 : PRODUCT LIST-->
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/admin/product/list.do}">
+          <i class="bi bi-menu-button-wide"></i><!-- ∈-- ○∋ 아이콘-->
+          <span>商品</span>                 <!--∈=== ∋       -->
+                                                <!-- ∈=== ∋       -->
+          <!-- <i class="bi bi-chevron-down ms-auto"></i> ▼ 아이콘 -->
+        </a>
+      </li>
+     
+
+      <!--BEGIN NAV-CONTENT 4 : QNA LIST-->
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/admin/qna/list.do}">
+          <i class="bi bi-layout-text-window-reverse"></i> <!--(피그마에 그린) 메인 페이지 같은은 아이콘-->
+          <span>お問い合わせ</span>                            
+          <!-- <i class="bi bi-chevron-down ms-auto"></i> ▼ 아이콘 -->
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse"  th:href="@{/admin/notice/list.do}">
+          <i class="bi bi-journal-text"></i><span>お知らせ</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+              <a th:href="@{/admin/notice/list.do}"><i class="bi bi-circle"></i><span>お知らせ</span></a>
+          </li>
+          <li>
+              <a th:href="@{/admin/notice/write.do}"><i class="bi bi-circle"></i><span>お知らせ登録</span></a>
+          </li>
+        </ul>
+      </li><!-- End Forms Nav -->
+
+
+
+      
+      <!--BEGIN NAV-CONTENT 6 : LOGOUT -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/logout.do}">
+          <i class="bi bi-box-arrow-in-right"></i> <!--로그아웃 아이콘-->
+            <span>ログアウト</span>
+         <!-- <i class="bi bi-chevron-down ms-auto"></i>  ▼ 아이콘 -->
+        </a>
+      </li>
+   
+    </ul>
+    <!--END SIDEBAR NAV-BOX -->
+
+  </aside>  <!-- End Sidebar Area -->
+</div><!-- End th:fragment="sidebar" -->
+</html>

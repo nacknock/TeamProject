@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout}">
+<th:block layout:fragment="css">
+    <!-- Fonts START -->
+    <link
+            href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all"
+            rel="stylesheet" type="text/css">
+    <!-- Fonts END -->
+
+    <!-- Theme styles START -->
+    <link th:href="@{/Main/assets/corporate/css/custom.css}" rel="stylesheet">
+    <!-- Theme styles END -->
+    <style>
+        .bg-light {
+            height: 100%;
+            padding-top: 55px;
+            padding-bottom: 75px;
+        }
+
+        .form-container {
+            border-radius: 5px !important;
+            font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+            height: 750px !important;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .bir_yy,
+        .bir_mm,
+        .bir_dd {
+            display: inline-block;
+            width: 30%;
+        }
+
+        .bir_mm+.bir_dd,
+        .bir_yy+.bir_mm {
+            margin-left: 10px;
+        }
+
+        .form-select {
+            border-color: #dbdbdb;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .btn-auth {
+            width: 18%;
+            margin-left: 2%;
+        }
+
+        .mb-3 {
+            margin: 15px 0px;
+        }
+
+        .help-block {
+            margin-left: 15px;
+        }
+
+        div.search-container {
+            padding-right: 40px;
+        }
+
+        div.footer {
+            margin-top: -13px !important;
+        }
+
+         /* placeholder 스타일 변경 */
+        input::placeholder {
+            font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+        }
+
+        select::placeholder {
+            font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="main"><!-- 머리-본문-꼬리 중 본문 태그 -->
+        <div class="container"><!-- 여백 있는 브라우저 넓이를 생성 -->
+            <section class="bg-light"><!-- 연한 배경색을 주는 섹션 -->
+                <div class="form-container" style="height: auto !important;"><!-- 폼을 감싸는 컨테이너 -->
+
+                    <h3 class="text-center mb-4" style="margin: 30px 0px; font-family: 'PRETENDARDJP-BLACK'; /* 사용자 정의 글씨체 이름 */">購入者登録</h3> <!--페이지 제목-->
+                    <!-- text-center : 텍스트 중앙 정렬 & mb-4 : 하단 마진을 추가하여 간격을 줌 -->
+
+                    <!-- 폼 시작 -->
+                    <form>
+                        <!-- 본인 확인 이메일 -->
+                        <div class="form-group"><!--수직으로 정렬,하위태그 간격 자동 배열-->
+                            <div class="mb-3"><!-- 하단 마진을 추가하는 div -->
+                                <label for="email" class="form-label">本人確認メール</label><!-- form-label : 부트스트랩 레이블 스타일을 적용 -->
+                                <div class="d-flex">
+                                    <input type="email" class="form-control" id="emailIn" placeholder="メールアドレス入力" style="width: 78%; float: left; border-radius: 5px !important;">
+                                    <button type="button" class="btn btn-primary btn-auth" id="btn_mail" style="width: 130px; height:35px; border-radius: 5px !important;">認証</button>
+                                    <input type="text" class="form-control" id="email-ok" placeholder="認証番号入力" style="width: 78%; float: left; margin-top: 10px; border-radius: 5px !important;">
+                                    <button type="button" class="btn btn-primary btn-auth" id="auth-btn" style="width: 130px; height:35px; margin-top: 10px; border-radius: 5px !important;">認証確認</button>
+                                    <div class="help-block" id="email-help"></div><!-- 도움말 메시지를 위한 블록 -->
+                                </div>
+                            </div><!-- .mb-3 END -->
+                        </div><!-- .form-group END -->
+
+                        <!-- 아이디 -->
+                        <div class="mb-3"><!-- 하단 마진을 추가하는 div -->
+                            <label for="email" class="form-label">ユーザーID</label>
+                            <input type="text" class="form-control" id="email" placeholder="ユーザーIDは自動に入力されます" readonly="readonly" style = "border-radius: 5px !important;">
+                        </div>
+
+                        <!-- 닉네임 -->
+                        <div class="mb-3">
+                            <label for="nickname" class="form-label">ニックネーム</label>
+                            <input type="text" class="form-control" id="nickname" placeholder="ニックネームを入力してください" style = "border-radius: 5px !important;">
+                            <div id="nickname-help" class="help-block"></div><!-- 도움말 메시지 -->
+                        </div>
+
+                        <!-- 비밀번호 -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">パスワード</label>
+                            <input type="password" class="form-control" id="password" style = "border-radius: 5px !important;">
+                            <div id="pw-help" class="help-block"></div><!-- 도움말 메시지 -->
+                        </div>
+
+                        <!-- 비밀번호 재확인 -->
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">パスワード再確認</label>
+                            <input type="password" class="form-control" id="confirmPassword" style = "border-radius: 5px !important;">
+                            <div id="pwChk-help" class="help-block"></div><!-- 도움말 메시지 -->
+                        </div>
+
+                        <!-- 이름 -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">名前</label>
+                            <input type="text" class="form-control" id="name" placeholder="名前を入力してください" style = "border-radius: 5px !important;">
+                            <div id="name-help" class="help-block"></div><!-- 도움말 메시지 -->
+                        </div>
+
+                        <!-- 연락처 -->
+                        <div class="mb-3">
+                            <label for="call" class="form-label">連絡先</label>
+                            <input type="text" class="form-control" id="call" placeholder="「-」を含めずに入力してください" style = "border-radius: 5px !important;">
+                            <div id="call-help" class="help-block"></div><!-- 도움말 메시지 -->
+                        </div>
+
+                        <!-- 가입하기 버튼 -->
+                        <div class="d-grid gap-2" style="text-align: center;">
+                            <!-- d-grid : 그리드 레이아웃을 사용하여 버튼을 중앙 정렬 & gap-2 : 그리드 요소 간의 간격을 설정 -->
+                            <button class="btn btn-primary btn-lg" id="btn_submit" type="button"
+                                    style="width: 100%; margin: 50px 0px; margin-top: 20px !important; border-radius: 5px !important;">登録する</button> <!-- btn-lg : 큰 버튼 스타일 적용 -->
+                        </div><!-- .d-grid END -->
+                    </form><!-- 폼 끝 -->
+                </div><!-- .form-container END -->
+            </section><!-- .bg-light END -->
+        </div><!-- .container END -->
+    </div><!-- .main END -->
+</div><!-- layout:fragment END -->
+
+<th:block layout:fragment="bodyScript">
+    <script>
+        var incode = "";
+        var email = "";
+        var code = "";
+        var authCheck = false;
+        let isEmailSent = false; // 플래그 변수
+        // 이메일 유효성 정규 표현식 상단 정의
+        var regEmail = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-0\-]+\.[a-zA-Z0-9\-]+/;
+        // 유효성 검사할 필드의 배열
+        var fields = [
+            { id: '#name', helpId: '#name-help', message: '名前を入力してください' },
+            { id: '#nickname', helpId: '#nickname-help', message: 'ニックネームを入力してください' },
+            { id: '#password', helpId: '#password-help', message: 'パスワードを入力してください' },
+            { id: '#confirmPassword', helpId: '#confirmPassword-help', message: 'パスワードを再入力してください' },
+            { id: '#call', helpId: '#call-help', message: '電話番号を入力してください' },
+            { id: '#email-ok', helpId: '#email-help', message: 'メール認証を完了してください' }
+        ];
+
+        // 유효성 검사 함수
+        function validateField(field) {
+            var inputValue = $(field.id).val().trim(); // 입력 값 가져오기
+
+            // 입력 값이 비어 있는 경우
+            if (inputValue === "") {
+                $(field.helpId).html(field.message).css('color', 'red'); // 도움말 블록에 메시지 출력
+                return false; // 유효성 검사 실패
+            } else {
+                $(field.helpId).html(""); // 유효성 검사 통과 시 도움말 메시지 초기화
+                return true; // 유효성 검사 성공
+            }
+        }
+
+        $('#btn_mail').on("click", function () {
+
+            if (isEmailSent) {
+                alert("既に認証メールが送信されています");
+                return; // 이미 클릭된 경우 처리하지 않음
+            }
+
+            // 이메일 유효성 검증
+            if (!regEmail.test($("#emailIn").val())) {
+                alert("メールアドレスが無効です");
+                $("#emailIn").focus();
+                return false;
+            }
+
+            email = $("#emailIn").val();
+
+            // 플래그 설정
+            isEmailSent = true;
+
+            $.ajax({
+                type: 'get',
+                url: '/sign/mail.do?email=' + email,
+                success: function (data) {
+                    if (data === "false") {
+                        alert("既に登録されているメールアドレスです。");
+                        $("#emailIn").focus();
+                        // 플래그 초기화
+                        isEmailSent = false;
+                        return false;
+                    } else {
+                        alert('認証コードが送信されました');
+                        code = data; // 인증 코드 저장
+                        $('#auth-btn').attr("disabled", false);
+                    }
+                }
+            })
+        });
+
+        $('#auth-btn').on("click", function () {
+            incode = $('#email-ok').val();
+
+            if (!authCheck && incode != "") { // 인증 체크와 incode 유효성 확인
+                if (incode == code) {
+                    $("#email-help").html("認証番号が一致します").css('color', 'red'); // 도움말 블록에 메시지 출력
+                    authCheck = true; // 인증 체크 완료
+                    $('#email').val(email); // 이메일 저장
+                } else {
+                    $("#email-help").html("認証番号が一致しません").css('color', 'red'); // 도움말 블록에 메시지 출력
+                    authCheck = false; // 인증 실패
+                }
+            } else {
+                alert("メール認証を先に完了してください！"); // 구체적인 알림 추가
+            }
+        });
+
+        // blur할때 각 필드에 유효성 검사
+        fields.forEach(function(field) {
+            $(field.id).on('blur', function() {
+                validateField(field); // blur 시 유효성 검사 수행
+            });
+        });
+
+
+
+
+        $("#btn_submit").on("click", function () {
+            var isValid = true;
+
+            // 모든 필드 유효성 검사
+            fields.forEach(function(field) {
+                if (!validateField(field)) {
+                    isValid = false; // 유효성 검사 실패
+                }
+            });
+
+            // 이메일 인증 체크
+            if (!authCheck) {
+                alert("まずメール認証を行ってください");
+                isValid = false;
+                $('#email-ok').focus();
+            }
+
+            // 전화번호 유효성 검사 함수
+            function isValidPhoneNumber(phone) {
+                const phonePattern = /^[0-9]{10,13}$/; // 정규 표현식: 숫자만 포함, 길이는 10~13자리
+                return phonePattern.test(phone);
+            }
+
+            // 전화번호 유효성 검사
+            if (!isValidPhoneNumber($("#call").val())) {
+                $("#call-help").html("使用できない電話番号").css('color', 'red');
+                isValid = false; // 전화번호 유효성 검사 실패
+            } else {
+                $("#call-help").html(""); // 유효성 검사 통과 시 도움말 메시지 초기화
+            }
+
+
+            var password = $("#password").val();
+            var pwChk = $('#confirmPassword').val();
+            var pwRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{9,13}$/;
+
+               if(!pwRegex.test(password)) {
+                  $("#pw-help").html("<span style = 'color:#f00;'>パスワードは、英大文字、英小文字、数字、特殊文字を含む9〜13文字で設定してください</span>");
+                  $("#password").val("");
+                  $("#confirmPassword").val("");
+                  isValid=false;
+               }
+               else if(password !== pwChk) {
+                  $("#pwChk-help").html("<span style = 'color:#f00;'>パスワードが一致しません</span>");
+                  $("#password").val("");
+                  $("#confirmPassword").val("");
+                  isValid=false;
+               } else {
+                $("#pw-help").html(""); // 유효성 검사 통과 시 도움말 메시지 초기화
+                $("#pwChk-help").html(""); // 유효성 검사 통과 시 도움말 메시지 초기화
+                }
+
+            if (isValid) {
+                $.ajax({
+                    type: "post",
+                    url: "/sign/buyerJoinAction.do",
+                    data: {
+                        email: $("#email").val(),
+                        password: $("#password").val(),
+                        nickname: $('#nickname').val(),
+                        name: $('#name').val(),
+                        phone_number : $('#call').val()
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.result === "ok") {
+                            alert("会員登録が完了しました");
+                            location.href = "/";
+                        }
+                    }, error: function () {
+                        alert("通信エラー");
+                    }
+                })
+            }
+
+        });
+    </script>
+</th:block>
+</html>

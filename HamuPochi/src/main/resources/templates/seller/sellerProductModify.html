@@ -1,0 +1,261 @@
+<!--jQuery 중복 세출 주석처리 : 문제시 확인 바람람-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/MypageLayout}">
+<th:block layout:fragment="css">
+    
+    <!-- Page level plugin styles START -->
+    <link href="assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"><!-- for slider-range -->
+    <!-- Page level plugin styles END -->
+
+    <!-- select박스 직접입력 추가용 selectize -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/selectize/dist/css/selectize.default.css">
+
+  <STYLE>
+    .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding-top: 20px;
+	  }
+
+    button:hover {
+      background:gray;
+      color:white;
+    }
+
+    #productImage{
+        width:140px;
+        height:170px;
+
+    }
+
+    .picture{
+        width:140px;
+        height:170px;
+        margin-right:15px;
+    }
+    .item{
+        background: #f03d06 !important;
+    }
+  </STYLE>
+</th:block>
+
+<div layout:fragment="content">
+    <div class="main">
+        <div class="container-fluid" style="padding:0px 100px 0px 100px;">
+            <div class="row"  style="margin-top:40px;">
+                <!-- Sidebar -->
+                <div class="col-md-2 col-lg-2 bg-light sidebar">
+                    <div th:replace="~{fragments/sellerSidebar::sidebar}"></div>
+                </div>
+                <!-- Main Content -->
+                <div class="col-md-8 ml-sm-auto col-lg-10 px-4">
+                    <div class="row" style="display: block; margin: 50px 15px 150px 0px;">
+                        <!-- Header -->
+                        <div class="col-md-6">
+                            <ul class="breadcrumb">
+                                <li><a th:href="@{/seller/main.do}">マイページ</a></li>
+                                <li><a th:href="@{/seller/product.do}">販売商品</a></li>
+                                <li class="active">商品詳細/編集</li>
+                            </ul>
+                        </div>
+
+                        <div class="row product-page" style="margin: 50px 15px 150px 0px; display:block;">
+                            <h1 style="text-align: center; margin: 10px 0px; font-size: 30px; font-weight: bold;"> 商品詳細/編集 </h1>
+                            <form th:action="@{/seller/productUpdate.do}" method="post" enctype="multipart/form-data" name="modify">
+                                <input type="hidden" name="id" th:value="${product.id}">
+                                <input type="hidden" name="pageId" th:value="${product.seller_id.id}">
+                                <input type="hidden" name="existingThumbnail" th:value="${product.thumbnail_url}">
+                                    <div class="mb-3">
+                                        <!-- 썸네일 수정 -->
+                                        <label for="fileInput" style="padding-right:10px;">サムネイル:</label>
+                                        <div>
+                                            <img id="productImage" th:src="${product.thumbnail_url}" alt="상품 이미지">
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <button type="button" class="btn" onclick="triggerThumbnailInput()" style="border: 1px solid #ccc;">サムネイルを修正する</button>
+                                            <input type="file" name="thumbnail" id="fileInput" style="display: none;" onchange="previewThumbnail(event)" />
+                                        </div>
+
+                                    </div>
+
+                                        <!-- 추가 사진 수정 -->
+
+                                        <label style="padding-right: 10px;">追加写真:</label>
+                                        <div id="picturesContainer">
+                                            <img th:each="picture : ${pictures}" th:src="${picture.product_picture_url}" alt="상품 이미지" class="picture">
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <button type="button" class="btn" onclick="triggerAdditionalImagesInput()" style="border: 1px solid #ccc;">追加写真を修正する</button>
+                                            <input type="file" name="files" id="filesInput" style="display: none;" onchange="previewAdditionalImages(event)" multiple />
+                                        </div>
+
+                                        <br>
+
+                                        <!--이름-->
+                                        <div class="mb-3">
+                                            <label for="fileInput" STYLE="padding-right:10px; margin-top: 10px; width:80px;">商品名:</label>
+                                            <input type="text" class="form-control" th:value="${product.title}" name="title">
+                                        </div>
+
+                                        <br>
+
+                                        <!--가격-->
+                                        <div class="mb-3">
+                                            <label for="fileInput" STYLE="padding-right:10px; margin-top: 10px; width:80px;">価格:</label>
+                                            <input type="text" class="form-control" th:value="${product.price}" name="price">
+                                        </div>
+
+                                        <br>
+
+                                        <!--재고-->
+                                        <div class="mb-3">
+                                            <label for="fileInput" STYLE="padding-right:10px; margin-top: 10px; width:80px;">在庫:</label>
+                                            <input type="text" class="form-control" th:value="${product.amount}" name="amount">
+                                        </div>
+
+                                        <br>
+
+                                        <!--제품내용-->
+                                        <div class="mb-3">
+                                            <label for="fileInput" STYLE="padding-right:10px; margin-top: 10px; width:80px;">製品内容:</label>
+                                            <textarea class="form-control" style="height:100px; resize: none;" name="content">[[${product.content}]]</textarea>
+                                        </div>
+
+                                        <br>
+
+                                        <!--옵션-->
+                                        <div class="mb-3">
+                                            <label for="options">オプション</label>
+                                            <div id="options">
+                                                <select class="js-example-basic-multiple" multiple="multiple" name="option_name" id="option_name"><!-- sendto배열로 db에 넘긴 후 바꿈-->
+                                                    <option th:each="optionList : ${optionList}" th:value="${optionList.option_name}" selected="selected">[[${optionList.option_name}]]</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <br>
+                                <div class="mb-3">
+                                    <div class="button-container" style="text-align:center">
+                                        <button type="submit" class="btn btn-primary" style="width:100px;">修整</button>
+                                        <button type="button" class="btn btn-default" style="width:100px; border: 1px solid #ccc;" th:onclick="'location.href=\'/seller/product.do?id=' +'\' '">削除</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="bodyScript">
+    <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- select박스 직접입력 추가용 selectize || 항상 jquery보다 뒤에 위치해야함 -->
+    <script src="https://cdn.jsdelivr.net/npm/selectize/dist/js/standalone/selectize.min.js"></script>
+
+    <script type="text/javascript">
+
+        
+    $(document).ready(function() {
+        $('#option_name').selectize({
+            create:true
+        });
+    });
+
+    let thumbnailChanged = false; // 썸네일 변경 여부
+    let additionalImagesChanged = false; // 추가 사진 변경 여부
+    let optionCount = 1; // 초기 옵션 번호
+
+    // 썸네일 미리보기
+    function previewThumbnail(event) {
+        const file = event.target.files[0];
+        if (file) {
+            thumbnailChanged = true; // 썸네일이 변경됨
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('productImage').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // 추가 사진 미리보기
+    function previewAdditionalImages(event) {
+        const files = event.target.files;
+        const picturesContainer = document.getElementById('picturesContainer');
+        picturesContainer.innerHTML = ''; // 기존 추가 사진 제거
+        additionalImagesChanged = true; // 추가 사진이 변경됨
+
+        Array.from(files).forEach((file) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = "상품 이미지";
+                img.className = "picture";
+                picturesContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // 썸네일 파일 입력창 열기
+    function triggerThumbnailInput() {
+        document.getElementById('fileInput').click();
+    }
+
+    // 추가 사진 파일 입력창 열기
+    function triggerAdditionalImagesInput() {
+        document.getElementById('filesInput').click();
+    }
+
+    function plusOption() {
+      optionCount++; // 옵션 번호 증가
+
+      // 새로운 input 요소 생성
+      const newInput = document.createElement('input');
+      newInput.type = 'text';
+      newInput.className = 'form-control';
+      newInput.id = `option${optionCount}`; // id 설정
+      newInput.placeholder = '옵션을 입력해주세요';
+      newInput.name = 'option_name[]';
+      newInput.style.marginTop = '10px'; // 약간의 여백 추가
+
+      // 새로운 input 요소를 options div에 추가
+      document.getElementById('options').appendChild(newInput);
+    }
+    
+    
+  function validateFile() {
+      const fileInput = document.getElementById('imageInput');
+      const errorMessage = document.getElementById('error-message');
+
+      // 파일이 선택되었는지 확인
+      if (fileInput.files.length > 1) {
+        errorMessage.textContent = '한 번에 하나의 이미지 파일만 업로드할 수 있습니다.';
+        fileInput.value = ''; // 입력 초기화
+        return;
+      }
+
+      // 파일 타입 확인
+      const file = fileInput.files[0];
+      if (file && !file.type.startsWith('image/')) {
+        errorMessage.textContent = '이미지 파일만 업로드할 수 있습니다.';
+        fileInput.value = ''; // 입력 초기화
+        return;
+      }
+
+      // 오류 메시지 초기화
+      errorMessage.textContent = '';
+  }
+
+    </script>
+    <!-- END PAGE LEVEL JAVASCRIPTS -->
+</th:block>
+</html>

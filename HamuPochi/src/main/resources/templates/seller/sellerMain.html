@@ -1,0 +1,239 @@
+<!--layout:content : <main> 태그 누락 수정 -->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/MypageLayout}">
+
+  
+
+<th:block layout:fragment="css">
+    <style>
+        .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding-top: 20px;
+        }
+
+        .card {
+            border: none;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .card-text {
+            font-size: 1rem;
+        }
+
+        .container-fluid,
+        .h2,
+        .mainFont{
+            font-family: 'PRETENDARDJP-BLACK' !important;
+        }
+
+        .search-container {
+            color: black;
+        }
+
+         .search-container:hover {
+            color: gray;
+        }
+
+        div.card-body {
+            border-radius: 5px !important;
+        }
+    </style>
+</th:block>
+<div layout:fragment="content">
+    <div class="main">
+        <div class="container-fluid" style="padding:0px 100px 0px 100px;">
+            <!-- BEGIN SIDEBAR & CONTENT -->
+            <div class="row" style="margin-top:40px;">
+                <!-- BEGIN SIDEBAR -->
+                <div class="col-md-2 col-lg-2 d-md-block bg-light sidebar">
+                    <div th:replace="~{fragments/sellerSidebar::sidebar}"></div>
+                </div>
+                <!-- END SIDEBAR -->
+
+                <!-- BEGIN CONTENT -->
+                <div class="col-md-8 ml-sm-auto col-lg-10 px-4">
+                    <div class="row" style="display: block; margin-right:80px; margin-left:20px;">
+                        <!-- Header -->
+                        <div class="col-md-12">
+                            <div class=" justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
+                                <h1 class="h2"><span th:text="${companyName}"></span>様のダッシュボード ▼</h1>
+                            </div>
+                        </div>
+
+                        <!-- BEGIN PRODUCT LIST -->
+                        <div class="row" style="clear: both; margin-top:20px;">
+                            <!-- 매출 통계 -->
+                            <div class="col-md-4"> <!-- col-md-4 유지 -->
+                                <div class="card mb-4"
+                                     style="height: 505px;
+                                     border-radius: 5px !important;">
+                                    <div class="card-body text-center">
+
+                                        <!-- Pie Chart -->
+                                        <canvas id="pieChart" style="max-height: 400px;"></canvas>
+                                        <script th:inline="javascript">
+                                            document.addEventListener("DOMContentLoaded", () => {
+                                              let labelss = [];
+                                              let datase = [];
+                                              [# th:each="entry : ${orderRate}"]
+                                                  labelss.push(JSON.parse('"' + [[${entry.key}]] + '"')); 
+                                                  datase.push([[${entry.value}]]);
+                                              [/]
+                                              new Chart(document.querySelector('#pieChart'), {
+                                                type: 'pie',
+                                                data: {
+                                                  labels: labelss,
+                                                  datasets: [{
+                                                    label: ['比率'],
+                                                    data: datase,
+                                                    hoverOffset: 4
+                                                  }]
+                                                }
+                                              });
+                                            });
+                                          </script>
+                                        <!-- End Pie CHart -->
+
+                                        <!-- <h5 class="card-title">売上統計</h5>
+                                        <p class="card-text">本日の売上高です。</p>
+                                        <img src="Metronic-Shop-UI-master/theme/assets/pages/img/" alt="매출 통계 이미지" class="img-fluid mb-3">
+                                        <div class="mt-3">
+                                            <p>今月の総売上: <strong>₩10,000,000</strong></p>
+                                            <p>週間売上成長率: <span style="color: green;">+15%</span></p>
+                                            <p>購買トレンド: <strong>電子機器</strong>が最も人気あり</p>
+                                        </div> -->
+                                        <p style="margin-top:15px;margin-bottom:2px;" th:if="${totalsales != 0}">現在の総売上高は 「[[${totalsales}]]」円です。</p>
+                                        <p style="font-size: 10px; margin-top:2px;" th:if="${totalsales != 0}">売上が着実に伸びています。次の目標に向けて頑張りましょう！</p>
+                                        <p style="margin-top:15px;margin-bottom:2px;" th:if="${totalsales == 0}">現在の総売上高は「[0]」 円です。</p>
+                                        <p style="font-size: 10px; margin-top:2px;" th:if="${totalsales == 0}">目標に向けて頑張りましょう！</p>
+                                        <p style="margin-top:15px;margin-bottom:2px; "  th:if="${bestseller != null}">最も売れた商品は「[[${bestseller.title}]]」です！</p>
+                                        <p style="font-size: 10px; margin-top:2px; margin-bottom:2px;"  th:if="${bestseller != null}">最近の注文数が増加しています。</p>
+                                        <p style="font-size: 10px; margin-top:2px;"  th:if="${bestseller != null}">商品の在庫状況を確認してください。</p>
+                                        <p style="margin-top:15px;"  th:if="${bestseller == null}">最も売れた商品売れた商品はありません。TT</p>
+                                        <p style="font-size:10px; margin-top:20px; margin-bottom:2px;">特別セールを開催して、売上アップを目指しましょう！</p>
+                                        <p style="font-size:10px; margin:0px;">最新のレビューを確認して、顧客満足度を向上させましょう。</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- 나머지 콘텐츠 -->
+                            <div class="col-md-8"> <!-- col-md-8로 너비 설정 -->
+                                <!-- 상품 등록 -->
+                                <div class="card mb-4" style = "border-radius: 5px !important;">
+                                    <div class="card-body">
+                                        <h5 class="card-title mainFont">商品登録
+                                            <div class="justify-content-end" style="float:right;">
+                                                 <a th:href="@{/seller/productRegistration.do(id=${id})}" class="btn btn-secondary mainFont" style="height:25px; border-radius: 5px !important; ">登録</a>
+                                            </div>
+                                        </h5>
+                                        <p class="card-text">ポイントだけ素早く、区分販売を始める</p>
+                                    </div>
+                                </div>
+
+                                <!-- 최신 질문 -->
+                                <div class="card mb-4"
+                                     style = "border-radius: 5px !important;">
+                                    <div class="card-body"
+                                         style="height:203px;
+                                         ">
+                                        <h5 class="card-title mainFont">最新の問い合わせ
+                                            <div class="justify-content-end" style="float:right;">
+                                                <a th:href="@{/seller/buyerQna.do(id=${id})}" class="btn btn-secondary mainFont" style="height:25px; border-radius: 5px !important; ">リスト·ページ</a>
+                                            </div>
+                                        </h5>
+                                        <table class="table" th:if="${not #lists.isEmpty(questionList)}">
+                                            <thead>
+                                                <tr>
+                                                    <th>題目</th>
+                                                    <th>カテゴリ</th>
+                                                    <th>内容</th>
+                                                    <th>日数</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="border-bottom:1px solid #ccc">
+                                                <tr th:each="que:${questionList}">
+                                                    <td th:if="${#strings.length(que.title) > 10 }"
+                                                        th:text="${que.title.substring(0, 10) + '...'}"></td>
+                                                    <td th:if="${#strings.length(que.title) <= 10}"
+                                                        th:text="${que.title}"></td>
+                                                    <td class="title">[[${que.category}]]</td>
+                                                    <td th:if="${#strings.length(que.content) > 20 }"
+                                                        th:text="${que.content.substring(0, 20) + '...'}"></td>
+                                                    <td th:if="${#strings.length(que.content) <= 20}"
+                                                        th:text="${que.content}"></td>
+                                                    <td class="date" th:text="${#strings.substring(que.created_at, 0, 10)}"></td>
+                                                </tr>
+                                            <tbody>
+                                        </table >
+                                        <p th:if="${#lists.isEmpty(questionList)}" class="mainFont">最近のお問い合わせ履歴がありません</p>
+                                    </div>
+                                </div>
+
+                                <!-- 공지사항 -->
+                                <div class="card mb-4" style = " border-radius: 5px !important;">
+                                    <div class="card-body"
+                                         style="height:203px;
+                                         ">
+                                        <h5 class="card-title" style = "font-family:'PRETENDARDJP-BLACK';">お知らせ
+                                            <div class="justify-content-end"  style="float:right;"> <!-- 버튼 오른쪽 정렬 -->
+                                                <a th:href="@{/seller/noticeRegistration.do(id=${id})}" class="btn btn-secondary mainFont" style="height:25px; border-radius: 5px !important; ">登録</a>
+                                            </div>
+                                        </h5>
+                                        <table class="table" th:if="${not #lists.isEmpty(noticeList)}">
+                                            <thead>
+                                                <tr>
+                                                    <th>題目</th>
+                                                    <th>商品名</th>
+                                                    <th>内容</th>
+                                                    <th>日数</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody style="border-bottom:1px solid #ccc" >
+                                                <tr th:each="no:${noticeList}">
+                                                    <td th:if="${#strings.length(no.title) > 8 }"
+                                                        th:text="${no.title.substring(0, 8) + '...'}"></td>
+                                                    <td th:if="${#strings.length(no.title) <= 8}"
+                                                        th:text="${no.title}"></td>
+
+                                                    <td th:if="${#strings.length(no.product_id.title) > 9 }"
+                                                        th:text="${no.product_id.title.substring(0, 9) + '...'}"></td>
+                                                    <td th:if="${#strings.length(no.product_id.title) <= 9}"
+                                                        th:text="${no.product_id.title}"></td>
+
+                                                    <td th:if="${#strings.length(no.content) > 15}"
+                                                          th:text="${no.content.substring(0, 15) + '...'}"></td>
+                                                    <td th:if="${#strings.length(no.content) <= 15}"
+                                                          th:text="${no.content}"></td>
+                                                    <td class="date" th:text="${#strings.substring(no.created_at, 0, 10)}"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <p th:if="${#lists.isEmpty(noticeList)}" style = "font-family:'PRETENDARDJP-BLACK';">最近作成したお知らせがありません</p>
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- END PRODUCT LIST -->
+                    </div>
+                </div>
+                <!-- END CONTENT -->
+            </div>
+            <!-- END SIDEBAR & CONTENT -->
+        </div>
+    </div>
+</div>
+
+    <th:block layout:fragment="bodyScript">
+      <script th:src="@{/Main/assets/plugins/respond.min.js}"></script> 
+      <script th:src="@{/Admin/assets/vendor/chart.js/chart.umd.js}"></script>
+    </th:block>
+<!-- END BODY -->
+</html>

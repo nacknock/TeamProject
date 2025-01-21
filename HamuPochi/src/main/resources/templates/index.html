@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+    <style>
+        .material-symbols-outlined {
+            color: black;
+        }
+
+        .material-symbols-outlined:hover {
+            color: gray;
+        }
+
+        .search-container {
+            color: black;
+        }
+
+         .search-container:hover {
+            color: gray;
+        }
+
+        .product-item h3 a {
+            font-size: 15px;
+            color: black !important;
+            text-decoration: none;
+        }
+
+        .product-item h3 a:hover {
+            color: gary !important; /* 호버 시 색상 변경 */
+        }
+
+        .product-item a.btn {
+            font-family:'PRETENDARDJP-BLACK';
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+    <!-- BEGIN SLIDER -->
+    <div class="page-slider margin-bottom-35" 
+		style="margin-top: -20; height: 500px;">
+        <div id="carousel-example-generic" class="carousel slide carousel-slider">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+            </ol>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+              <th:block th:each="list4, iterStat : ${noticeList4}">
+                <!-- First slide -->
+                <div th:if="${iterStat.index == 0}" class="item carousel-item-four active" 
+                     style="'background:none !important; cursor:pointer;"
+                     th:onclick="goNotice([[${list4.id}]])">
+                    <img th:src="${list4.notice_picture_url}" style="width: 100%; height: 580px; margin-top: 20px;">
+                </div>
+                
+                <!-- Second slide -->
+                  <div th:if="${iterStat.index == 1}" class="item carousel-item-five"
+                       style="'background:none !important; cursor:pointer;"
+                       th:onclick="goNotice([[${list4.id}]])">
+                      <img th:src="${list4.notice_picture_url}" style="width: 100%; height: 580px; margin-top: 20px;">
+                  </div>
+            
+                <!-- Third slide -->
+                  <div th:if="${iterStat.index == 2}" class="item carousel-item-six"
+                       style="'background:none !important; cursor:pointer;"
+                       th:onclick="goNotice([[${list4.id}]])">
+                      <img th:src="${list4.notice_picture_url}" style="width: 100%; height: 580px; margin-top: 20px;">
+                  </div>
+            
+                <!-- Fourth slide -->
+                  <div th:if="${iterStat.index == 3}" class="item carousel-item-saven"
+                       style="'background:none !important; cursor:pointer;"
+                       th:onclick="goNotice([[${list4.id}]])">
+                      <img th:src="${list4.notice_picture_url}" style="width: 100%; height: 580px; margin-top: 20px;">
+                  </div>
+            </th:block>
+            </div>
+
+            <!-- Controls -->
+            <a class="left carousel-control carousel-control-shop" href="#carousel-example-generic" role="button" data-slide="prev">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+            </a>
+            <a class="right carousel-control carousel-control-shop" href="#carousel-example-generic" role="button" data-slide="next">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+    <!-- END SLIDER -->
+
+    <div class="main">
+      <div class="container">
+        <!-- BEGIN SALE PRODUCT & NEW ARRIVALS -->
+        <div class="row margin-bottom-40">
+          <!-- BEGIN NEW PRODUCT -->
+          <div class="col-md-12 sale-product">
+            <h2 style = "margin-top:110px;
+                font-family:'PRETENDARDJP-BLACK';
+                color: black;">新商品</h2>
+            <div class="owl-carousel owl-carousel5">
+              <div th:each="newList : ${newProductList}">
+                <div class="product-item">
+                  <div class="pi-img-wrapper">
+                      <img th:src="${newList.thumbnail_url}" class="img-responsive" alt="Berry Lace Dress"
+                      style = "height:180px;">
+                  </div>
+                  <h3 class = "product-name"><a th:href="@{/product/detail.do(id=${newList.id})}">[[${newList.title}]]</a></h3>
+                  <div class="pi-price">[[${newList.price}]]円</div>
+                  <a href="javascript:void(0);" th:onclick="addWish('[[${newList.id}]]')" class="btn btn-default add2cart">お気に入り</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END NEW PRODUCT -->
+        </div>
+        <!-- END SALE PRODUCT & NEW ARRIVALS -->
+
+        <!-- BEGIN SIDEBAR & CONTENT -->
+        <div class="row margin-bottom-40">
+          <!-- BEGIN CONTENT -->
+          <div class="col-md-12" style = "padding-top:10px;">
+            <th:block th:each="random3,iterStat : ${randomProduct3}">
+                <h2 style="font-family:'PRETENDARDJP-BLACK';
+                    color: black;" th:if="${iterStat.index == 0}">[[${random3.category_id.category_name}]]</h2>
+            </th:block>
+            <div class="owl-carousel owl-carousel3">
+              <!-- 항목 1 BEGIN -->
+              <div th:each="list3 : ${randomProduct3}">
+                <div class="product-item">
+                  <div class="pi-img-wrapper">
+                    <img th:src="${list3.thumbnail_url}" class="img-responsive" alt="Berry Lace Dress"
+                    style = "height:260px;">
+                  </div>
+                  <h3 style="font-family:'PRETENDARDJP-BLACK';">
+                    <a th:href="@{/product/detail.do(id=${list3.id})}">[[${list3.title}]]</a>
+                  </h3>
+                  <div class="pi-price" style="font-family:'PRETENDARDJP-BLACK';">[[${list3.price}]]円</div>
+                  <a href="javascript:void(0);" th:onclick="addWish('[[${list3.id}]]')" class="btn btn-default add2cart">お気に入り</a>
+                </div>
+              </div>
+              <!-- 항목 1 END -->
+            </div>
+          </div>
+        </div>
+<!-- BEGIN TWO PRODUCTS & PROMO -->
+        <div class="row margin-bottom-35">
+          <!-- BEGIN TWO PRODUCTS -->
+          <div class="col-md-6 two-items-bottom-items" style = "padding-top:20px;">
+            <th:block th:each="random6,iterStat : ${randomProduct6}">
+            <h2 style = "font-family:'PRETENDARDJP-BLACK';
+                color: black;" th:if="${iterStat.index == 1}">[[${random6.category_id.category_name}]]</h2>
+            </th:block>
+            <div class="owl-carousel owl-carousel2" >
+              <div th:each="list6 : ${randomProduct6}">
+                <div class="product-item">
+                  <div class="pi-img-wrapper" style = "heg">
+                    <img th:src="${list6.thumbnail_url}" class="img-responsive" alt="Berry Lace Dress"
+                         style = "height:200px;">
+                  </div>
+                  <h3 style = "font-family:'PRETENDARDJP-BLACK';"s><a th:href="@{/product/detail.do(id=${list6.id})}">[[${list6.title}]]</a></h3>
+                  <div class="pi-price" style = "font-family:'PRETENDARDJP-BLACK';">[[${list6.price}]]円</div>
+                  <a href="javascript:void(0);" th:onclick="addWish('[[${list6.id}]]')" class="btn btn-default add2cart">お気に入り</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END TWO PRODUCTS -->
+          <!-- BEGIN PROMO -->
+          <div class="col-md-6 shop-index-carousel">
+            <div class="content-slider" style = "padding-top:53px;">
+              <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                  <li data-target="#myCarousel" data-slide-to="1"></li>
+                  <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <th:block th:each="list3,iterStat : ${noticeList3}">
+                    <div class="item active" th:if="${iterStat.index == 0}" th:onclick="goNotice([[${list3.id}]])" style="cursor:pointer;">
+                      <img th:src="${list3.notice_picture_url}" class="img-responsive" alt="Berry Lace Dress"
+                      style = "height:325px;">
+                    </div>
+                    <div class="item" th:if="${iterStat.index != 0}" th:onclick="goNotice([[${list3.id}]])" style="cursor:pointer;">
+                      <img th:src="${list3.notice_picture_url}" class="img-responsive" alt="Berry Lace Dress"
+                           style = "height:325px;">
+                    </div>
+                  </th:block>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END PROMO -->
+        </div>
+        <!-- END TWO PRODUCTS & PROMO -->
+        <!-- END CONTENT -->
+        <img th:src="@{/Main/assets/corporate/img/logos/01.png}" alt="Example Image" class = "img">
+      </div>
+
+    </div>
+</div>
+
+<th:block layout:fragment="bodyScript">
+<script>
+  function goNotice(id){
+    location.href="/notice/detail.do?id="+id;
+  }
+  function addWish(id) {
+
+    if(id === ""){
+      alert("問題が発生しました。");
+      return false;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/buyer/addWish.do',
+        data: {
+            id: id
+        },
+        success: function(data) {
+            if (data === "true") {
+              alert("お気に入りに追加しました。");
+            }else if(data === "false"){
+              alert('問題が発生しました。');
+              console.log('fail');
+            }else if(data === "added"){
+              alert('既に追加した商品です。');
+            }else if(data === "notLogin"){
+              location.href="/sign/login.do";
+            }
+        },
+        error: function() {
+            alert('エーラーが発生しました。');
+        }
+    });
+  }
+</script>
+</th:block>
+</html>

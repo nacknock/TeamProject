@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraweb.com/layout" layout:decorate="~{layouts/MypageLayout}">
+
+<th:block layout:fragment="css">
+  <!-- Page level plugin styles START -->
+  <link th:href="@{/Main/assets/plugins/uniform/css/uniform.default.css}" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"> <!-- for slider-range -->
+  <!-- Page level plugin styles END -->
+  <style>
+    .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding-top: 20px;
+    }
+    .container-fluid,
+    .breadcrumb,
+    .mainFont{
+      font-family: 'PRETENDARDJP-BLACK' !important;
+    }
+  </style>
+</th:block>
+
+<div layout:fragment="content">
+  <div class="main">
+    <div class="container-fluid" style="padding:0px 100px 0px 100px;">
+      <!-- BEGIN SIDEBAR & CONTENT -->
+      <div class="row" style="margin-top:40px;">
+        <!-- BEGIN SIDEBAR -->
+        <div class="col-md-2 col-lg-2 d-md-block bg-light sidebar">
+          <div th:replace="~{fragments/sellerSidebar::sidebar}"></div>
+        </div>
+        <!-- END SIDEBAR -->
+
+        <!-- BEGIN CONTENT -->
+        <div class="col-md-8 ml-sm-auto col-lg-10 px-4">
+          <div class="row" style="display: block; margin-right:80px; margin-left:20px;">
+            <!-- Header -->
+            <div class="col-md-6">
+              <ul class="breadcrumb">
+                <li><a th:href="@{/seller/main.do}">マイページ</a></li>
+                <li class="active">販売商品</li>
+              </ul>
+              <h1 class="mainFont" style="margin:15px 0px 15px 0px;">販売商品</h1>
+            </div>
+
+            <form method="get" th:action="@{/seller/order.do}">
+              <div class="col-md-6 justify-content-between" style="padding:0; margin-top: 18px;">
+<!--                <div style="align-items: center; float:right;">-->
+<!--                  <select class="form-control mainFont" style="margin: 18px 5px 15px 0px; width: 100px; float:left;">-->
+<!--                    <option value="#?limit=36" selected="selected">食品</option>-->
+<!--                    <option value="#?limit=48">衣類</option>-->
+<!--                    <option value="#?limit=60">家具</option>-->
+<!--                    <option value="#?limit=72">筆記具</option>-->
+<!--                  </select>-->
+<!--                </div>-->
+<!--                <div style="float:right;">-->
+<!--                  <span class="mainFont" style="margin: 22px 5px 15px 0px; float:left;">業種 :</span>-->
+<!--                </div>-->
+              </div>
+            </form>
+
+            <!-- BEGIN PRODUCT LIST -->
+            <div class="row product-list" style="clear: both; margin-top:20px;">
+              <!-- PRODUCT ITEM START -->
+              <div class="col-md-3 col-sm-6 col-xs-12" th:each="list : ${list}">
+                <div class="product-item" style="width:233px;">
+                  <div class="pi-img-wrapper">
+                    <img th:src="${list.thumbnail_url}" class="img-responsive" alt="Berry Lace Dress" style="width: 210px;height: 230px;">
+                  </div>
+                  <a th:href="@{/product/detail.do(id=${list.id})}">
+                    <h2 class="mainFont" style="text-align: center; margin:10px; font-family: none;" th:if="${#strings.length(list.title) > 8}" th:text="${list.title.substring(0, 8) + '...'}"></h2>
+                  </a>
+                  <a th:href="@{/product/detail.do(id=${list.id})}">
+                    <h2 class="mainFont" style="text-align: center; margin:10px;  font-family: none;" th:if="${#strings.length(list.title) <= 8}" th:text="${list.title}"></h2>
+                  </a>
+                  <h4 class="mainFont" style="text-align: center; font-size: 15px; color: red; font-weight: bold; margin-top: 0px; font-family: none;">[[${list.price}]]円</h4>
+                </div>
+              </div>
+              <!-- PRODUCT ITEM END -->
+            </div>
+            <!-- END PRODUCT LIST -->
+
+            <!-- BEGIN PAGINATOR -->
+            <div class="row" th:if="${pageMaker.total != 0}" style="margin-bottom:150px;">
+              <div class="col-md-12 col-sm-12">
+                <ul class="pagination pull-right">
+                  <!-- 이전 페이지 -->
+                  <li th:if="${pageMaker.prev}">
+                    <a th:href="@{/seller/product.do(id=${id},pageNum=${pageMaker.startPage - 1}, amount=${pageMaker.cri.amount}, type=${pageMaker.cri.type}, keyword=${pageMaker.cri.keyword})}">&laquo;</a>
+                  </li>
+                  <th:block th:each="page : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                    <li th:if="${pageMaker.cri.pageNum != page}">
+                      <a th:href="@{/seller/product.do(id=${id},pageNum=${page}, amount=${pageMaker.cri.amount}, type=${pageMaker.cri.type}, keyword=${pageMaker.cri.keyword})}">[[${page}]]</a>
+                    </li>
+                    <li th:if="${pageMaker.cri.pageNum == page}">
+                      <span>[[${page}]]</span>
+                    </li>
+                  </th:block>
+                  <!-- 다음 페이지 -->
+                  <li th:if="${pageMaker.next}">
+                    <a th:href="@{/seller/product.do(id=${id},pageNum=${pageMaker.endPage + 1}, amount=${pageMaker.cri.amount}, type=${pageMaker.cri.type}, keyword=${pageMaker.cri.keyword})}">&laquo;</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- END PAGINATOR -->
+          </div>
+        </div>
+        <!-- END CONTENT -->
+      </div>
+      <!-- END SIDEBAR & CONTENT -->
+    </div>
+  </div>
+</div>
+
+
+<th:block layout:fragment="bodyScript">
+  <script src="assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script> <!-- Quantity -->
+  <script src="assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        //Layout.init();
+        //Layout.initOWL();
+        //Layout.initTwitter();
+        Layout.initImageZoom();
+        Layout.initTouchspin();
+        Layout.initUniform();
+    });
+  </script>
+  <!-- END PAGE LEVEL JAVASCRIPTS -->
+</th:block>
+</html>
